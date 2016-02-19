@@ -143,12 +143,19 @@ function bigbluebuttonbn_getPublishRecordingsURL( $recordID, $set, $URL, $SALT )
     return $url;
 }
 
-function bigbluebuttonbn_getCreateMeetingArray( $username, $meetingID, $welcomeString, $mPW, $aPW, $SALT, $URL, $logoutURL, $record='false', $duration=0, $voiceBridge=0, $metadata=array(), $presentation_name=null, $presentation_url=null ) {
-    if( !is_null($presentation_name) && !is_null($presentation_url) ) {
+function bigbluebuttonbn_getCreateMeetingArray( $username, $meetingID, $welcomeString, $mPW, $aPW, $SALT, $URL, $logoutURL, $record='false', $duration=0, $voiceBridge=0, $metadata=array(), $presentation_name=null, $presentation_url=null, $authorization=null ) {
+    if ( (!is_null($presentation_name) && !is_null($presentation_url)) || !is_null($authorization) ) {
+        $message_envelope = "<?xml version='1.0' encoding='UTF-8'?>";
+        $message_envelope .= "<modules>";
+        if ( !is_null($presentation_name) && !is_null($presentation_url) )
+            $message_envelope .= "<module name='presentation'><document url='".$presentation_url."' /></module>";
+        if ( !is_null($authorization) )
+            $message_envelope .= "<module name='authorization'>".$authorization."</module>";
+        $message_envelope .= "</modules>";
+        error_log($message_envelope);
+
         $xml = bigbluebuttonbn_wrap_xml_load_file( bigbluebuttonbn_getCreateMeetingURL($username, $meetingID, $aPW, $mPW, $welcomeString, $logoutURL, $SALT, $URL, $record, $duration, $voiceBridge, $metadata),
-                BIGBLUEBUTTONBN_METHOD_POST,
-                "<?xml version='1.0' encoding='UTF-8'?><modules><module name='presentation'><document url='".$presentation_url."' /></module></modules>"
-                );
+                BIGBLUEBUTTONBN_METHOD_POST, $message_envelope);
     } else {
         $xml = bigbluebuttonbn_wrap_xml_load_file( bigbluebuttonbn_getCreateMeetingURL($username, $meetingID, $aPW, $mPW, $welcomeString, $logoutURL, $SALT, $URL, $record, $duration, $voiceBridge, $metadata) );
     }
@@ -1439,25 +1446,31 @@ function bigbluebuttonbn_getRecordedMeetings($courseID) {
 }
 
 function bigbluebuttonbn_getRecordingsArrayByCourse($courseID, $URL, $SALT) {
+    $recordings = array();
+
+    // Load the meetingIDs to be used in the getRecordings request 
     $meetingID = '';
-    $results = bigbluebuttonbn_getRecordedMeetings($courseID);
-    if( $results ) {
-        //Eliminates duplicates
-        $mIDs = array();
-        foreach ($results as $result) {
-            $mIDs[$result->meetingid] = $result->meetingid;
-        }
-        //Generates the meetingID string
-        foreach ($mIDs as $mID) {
-            if (strlen($meetingID) > 0) $meetingID .= ',';
-            $meetingID .= $mID;
+    if ( is_numeric($courseID) ) {
+        $results = bigbluebuttonbn_getRecordedMeetings($courseID);
+        if( $results ) {
+            //Eliminates duplicates
+            $mIDs = array();
+            foreach ($results as $result) {
+                $mIDs[$result->meetingid] = $result->meetingid;
+            }
+            //Generates the meetingID string
+            foreach ($mIDs as $mID) {
+                if (strlen($meetingID) > 0) $meetingID .= ',';
+                $meetingID .= $mID;
+            }
         }
     }
 
-    $recordings = array();
+    // If there were meetingIDs excecute the getRecordings request 
     if ( $meetingID != '' ) {
         $recordings = bigbluebuttonbn_getRecordingsArray($meetingID, $URL, $SALT);
     }
+
     return $recordings;
 }
 

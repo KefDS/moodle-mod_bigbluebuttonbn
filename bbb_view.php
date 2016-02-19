@@ -94,6 +94,7 @@ switch (strtolower($action)) {
                     } else {
                         $durationtime = 0;
                     }
+
                     /// Execute the create command
                     $response = bigbluebuttonbn_getCreateMeetingArray(
                             $bbbsession['meetingname'],
@@ -109,7 +110,8 @@ switch (strtolower($action)) {
                             $bbbsession['voicebridge'],
                             $metadata,
                             $bbbsession['presentation']['name'],
-                            $bbbsession['presentation']['url']
+                            $bbbsession['presentation']['url'],
+                            $bbbsession['authorization']
                     );
 
                     if (!$response) {

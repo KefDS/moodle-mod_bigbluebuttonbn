@@ -110,6 +110,7 @@ $bbbsession['originTag'] = 'moodle-mod_bigbluebuttonbn ('.$module_version.')';
 $bbbsession['contextActivityName'] = "";
 $bbbsession['contextActivityDescription'] = "";
 $bbbsession['contextActivityTags'] = "";
+$bbbsession['authorization'] = null;
 ////////////////////////////////////////////////
 /////   BigBlueButton Session Setup Ends   /////
 ////////////////////////////////////////////////
@@ -132,8 +133,13 @@ if ( !isset($serverVersion) ) { //Server is not working
             print_error( 'view_error_unable_join_teacher', 'bigbluebuttonbn', $CFG->wwwroot.'/course/view.php?id='.$bigbluebuttonbn->course );
         else
             print_error( 'view_error_unable_join_student', 'bigbluebuttonbn', $CFG->wwwroot.'/course/view.php?id='.$bigbluebuttonbn->course );
+    } else {
+        if ($serverVersion == '1.0') {
+            $bbbsession['authorization'] = "<authorization><read><role_list><role>admin</role></role_list><user_id_list><user_id>3</user_id><user_id>4</user_id></user_id_list></read><write><role_list><role>admin</role></role_list><user_id_list><user_id>2</user_id></user_id_list></write></authorization>";
+        }
     }
 }
+
 
 // Mark viewed by user (if required)
 $completion = new completion_info($course);
