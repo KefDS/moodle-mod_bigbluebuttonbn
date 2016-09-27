@@ -14,7 +14,7 @@
 $string['config_cloud'] = 'Configuración General para servidores BBB en demanda';
 $string['config_cloud_description']='Esta configuración <b>se usa siempre</b> que se crean servidores de BBB en demanda.';
 $string['config_heat_url']='URL del servidor de OpenStack';
-$string['config_heat_url_description']='El URL del servidor de OpenStack para la creación de los servidores de BBB.';
+$string['config_heat_url_description']='El URL del servidor de OpenStack (con Heat) para la creación de los servidores de BBB.';
 $string['config_openstack_credentials']='Credenciales de OpenStack';
 $string['config_openstack_credentials_description']='Credenciales necesarias para conectarse a los servicios de OpenStack.';
 $string['config_openstack_username']='Nombre de usuario';

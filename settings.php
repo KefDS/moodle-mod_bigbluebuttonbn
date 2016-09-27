@@ -17,7 +17,7 @@ require_once(dirname(__FILE__).'/locallib.php');
 
 if ($ADMIN->fulltree) {
 
-    if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_server_url) || 
+    if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_server_url) ||
         !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_shared_secret) ) {
         $settings->add( new admin_setting_heading('bigbluebuttonbn_config_general',
                 get_string('config_general', 'bigbluebuttonbn'),
@@ -44,7 +44,7 @@ if ($ADMIN->fulltree) {
             get_string('config_cloud', 'bigbluebuttonbn'),
             get_string('config_cloud_description', 'bigbluebuttonbn'),
             null));
-        $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_openStack_url',
+        $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_heat_url',
             get_string( 'config_heat_url', 'bigbluebuttonbn' ),
             get_string( 'config_heat_url_description', 'bigbluebuttonbn' ),
             null));
@@ -52,7 +52,7 @@ if ($ADMIN->fulltree) {
             get_string( 'config_shared_secret_on_demand', 'bigbluebuttonbn' ),
             get_string( 'config_shared_secret_on_demand_description', 'bigbluebuttonbn' ),
             null));
-        $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_openstack_credentials',
+        $settings->add( new admin_setting_heading( 'bigbluebuttonbn_openstack_credentials',
             get_string( 'config_openstack_credentials', 'bigbluebuttonbn' ),
             get_string( 'config_openstack_credentials_description', 'bigbluebuttonbn' ),
             null));
@@ -60,7 +60,7 @@ if ($ADMIN->fulltree) {
             get_string( 'config_openstack_username', 'bigbluebuttonbn' ),
             get_string( 'config_openstack_username_description', 'bigbluebuttonbn' ),
             null));
-        $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_openstack_password',
+        $settings->add( new admin_setting_configpasswordunmask('bigbluebuttonbn_openstack_password',
             get_string( 'config_openstack_password', 'bigbluebuttonbn' ),
             get_string( 'config_openstack_password_description', 'bigbluebuttonbn' ),
             null));
@@ -71,10 +71,10 @@ if ($ADMIN->fulltree) {
     }
 
     //----end of OpenStack integration-----
-    
+
     //// Configuration for 'recording' feature
-    if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_recording_default) || 
-        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_recording_editable) || 
+    if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_recording_default) ||
+        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_recording_editable) ||
         !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_recording_icons_enabled) ) {
         $settings->add( new admin_setting_heading('bigbluebuttonbn_recording',
                 get_string('config_feature_recording', 'bigbluebuttonbn'),
@@ -102,9 +102,9 @@ if ($ADMIN->fulltree) {
                     1));
         }
     }
-    
+
     //// Configuration for 'recording tagging' feature
-    if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_recordingtagging_default) || 
+    if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_recordingtagging_default) ||
         !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_recordingtagging_editable) ) {
         $settings->add( new admin_setting_heading('bigbluebuttonbn_recordingtagging',
                 get_string('config_feature_recordingtagging', 'bigbluebuttonbn'),
@@ -151,8 +151,8 @@ if ($ADMIN->fulltree) {
 
     //// Configuration for wait for moderator feature
     if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_waitformoderator_default) ||
-        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_waitformoderator_editable) || 
-        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_waitformoderator_ping_interval) || 
+        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_waitformoderator_editable) ||
+        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_waitformoderator_ping_interval) ||
         !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_waitformoderator_cache_ttl) ) {
         $settings->add( new admin_setting_heading('bigbluebuttonbn_feature_waitformoderator',
                 get_string('config_feature_waitformoderator', 'bigbluebuttonbn'),
@@ -225,7 +225,7 @@ if ($ADMIN->fulltree) {
     }
 
     //// Configuration for "user limit" feature
-    if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_userlimit_default) || 
+    if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_userlimit_default) ||
         !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_userlimit_editable) ) {
         $settings->add( new admin_setting_heading('config_userlimit',
                 get_string('config_feature_userlimit', 'bigbluebuttonbn'),
@@ -271,7 +271,7 @@ if ($ADMIN->fulltree) {
               get_string('config_scheduled_pre_opening_description', 'bigbluebuttonbn'),
               10, PARAM_INT));
     }
-      
+
     //// Configuration for defining the default role/user that will be moderator on new activities
     if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_moderator_default) ) {
         $settings->add( new admin_setting_heading('bigbluebuttonbn_permission',

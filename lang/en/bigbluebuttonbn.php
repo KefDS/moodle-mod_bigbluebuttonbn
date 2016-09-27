@@ -15,7 +15,7 @@ defined('MOODLE_INTERNAL') || die();
 $string['config_cloud'] = 'General settings for BBB servers on demand';
 $string['config_cloud_description']='These settings are <b>always used</b> when creating  BBB servers on demand.';
 $string['config_heat_url']='OpenStack Server URL';
-$string['config_heat_url_description']='The URL of your OpenStack server used for the creation of the BBB servers.';
+$string['config_heat_url_description']='The URL of your OpenStack server (with Heat) used for the creation of the BBB servers.';
 $string['config_openstack_credentials']='OpenStack Credentials';
 $string['config_openstack_credentials_description']='Credentials to access OpenStack services.';
 $string['config_openstack_username']='Username';
