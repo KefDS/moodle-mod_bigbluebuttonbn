@@ -23,7 +23,9 @@ $params['signed_parameters'] = optional_param('signed_parameters', '', PARAM_TEX
 //---- OpenStack integration variables ----
 
 $heat_url= bigbluebuttonbn_get_cfg_heat_url();
-$shared_secret_bbb_servers = bigbluebuttonbn_get_cfg_shared_secret_on_demand();
+$heat_region = bigbluebuttonbn_get_cfg_heat_region();
+$stack_parameters = bigbluebuttonbn_get_cfg_json_stack_parameters();
+$parametros = json_decode($stack_parameters);
 $opensack_username = bigbluebuttonbn_get_cfg_openstack_username();
 $openstack_password = bigbluebuttonbn_get_cfg_openstack_password();
 $openstack_tenant_id =bigbluebuttonbn_get_cfg_openstack_tenant_id();

@@ -732,9 +732,14 @@ function bigbluebuttonbn_get_cfg_heat_url() {
     return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_url)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_url): (isset($CFG->bigbluebuttonbn_heat_url)? trim($CFG->bigbluebuttonbn_heat_url): null));
 }
 
-function bigbluebuttonbn_get_cfg_shared_secret_on_demand(){
+function bigbluebuttonbn_get_cfg_heat_region(){
     global $BIGBLUEBUTTONBN_CFG, $CFG;
-    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_shared_secret_on_demand)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_shared_secret_on_demand): (isset($CFG->bigbluebuttonbn_shared_secret_on_demand)? trim($CFG->bigbluebuttonbn_shared_secret_on_demand): null));
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_region)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_region): (isset($CFG->bigbluebuttonbn_heat_region)? trim($CFG->bigbluebuttonbn_heat_region): null));
+}
+
+function bigbluebuttonbn_get_cfg_json_stack_parameters(){
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters): (isset($CFG->bigbluebuttonbn_json_stack_parameters)? trim($CFG->bigbluebuttonbn_json_stack_parameters): null));
 }
 
 function bigbluebuttonbn_get_cfg_openstack_username(){

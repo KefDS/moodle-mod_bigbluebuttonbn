@@ -14,8 +14,12 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['config_cloud'] = 'General settings for BBB servers on demand';
 $string['config_cloud_description']='These settings are <b>always used</b> when creating  BBB servers on demand.';
+$string['config_heat_region']='Heat Region';
+$string['config_heat_region_description']='Region where Heat service operates.';
 $string['config_heat_url']='OpenStack Server URL';
 $string['config_heat_url_description']='The URL of your OpenStack server (with Heat) used for the creation of the BBB servers.';
+$string['config_json_stack_parameters']='Stack parameters';
+$string['config_json_stack_parameters_description']='Arguments for Heat template, used for stack creation. They must be in JSON format: {"param1" : "val1", "param2" : "val2"}.';
 $string['config_openstack_credentials']='OpenStack Credentials';
 $string['config_openstack_credentials_description']='Credentials to access OpenStack services.';
 $string['config_openstack_username']='Username';
@@ -24,8 +28,6 @@ $string['config_openstack_password']='Password';
 $string['config_openstack_password_description']='OpenStack pasword to access services.';
 $string['config_openstack_tenant_id']='Tenant ID';
 $string['config_openstack_tenant_id_description']='OpenStack tenant(project) identifier to access services.';
-$string['config_shared_secret_on_demand']='Shared Secret of the BigBlueButton Servers';
-$string['config_shared_secret_on_demand_description']='<i>Secret salt</i> of BigBlueButton servers.';
 
 //----end of OpenStack integration----
 

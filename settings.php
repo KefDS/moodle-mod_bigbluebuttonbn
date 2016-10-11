@@ -37,40 +37,71 @@ if ($ADMIN->fulltree) {
         }
     }
 
-    /*Settings for OpenStack integration */
+    //---- Settings for OpenStack integration ----
 
-    if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_url)) {
+    ////Configurations for stacks and OpenStack API
+    if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_url) ||
+        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_region) ||
+        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters)) {
         $settings->add( new admin_setting_heading('bigbluebuttonbn_config_cloud',
             get_string('config_cloud', 'bigbluebuttonbn'),
             get_string('config_cloud_description', 'bigbluebuttonbn'),
             null));
-        $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_heat_url',
-            get_string( 'config_heat_url', 'bigbluebuttonbn' ),
-            get_string( 'config_heat_url_description', 'bigbluebuttonbn' ),
-            null));
-        $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_shared_secret_on_demand',
-            get_string( 'config_shared_secret_on_demand', 'bigbluebuttonbn' ),
-            get_string( 'config_shared_secret_on_demand_description', 'bigbluebuttonbn' ),
-            null));
+
+        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_url) ){
+            //URL of server with Heat endpoint
+            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_heat_url',
+                get_string( 'config_heat_url', 'bigbluebuttonbn' ),
+                get_string( 'config_heat_url_description', 'bigbluebuttonbn' ),
+                null));
+        }
+        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_region) ){
+            //Region of Heat service
+            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_heat_region',
+                get_string( 'config_heat_region', 'bigbluebuttonbn' ),
+                get_string( 'config_heat_region_description', 'bigbluebuttonbn' ),
+                null));
+        }
+        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters)){
+            //Parameters for stack creation in JSON representation
+            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_json_stack_parameters',
+                get_string( 'config_json_stack_parameters', 'bigbluebuttonbn' ),
+                get_string( 'config_json_stack_parameters_description', 'bigbluebuttonbn' ),
+                null));
+        }
+    }
+
+    ////Configurations for OpenStack authentication
+    if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_username)||
+        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_password)||
+        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_tenant_id)){
         $settings->add( new admin_setting_heading( 'bigbluebuttonbn_openstack_credentials',
             get_string( 'config_openstack_credentials', 'bigbluebuttonbn' ),
             get_string( 'config_openstack_credentials_description', 'bigbluebuttonbn' ),
             null));
-        $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_openstack_username',
-            get_string( 'config_openstack_username', 'bigbluebuttonbn' ),
-            get_string( 'config_openstack_username_description', 'bigbluebuttonbn' ),
-            null));
-        $settings->add( new admin_setting_configpasswordunmask('bigbluebuttonbn_openstack_password',
-            get_string( 'config_openstack_password', 'bigbluebuttonbn' ),
-            get_string( 'config_openstack_password_description', 'bigbluebuttonbn' ),
-            null));
-        $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_openstack_tenant_id',
-            get_string( 'config_openstack_tenant_id', 'bigbluebuttonbn' ),
-            get_string( 'config_openstack_tenant_id_description', 'bigbluebuttonbn' ),
-            null));
-    }
 
-    //----end of OpenStack integration-----
+        if(!isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_username)){
+            //OpenStack username
+            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_openstack_username',
+                get_string( 'config_openstack_username', 'bigbluebuttonbn' ),
+                get_string( 'config_openstack_username_description', 'bigbluebuttonbn' ),
+                null));
+        }
+        if(!isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_password)){
+            $settings->add( new admin_setting_configpasswordunmask('bigbluebuttonbn_openstack_password',
+                get_string( 'config_openstack_password', 'bigbluebuttonbn' ),
+                get_string( 'config_openstack_password_description', 'bigbluebuttonbn' ),
+                null));
+        }
+        if(!isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_tenant_id)){
+            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_openstack_tenant_id',
+                get_string( 'config_openstack_tenant_id', 'bigbluebuttonbn' ),
+                get_string( 'config_openstack_tenant_id_description', 'bigbluebuttonbn' ),
+                null));
+        }
+    }
+    
+    //---- end of OpenStack integration ----
 
     //// Configuration for 'recording' feature
     if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_recording_default) ||
