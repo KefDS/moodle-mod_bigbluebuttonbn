@@ -727,6 +727,7 @@ function bigbluebuttonbn_get_cfg_shared_secret() {
 
 //---- OpenStack integration functions ----
 
+//Functions to retrieve settings from  admin settings page
 function bigbluebuttonbn_get_cfg_heat_url() {
     global $BIGBLUEBUTTONBN_CFG, $CFG;
     return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_url)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_url): (isset($CFG->bigbluebuttonbn_heat_url)? trim($CFG->bigbluebuttonbn_heat_url): null));
@@ -755,6 +756,14 @@ function bigbluebuttonbn_get_cfg_openstack_password(){
 function bigbluebuttonbn_get_cfg_openstack_tenant_id(){
     global $BIGBLUEBUTTONBN_CFG, $CFG;
     return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_tenant_id)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_tenant_id): (isset($CFG->bigbluebuttonbn_openstack_tenant_id)? trim($CFG->bigbluebuttonbn_openstack_tenant_id): null));
+}
+
+
+////Get upcoming opening meetings whithin the next $minutes minutes
+function  bigbluebuttonbn_get_upcomming_meetings($minutes){
+    global $DB;
+    $creation_time = time()+($minutes*60);
+  return $meetings = $DB->get_records_sql('SELECT * FROM {bigbluebuttonbn} WHERE openingtime < ? AND openstack_stack_name IS NULL', array($creation_time));
 }
 
 //---- end of Openstack integration ----
