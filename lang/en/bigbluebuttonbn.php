@@ -29,6 +29,8 @@ $string['config_openstack_password_description']='OpenStack pasword to access se
 $string['config_openstack_tenant_id']='Tenant ID';
 $string['config_openstack_tenant_id_description']='OpenStack tenant(project) identifier to access services.';
 
+$string['task_openstack_async_communication']= 'Creating BBB meeting servers with OpenStack';
+
 //----end of OpenStack integration----
 
 $string['bbbduetimeoverstartingtime'] = 'The due time for this activity must be greater than the starting time';

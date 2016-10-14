@@ -30,4 +30,7 @@ $string['config_openstack_tenant_id_description']='Identificador del projecto (<
 $string['config_shared_secret_on_demand']='Shared Secret de los servidores de BigBlueButton';
 $string['config_shared_secret_on_demand_description']='El <i>secret salt</i> de los servidores de BigBlueButton.';
 
+
+$string['task_openstack_async_communication']= 'Creación de servidores de conferencias BBB con OpenStack';
+
 //----end of OpenStack integration----
