@@ -12,49 +12,46 @@ use OpenCloud\OpenStack;
 class mod_bigbluebuttonbn_openstack_bbb {
     private $openstack_connection;
     private $region;
+    private $error_handler;
 
     function __construct(OpenStack $openstack_connection, $region) {
         $this->openstack_connection = $openstack_connection;
         $this->region = $region;
+        $this->error_handler = new mod_bigbluebuttonbn_openstack_error_communication();
     }
 
-    function new_bbb_host($template_url) {
+    function new_bbb_host($meeting_id, $stack_parameters) {
+        // Set stack name
+        $stack_parameters['name'] = $this->get_default_name($meeting_id);
         try {
-            $stack_output = $this->get_stack_service()->create_stack($this->default_heat_options($template_url));
-            // TODO_BBB Save output in database
+            $service = $this->get_orchestration_service();
+            $stack_output = $service->stack($stack_parameters);
+
+            // TODO_BBB: Return stack name, IP and ShareKey
+            return [];
         }
         catch (Exception $e) {
-            // TODO_BBB: what to do with $e
+           $this->error_handler->communicate_error($e);
         }
     }
 
     function  delete_bbb_host($meeting_id) {
-        // TODO_BBB: get stack name from $meeting_id
-        $stack_name = null;
+        $stack_name = $this->get_default_name($meeting_id);
         try {
-            $this->get_stack_service()->delete_stack($stack_name);
+            $service = $this->get_orchestration_service();
+            $stack = $service->getStack($stack_name);
+            $stack->delete();
         }
         catch (Exception $e) {
-            // TODO_BBB: what to do with $e
+            $this->error_handler->communicate_error($e);
         }
     }
 
-    private function default_heat_options($template_url) {
-        // TODO_BBB: increment counter index name
-        // TODO_BBB: get key name from admin form
-        return ['name' => '',
-            'templateUrl' => $template_url,
-            'parameters' => ['key_name' => '']
-        ];
+    private function get_default_name($meeting_id) {
+        return "moodle_bbb_host_meeting_" . $meeting_id;
     }
 
-    private function get_stack_service() {
-        try {
-            $service = $this->openstack_connection->orchestrationService('heat', $this->region);
-            return new mod_bigbluebuttonbn_openstack_stack($service);
-        }
-        catch (Exception $e) {
-            // TODO_BBB: what to do with $e
-        }
+    private function get_orchestration_service() {
+        return $this->openstack_connection->orchestrationService('heat', $this->region);
     }
 }
