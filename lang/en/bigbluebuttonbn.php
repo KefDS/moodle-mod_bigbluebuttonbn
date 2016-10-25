@@ -10,6 +10,29 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
+//----OpenStack integration---
+
+$string['config_cloud'] = 'General settings for BBB servers on demand';
+$string['config_cloud_description']='These settings are <b>always used</b> when creating  BBB servers on demand.';
+$string['config_heat_region']='Heat Region';
+$string['config_heat_region_description']='Region where Heat service operates.';
+$string['config_heat_url']='OpenStack Server URL';
+$string['config_heat_url_description']='The URL of your OpenStack server (with Heat) used for the creation of the BBB servers.';
+$string['config_json_stack_parameters']='Stack parameters';
+$string['config_json_stack_parameters_description']='Arguments for Heat template, used for stack creation. They must be in JSON format: {"param1" : "val1", "param2" : "val2"}.';
+$string['config_openstack_credentials']='OpenStack Credentials';
+$string['config_openstack_credentials_description']='Credentials to access OpenStack services.';
+$string['config_openstack_username']='Username';
+$string['config_openstack_username_description']='OpenStack username to access services.';
+$string['config_openstack_password']='Password';
+$string['config_openstack_password_description']='OpenStack pasword to access services.';
+$string['config_openstack_tenant_id']='Tenant ID';
+$string['config_openstack_tenant_id_description']='OpenStack tenant(project) identifier to access services.';
+
+$string['task_openstack_async_communication']= 'Creating BBB meeting servers with OpenStack';
+
+//----end of OpenStack integration----
+
 $string['bbbduetimeoverstartingtime'] = 'The due time for this activity must be greater than the starting time';
 $string['bbbdurationwarning'] = 'The maximum duration for this session is %duration% minutes.';
 $string['bbbrecordwarning'] = 'This session may be recorded.';
@@ -18,7 +41,6 @@ $string['bigbluebuttonbn:moderate'] = 'Moderate a meeting';
 $string['bigbluebuttonbn:managerecordings'] = 'Manage recordings';
 $string['bigbluebuttonbn:addinstance'] = 'Add a new meeting';
 $string['bigbluebuttonbn'] = 'BigBlueButton';
-
 
 $string['config_general'] = 'General configuration';
 $string['config_general_description'] = 'These settings are <b>always</b> used';

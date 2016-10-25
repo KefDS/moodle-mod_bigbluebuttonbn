@@ -281,6 +281,51 @@ function xmldb_bigbluebuttonbn_upgrade($oldversion=0) {
 
         upgrade_mod_savepoint(true, 2016011305, 'bigbluebuttonbn');
     }
+    
+    //----OpenStack integration----
+    
+    if ( $result && $oldversion < 2016100600) {
+        
+        // Define field bbb_server_url to be added to bigbluebuttonbn.
+        $table = new xmldb_table('bigbluebuttonbn');
+        $field = new xmldb_field('bbb_server_url', XMLDB_TYPE_CHAR, '256', null, null, null, null, 'userlimit');
 
+        // Conditionally launch add field bbb_server_url.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        
+        // Define field bbb_shared_secret to be added to bigbluebuttonbn.
+        $table = new xmldb_table('bigbluebuttonbn');
+        $field = new xmldb_field('bbb_shared_secret', XMLDB_TYPE_CHAR, '256', null, null, null, null, 'bbb_server_url');
+
+        // Conditionally launch add field bbb_shared_secret.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        
+        // Bigbluebuttonbn savepoint reached.
+        upgrade_mod_savepoint(true, 2016100600, 'bigbluebuttonbn');
+    }
+
+
+    if ($oldversion < 2016101100) {
+
+        // Define field openstack_stack_name to be added to bigbluebuttonbn.
+        $table = new xmldb_table('bigbluebuttonbn');
+        $field = new xmldb_field('openstack_stack_name', XMLDB_TYPE_CHAR, '256', null, null, null, null, 'bbb_shared_secret');
+
+        // Conditionally launch add field openstack_stack_name.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Bigbluebuttonbn savepoint reached.
+        upgrade_mod_savepoint(true, 2016101100, 'bigbluebuttonbn');
+    }
+
+
+    //----end of OpenStack integration----
+    
     return $result;
 }

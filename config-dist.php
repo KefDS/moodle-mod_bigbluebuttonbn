@@ -51,8 +51,6 @@ $BIGBLUEBUTTONBN_CFG = new stdClass();
 $BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_server_url = 'http://test-install.blindsidenetworks.com/bigbluebutton/';
 $BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_shared_secret = '8cd8ef52e8e101574e400365b55e11a6';
 
-
-
 //=========================================================================
 // 2. CONFIGURATION FOR "RECORDING" FEATURE
 //=========================================================================
