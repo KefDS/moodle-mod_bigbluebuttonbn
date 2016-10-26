@@ -12,6 +12,7 @@ defined('MOODLE_INTERNAL') || die();
 
 //----OpenStack integration---
 
+//Plugin admin settings
 $string['config_cloud'] = 'General settings for BBB servers on demand';
 $string['config_cloud_description']='These settings are <b>always used</b> when creating  BBB servers on demand.';
 $string['config_heat_region']='Heat Region';
@@ -29,7 +30,14 @@ $string['config_openstack_password_description']='OpenStack pasword to access se
 $string['config_openstack_tenant_id']='Tenant ID';
 $string['config_openstack_tenant_id_description']='OpenStack tenant(project) identifier to access services.';
 
+//Meeting form
+$string['mod_form_field_meeting_duration']='Duration';
+$string['mod_form_field_meeting_duration_help']='Meeting duration (in minutes)';
+
+//Tasks for OpenStack communication
 $string['task_openstack_async_communication']= 'Creating BBB meeting servers with OpenStack';
+
+
 
 //----end of OpenStack integration----
 
@@ -152,6 +160,8 @@ $string['mod_form_block_schedule'] = 'Schedule for session';
 $string['mod_form_block_record'] = 'Record settings';
 $string['mod_form_field_openingtime'] = 'Join open';
 $string['mod_form_field_closingtime'] = 'Join closed';
+$string['mod_form_field_openingtime_help'] = 'Start time for participants to join the conference.';
+$string['mod_form_field_closingtime_help'] = 'End time for participants to join the conference.';
 $string['mod_form_field_intro'] = 'Description';
 $string['mod_form_field_intro_help'] = 'A short description for the room or conference.';
 $string['mod_form_field_duration_help'] = 'Setting the duration for a meeting will establish the maximum time for a meeting to keep alive before the recording finish';

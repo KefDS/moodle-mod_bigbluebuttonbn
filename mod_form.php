@@ -266,14 +266,29 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
         //-------------------------------------------------------------------------------
         // Fourth block starts here
         //-------------------------------------------------------------------------------
+        
+        //Add explanation of openingtime and closingtime
+
+        
         $mform->addElement('header', 'schedule', get_string('mod_form_block_schedule', 'bigbluebuttonbn'));
         if( isset($current_activity->openingtime) && $current_activity->openingtime != 0 || isset($current_activity->closingtime) && $current_activity->closingtime != 0 )
             $mform->setExpanded('schedule');
 
         $mform->addElement('date_time_selector', 'openingtime', get_string('mod_form_field_openingtime', 'bigbluebuttonbn'), array('optional' => true));
         $mform->setDefault('openingtime', 0);
+        $mform->addHelpButton('openingtime', 'mod_form_field_openingtime', 'bigbluebuttonbn');
         $mform->addElement('date_time_selector', 'closingtime', get_string('mod_form_field_closingtime', 'bigbluebuttonbn'), array('optional' => true));
         $mform->setDefault('closingtime', 0);
+        $mform->addHelpButton('closingtime', 'mod_form_field_closingtime', 'bigbluebuttonbn');
+
+        /* OpenStack integration */
+
+        $durations = array(30,20,10); //Agregar campo en settings.php
+        $mform->addElement('select', 'meeting_duration', get_string('mod_form_field_meeting_duration', 'bigbluebuttonbn'), $durations);
+        $mform->addHelpButton('meeting_duration', 'mod_form_field_meeting_duration', 'bigbluebuttonbn');
+        
+        /* end of OpenStack integration*/
+        
         //-------------------------------------------------------------------------------
         // Fourth block ends here
         //-------------------------------------------------------------------------------
