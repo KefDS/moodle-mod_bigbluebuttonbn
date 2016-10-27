@@ -18,7 +18,8 @@ require_once(dirname(__FILE__).'/locallib.php');
 if ($ADMIN->fulltree) {
 
     if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_server_url) ||
-        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_shared_secret) ) {
+        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_shared_secret) ||
+        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_integration) ) {
         $settings->add( new admin_setting_heading('bigbluebuttonbn_config_general',
                 get_string('config_general', 'bigbluebuttonbn'),
                 get_string('config_general_description', 'bigbluebuttonbn')));
@@ -35,14 +36,24 @@ if ($ADMIN->fulltree) {
                     get_string( 'config_shared_secret_description', 'bigbluebuttonbn' ),
                     bigbluebuttonbn_get_cfg_shared_secret_default()));
         }
+
+        //---- OpenStack integration ----
+        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_integration) ){
+            //Enable OpenStack integration
+            $settings->add( new admin_setting_configcheckbox( 'bigbluebuttonbn_openstack_integration',
+                get_string('config_openstack_integration', 'bigbluebuttonbn'),
+                get_string('config_openstack_integration_description','bigbluebuttonbn'),
+                0));
+        }
+        //---- end of OpenStack integration ----
     }
 
-    //---- Settings for OpenStack integration ----
-
+    //---- OpenStack integration ----
     ////Configurations for stacks and OpenStack API
     if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_url) ||
         !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_region) ||
-        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters)) {
+        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters) ||
+        !isset($BIGBLUEBUTTONBN_CFG->bigbluebutton_json_meeting_durations)) {
         $settings->add( new admin_setting_heading('bigbluebuttonbn_config_cloud',
             get_string('config_cloud', 'bigbluebuttonbn'),
             get_string('config_cloud_description', 'bigbluebuttonbn'),
@@ -60,6 +71,13 @@ if ($ADMIN->fulltree) {
             $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_heat_region',
                 get_string( 'config_heat_region', 'bigbluebuttonbn' ),
                 get_string( 'config_heat_region_description', 'bigbluebuttonbn' ),
+                null));
+        }
+        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_meeting_durations)){
+            //Meeting durations
+            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_json_meeting_durations',
+                get_string('config_json_meeting_durations', 'bigbluebuttonbn'),
+                get_string('config_json_meeting_durations_description','bigbluebuttonbn'),
                 null));
         }
         if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters)){
