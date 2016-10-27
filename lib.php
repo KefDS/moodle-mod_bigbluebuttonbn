@@ -728,39 +728,50 @@ function bigbluebuttonbn_get_cfg_shared_secret() {
 //---- OpenStack integration functions ----
 
 //Functions to retrieve settings from  admin settings page
+
+function bigbluebuttonbn_get_cfg_openstack_integration() {
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_integration)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_integration): (isset($CFG->bigbluebuttonbn_openstack_integration)? trim($CFG->bigbluebuttonbn_openstack_integration): 0));
+}
+
 function bigbluebuttonbn_get_cfg_heat_url() {
     global $BIGBLUEBUTTONBN_CFG, $CFG;
     return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_url)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_url): (isset($CFG->bigbluebuttonbn_heat_url)? trim($CFG->bigbluebuttonbn_heat_url): null));
 }
 
-function bigbluebuttonbn_get_cfg_heat_region(){
+function bigbluebuttonbn_get_cfg_json_meeting_durations() {
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_meeting_durations)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_meeting_durations): (isset($CFG->bigbluebuttonbn_json_meeting_durations)? trim($CFG->bigbluebuttonbn_json_meeting_durations): '[30,60,120]'));
+}
+
+function bigbluebuttonbn_get_cfg_heat_region() {
     global $BIGBLUEBUTTONBN_CFG, $CFG;
     return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_region)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_region): (isset($CFG->bigbluebuttonbn_heat_region)? trim($CFG->bigbluebuttonbn_heat_region): null));
 }
 
-function bigbluebuttonbn_get_cfg_json_stack_parameters(){
+function bigbluebuttonbn_get_cfg_json_stack_parameters() {
     global $BIGBLUEBUTTONBN_CFG, $CFG;
     return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters): (isset($CFG->bigbluebuttonbn_json_stack_parameters)? trim($CFG->bigbluebuttonbn_json_stack_parameters): null));
 }
 
-function bigbluebuttonbn_get_cfg_openstack_username(){
+function bigbluebuttonbn_get_cfg_openstack_username() {
     global $BIGBLUEBUTTONBN_CFG, $CFG;
     return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_username)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_username): (isset($CFG->bigbluebuttonbn_openstack_username)? trim($CFG->bigbluebuttonbn_openstack_username): null));
 }
 
-function bigbluebuttonbn_get_cfg_openstack_password(){
+function bigbluebuttonbn_get_cfg_openstack_password() {
     global $BIGBLUEBUTTONBN_CFG, $CFG;
     return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_password)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_password): (isset($CFG->bigbluebuttonbn_openstack_password)? trim($CFG->bigbluebuttonbn_openstack_password): null));
 }
 
-function bigbluebuttonbn_get_cfg_openstack_tenant_id(){
+function bigbluebuttonbn_get_cfg_openstack_tenant_id() {
     global $BIGBLUEBUTTONBN_CFG, $CFG;
     return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_tenant_id)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_tenant_id): (isset($CFG->bigbluebuttonbn_openstack_tenant_id)? trim($CFG->bigbluebuttonbn_openstack_tenant_id): null));
 }
 
 
-////Get upcoming opening meetings whithin the next $minutes minutes
-function  bigbluebuttonbn_get_upcomming_meetings($minutes){
+////Get upcoming opening meetings whithin the next minutes
+function  bigbluebuttonbn_get_upcomming_meetings($minutes) {
     global $DB;
     $creation_time = time()+($minutes*60);
   return $meetings = $DB->get_records_sql('SELECT * FROM {bigbluebuttonbn} WHERE openingtime < ? AND openstack_stack_name IS NULL', array($creation_time));

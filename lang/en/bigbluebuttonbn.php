@@ -29,6 +29,10 @@ $string['config_openstack_password']='Password';
 $string['config_openstack_password_description']='OpenStack pasword to access services.';
 $string['config_openstack_tenant_id']='Tenant ID';
 $string['config_openstack_tenant_id_description']='OpenStack tenant(project) identifier to access services.';
+$string['config_json_meeting_durations']='Meeting Durations';
+$string['config_json_meeting_durations_description']='Array of meeting durations in minutes. They must be in JSON format: [30,60,90].';
+$string['config_openstack_integration']='BBB servers on demand';
+$string['config_openstack_integration_description']='Enables OpenStack integration for managing BBB servers on demand.';
 
 //Meeting form
 $string['mod_form_field_meeting_duration']='Duration';

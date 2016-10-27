@@ -283,9 +283,10 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
 
         /* OpenStack integration */
 
-        $durations = array(30,20,10); //Agregar campo en settings.php
-        $mform->addElement('select', 'meeting_duration', get_string('mod_form_field_meeting_duration', 'bigbluebuttonbn'), $durations);
-        $mform->addHelpButton('meeting_duration', 'mod_form_field_meeting_duration', 'bigbluebuttonbn');
+        $durations = json_decode(bigbluebuttonbn_get_cfg_json_meeting_durations());
+        $durations = array_combine($durations, $durations);
+        $mform->addElement('select', 'bbb_meeting_duration', get_string('mod_form_field_meeting_duration', 'bigbluebuttonbn'), $durations);
+        $mform->addHelpButton('bbb_meeting_duration', 'mod_form_field_meeting_duration', 'bigbluebuttonbn');
         
         /* end of OpenStack integration*/
         

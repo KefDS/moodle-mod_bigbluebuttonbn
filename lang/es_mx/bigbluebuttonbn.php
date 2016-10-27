@@ -30,6 +30,11 @@ $string['config_openstack_tenant_id']='Tenant ID';
 $string['config_openstack_tenant_id_description']='Identificador del projecto (<i>tenant</i>) para conectarse a los servicios de OpenStack. ';
 $string['config_shared_secret_on_demand']='Shared Secret de los servidores de BigBlueButton';
 $string['config_shared_secret_on_demand_description']='El <i>secret salt</i> de los servidores de BigBlueButton.';
+$string['config_json_meeting_durations']='Duraciones de las conferencias';
+$string['config_json_meeting_durations_description']='Arreglo con las duraciones de conferencia en minutos. Deben estar en formato JSON: [30,60,90].';
+$string['config_openstack_integration']='Servidores BBB en demanda.';
+$string['config_openstack_integration_description']='Habilita la integración con OpenStack para manejar los servidores en demanda.';
+
 
 //Meeting form
 $string['mod_form_field_meeting_duration']='Duración';
