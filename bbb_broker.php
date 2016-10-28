@@ -32,6 +32,8 @@ $openstack_tenant_id =bigbluebuttonbn_get_cfg_openstack_tenant_id();
 
 //---- end of OpenStack integration ----
 
+
+
 $endpoint = bigbluebuttonbn_get_cfg_server_url();
 $shared_secret = bigbluebuttonbn_get_cfg_shared_secret();
 
