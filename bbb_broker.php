@@ -20,6 +20,18 @@ $params['idx'] = optional_param('idx', '', PARAM_TEXT);  //meetingID, the BBB me
 $params['bigbluebuttonbn'] = optional_param('bigbluebuttonbn', 0, PARAM_INT);
 $params['signed_parameters'] = optional_param('signed_parameters', '', PARAM_TEXT);
 
+//---- OpenStack integration variables ----
+
+$heat_url= bigbluebuttonbn_get_cfg_heat_url();
+$heat_region = bigbluebuttonbn_get_cfg_heat_region();
+$stack_parameters = bigbluebuttonbn_get_cfg_json_stack_parameters();
+$parametros = json_decode($stack_parameters);
+$opensack_username = bigbluebuttonbn_get_cfg_openstack_username();
+$openstack_password = bigbluebuttonbn_get_cfg_openstack_password();
+$openstack_tenant_id =bigbluebuttonbn_get_cfg_openstack_tenant_id();
+
+//---- end of OpenStack integration ----
+
 $endpoint = bigbluebuttonbn_get_cfg_server_url();
 $shared_secret = bigbluebuttonbn_get_cfg_shared_secret();
 
@@ -66,7 +78,7 @@ if ( empty($error) ) {
             switch ( strtolower($params['action']) ){
                 case 'meeting_info':
                     $meeting_info = bigbluebuttonbn_bbb_broker_get_meeting_info($params['id'], $bbbsession['modPW']);
-                    $meeting_running = bigbluebuttonbn_bbb_broker_is_meeting_running($meeting_info); 
+                    $meeting_running = bigbluebuttonbn_bbb_broker_is_meeting_running($meeting_info);
 
                     $status_can_end = '';
                     $status_can_tag = '';
@@ -196,7 +208,7 @@ if ( empty($error) ) {
                             $callback_response['message'] = get_string('view_recording_publish_link_error', 'bigbluebuttonbn');
                         }
 
-                        $callback_response_data = json_encode($callback_response); 
+                        $callback_response_data = json_encode($callback_response);
                         echo "{$params['callback']}({$callback_response_data});";
 
                     } else {
@@ -214,7 +226,7 @@ if ( empty($error) ) {
                             $meeting_info = bigbluebuttonbn_bbb_broker_do_publish_recording_imported($params['id'], $bbbsession['course']->id, $bbbsession['bigbluebuttonbn']->id, false);
                         } else {
                             // As the recordingid was not identified as imported recording link, execute unpublish on a real recording
-                            // First: Unpublish imported links associated to the recording 
+                            // First: Unpublish imported links associated to the recording
                             $recordings_imported_all = bigbluebuttonbn_getRecordingsImportedAllInstances($params['id']);
 
                             if( count($recordings_imported_all) > 0 ) {
@@ -240,7 +252,7 @@ if ( empty($error) ) {
                         $callback_response['status'] = "true";
                         $callback_response_data = json_encode($callback_response);
                         echo "{$params['callback']}({$callback_response_data});";
-                        
+
                     } else {
                         error_log("ERROR: User not authorized to execute unpublish command");
                         header("HTTP/1.0 401 Unauthorized. User not authorized to execute unpublish command");
@@ -256,7 +268,7 @@ if ( empty($error) ) {
                             bigbluebuttonbn_bbb_broker_do_delete_recording_imported($params['id'], $bbbsession['course']->id, $bbbsession['bigbluebuttonbn']->id);
                         } else {
                             // As the recordingid was not identified as imported recording link, execute delete on a real recording
-                            // First: Delete imported links associated to the recording 
+                            // First: Delete imported links associated to the recording
                             $recordings_imported_all = bigbluebuttonbn_getRecordingsImportedAllInstances($params['id']);
 
                             if( count($recordings_imported_all) > 0 ) {
@@ -277,7 +289,7 @@ if ( empty($error) ) {
                         $callback_response['status'] = "true";
                         $callback_response_data = json_encode($callback_response);
                         echo "{$params['callback']}({$callback_response_data});";
-                        
+
                     } else {
                         error_log("ERROR: User not authorized to execute delete command");
                         header("HTTP/1.0 401 Unauthorized. User not authorized to execute delete command");
