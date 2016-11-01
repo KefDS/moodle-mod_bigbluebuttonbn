@@ -32,12 +32,11 @@ $openstack_tenant_id =bigbluebuttonbn_get_cfg_openstack_tenant_id();
 
 
 $openStack_integration_enabled = bigbluebuttonbn_get_cfg_openstack_integration();
-$meetingid = substr($params['id'], 0, strpos($params['id'], '-'));
+//Get the meetingID
+$meetingid_bbb = substr($params['id'], 0, strpos($params['id'], '-'));
 
-$endpoint = ($openStack_integration_enabled)? bigbluebuttonbn_get_meeting_server_url($meetingid): bigbluebuttonbn_get_cfg_server_url();
-$shared_secret = ($openStack_integration_enabled)? bigbluebuttonbn_get_meeting_shared_secret($meetingid): bigbluebuttonbn_get_cfg_shared_secret();
-
-//---- end of OpenStack integration ----
+$endpoint = ($openStack_integration_enabled)? bigbluebuttonbn_get_meeting_server_url($meetingid_bbb): bigbluebuttonbn_get_cfg_server_url();
+$shared_secret = ($openStack_integration_enabled)? bigbluebuttonbn_get_meeting_shared_secret($meetingid_bbb): bigbluebuttonbn_get_cfg_shared_secret();
 
 
 $error = '';

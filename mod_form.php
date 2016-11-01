@@ -49,8 +49,10 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
         $sendnotifications_enabled = bigbluebuttonbn_get_cfg_sendnotifications_enabled(); 
 
         /*---- OpenStack integration ----*/
-        if (!bigbluebuttonbn_get_cfg_openstack_integration()){
+        if (bigbluebuttonbn_get_cfg_openstack_integration()){
             //Validates if the BigBlueButton server is running
+            $serverVersion = 1.0;
+        }else{
             $serverVersion = bigbluebuttonbn_getServerVersion($endpoint);
             if ( !isset($serverVersion) ) {
                 print_error( 'general_error_unable_connect', 'bigbluebuttonbn', $CFG->wwwroot.'/admin/settings.php?section=modsettingbigbluebuttonbn' );
