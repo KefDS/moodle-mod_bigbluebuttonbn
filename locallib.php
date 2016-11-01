@@ -797,8 +797,13 @@ function bigbluebuttonbn_bbb_broker_get_meeting_info($meetingid, $password, $for
     global $CFG;
 
     $meeting_info = array();
-    $endpoint = bigbluebuttonbn_get_cfg_server_url();
-    $shared_secret = bigbluebuttonbn_get_cfg_shared_secret();
+
+    /*---- OpenStack integration ----*/
+    $openStack_integration_enabled = bigbluebuttonbn_get_cfg_openstack_integration();
+    $endpoint = ($openStack_integration_enabled())? bigbluebutton_get_meeting_server_url($meetingid): bigbluebuttonbn_get_cfg_server_url();
+    $shared_secret = ($openStack_integration_enabled())? bigbluebutton_get_meeting_shared_secret($meetingid): bigbluebuttonbn_get_cfg_shared_secret();
+    /*---- end of OpenStack integration ---*/
+
     $cache_ttl = bigbluebuttonbn_get_cfg_waitformoderator_cache_ttl();
 
     $cache = cache::make_from_params(cache_store::MODE_APPLICATION, 'mod_bigbluebuttonbn', 'meetings_cache');
@@ -819,8 +824,11 @@ function bigbluebuttonbn_bbb_broker_get_meeting_info($meetingid, $password, $for
 function bigbluebuttonbn_bbb_broker_do_end_meeting($meetingid, $password){
     global $CFG;
 
-    $endpoint = bigbluebuttonbn_get_cfg_server_url();
-    $shared_secret = bigbluebuttonbn_get_cfg_shared_secret();
+    /*---- OpenStack integration ----*/
+    $openStack_integration_enabled = bigbluebuttonbn_get_cfg_openstack_integration();
+    $endpoint = ($openStack_integration_enabled())? bigbluebutton_get_meeting_server_url($meetingid): bigbluebuttonbn_get_cfg_server_url();
+    $shared_secret = ($openStack_integration_enabled())? bigbluebutton_get_meeting_shared_secret($meetingid): bigbluebuttonbn_get_cfg_shared_secret();
+    /*---- end of OpenStack integration ---*/
 
     bigbluebuttonbn_doEndMeeting($meetingid, $password, $endpoint, $shared_secret);
 }
@@ -1617,3 +1625,20 @@ function bigbluebuttonbn_html2text($html, $len) {
         $text = substr($text, 0, $len);
     return $text;
 }
+
+
+/*---- OpenStack integration ---- */
+
+//Get BBB server URL. Used when creation on demand is enabled.
+function bigbluebuttonbn_get_meeting_server_url($meetingid){
+    global $DB;
+    return $DB->get_record('bigbluebuttonbn', array('bbb_server_url' => $meetingid));
+}
+
+//Get BBB server shared secret. Used when creation on demand is enabled.
+function bigbluebuttonbn_get_meeting_shared_secret($meetingid){
+    global $DB;
+    return $DB->get_record('bigbluebuttonbn', array('bbb_shared_secret' => $meetingid));
+}
+
+/*---- end of OpenStack integration ----*/
