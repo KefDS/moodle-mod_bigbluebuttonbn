@@ -33,6 +33,9 @@ $string['config_json_meeting_durations']='Meeting Durations';
 $string['config_json_meeting_durations_description']='Array of meeting durations in minutes. They must be in JSON format: [30,60,90].';
 $string['config_openstack_integration']='BBB servers on demand';
 $string['config_openstack_integration_description']='Enables OpenStack integration for managing BBB servers on demand.';
+$string['bbbconferencetoolate']='You cannot schedule a conference with that amount of anticipation.. For further information please contact the Administrator.';
+$string['bbbconferencetoosoon']='This opeining time is too soon. For further information please contact the Administrator.';
+
 
 //Meeting form
 $string['mod_form_field_meeting_duration']='Duration';

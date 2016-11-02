@@ -1617,3 +1617,16 @@ function bigbluebuttonbn_html2text($html, $len) {
         $text = substr($text, 0, $len);
     return $text;
 }
+
+/*---- OpenStack integration ----*/
+function bigbluebuttonbn_get_min_openingtime(){
+  $time_dd_hh = '00:01';//bigbluebuttonbn_get_cfg_min_openingtine();
+  $time= explode( ':',  $time_dd_hh );
+  return ( $time[0] * 24 * 3600 + $time[1] * 3600 + time());
+}
+function bigbluebuttonbn_get_max_openingtime(){
+  $time_dd_hh = '02:00';//bigbluebuttonbn_get_cfg_max_openingtine();
+  $time= explode( ':',  $time_dd_hh );
+  return ( $time[0] * 24 * 3600 + $time[1] * 3600 + time());
+}
+/*---- end of OpenStack integration ----*/

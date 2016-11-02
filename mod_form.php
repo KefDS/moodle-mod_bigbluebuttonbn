@@ -1,7 +1,7 @@
 <?php
 /**
  * Config all BigBlueButtonBN instances in this course.
- * 
+ *
  * @package   mod_bigbluebuttonbn
  * @author    Fred Dixon  (ffdixon [at] blindsidenetworks [dt] com)
  * @author    Jesus Federico  (jesus [at] blindsidenetworks [dt] com)
@@ -46,9 +46,9 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
         $userlimit_default = bigbluebuttonbn_get_cfg_userlimit_default();
         $userlimit_editable = bigbluebuttonbn_get_cfg_userlimit_editable();
         $preuploadpresentation_enabled = bigbluebuttonbn_get_cfg_preuploadpresentation_enabled();
-        $sendnotifications_enabled = bigbluebuttonbn_get_cfg_sendnotifications_enabled(); 
+        $sendnotifications_enabled = bigbluebuttonbn_get_cfg_sendnotifications_enabled();
 
-        //Validates if the BigBlueButton server is running 
+        //Validates if the BigBlueButton server is running
         $serverVersion = bigbluebuttonbn_getServerVersion($endpoint);
         if ( !isset($serverVersion) ) {
             print_error( 'general_error_unable_connect', 'bigbluebuttonbn', $CFG->wwwroot.'/admin/settings.php?section=modsettingbigbluebuttonbn' );
@@ -65,6 +65,7 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
         $mform->addElement('text', 'name', get_string('mod_form_field_name','bigbluebuttonbn'), 'maxlength="64" size="32"');
         $mform->setType('name', PARAM_TEXT);
         $mform->addRule('name', null, 'required', null, 'client');
+        $mform->addRule('name', null, 'maxlength', 30, 'client');
 
         $version_major = bigbluebuttonbn_get_moodle_version_major();
         if ( $version_major < '2015051100' ) {
@@ -266,30 +267,36 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
         //-------------------------------------------------------------------------------
         // Fourth block starts here
         //-------------------------------------------------------------------------------
-        
+
         //Add explanation of openingtime and closingtime
 
-        
+
+        /*---- OpenStack integration ----*/
+        $time_scheduling_options = ( bigbluebuttonbn_get_cfg_openstack_integration() )? array('enable'=>true) : array('optional'=>true) ;
+        /*---- end of OpenStack integration ----*/
+
         $mform->addElement('header', 'schedule', get_string('mod_form_block_schedule', 'bigbluebuttonbn'));
         if( isset($current_activity->openingtime) && $current_activity->openingtime != 0 || isset($current_activity->closingtime) && $current_activity->closingtime != 0 )
             $mform->setExpanded('schedule');
 
-        $mform->addElement('date_time_selector', 'openingtime', get_string('mod_form_field_openingtime', 'bigbluebuttonbn'), array('optional' => true));
+        $mform->addElement('date_time_selector', 'openingtime', get_string('mod_form_field_openingtime', 'bigbluebuttonbn'), $time_scheduling_options);
         $mform->setDefault('openingtime', 0);
         $mform->addHelpButton('openingtime', 'mod_form_field_openingtime', 'bigbluebuttonbn');
-        $mform->addElement('date_time_selector', 'closingtime', get_string('mod_form_field_closingtime', 'bigbluebuttonbn'), array('optional' => true));
+        $mform->addElement('date_time_selector', 'closingtime', get_string('mod_form_field_closingtime', 'bigbluebuttonbn'), $time_scheduling_options);
         $mform->setDefault('closingtime', 0);
         $mform->addHelpButton('closingtime', 'mod_form_field_closingtime', 'bigbluebuttonbn');
 
-        /* OpenStack integration */
+        /*---- OpenStack integration ----*/
+        if(bigbluebuttonbn_get_cfg_openstack_integration()){
+          $mform->addRule('openingtime', null, 'required', null, 'client');
+          $mform->addRule('closingtime', null, 'required', null, 'client');
+          $durations = json_decode(bigbluebuttonbn_get_cfg_json_meeting_durations());
+          $durations = array_combine($durations, $durations);
+          $mform->addElement('select', 'bbb_meeting_duration', get_string('mod_form_field_meeting_duration', 'bigbluebuttonbn'), $durations);
+          $mform->addHelpButton('bbb_meeting_duration', 'mod_form_field_meeting_duration', 'bigbluebuttonbn');
+        }
+        /*---- end of OpenStack integration ----*/
 
-        $durations = json_decode(bigbluebuttonbn_get_cfg_json_meeting_durations());
-        $durations = array_combine($durations, $durations);
-        $mform->addElement('select', 'bbb_meeting_duration', get_string('mod_form_field_meeting_duration', 'bigbluebuttonbn'), $durations);
-        $mform->addHelpButton('bbb_meeting_duration', 'mod_form_field_meeting_duration', 'bigbluebuttonbn');
-        
-        /* end of OpenStack integration*/
-        
         //-------------------------------------------------------------------------------
         // Fourth block ends here
         //-------------------------------------------------------------------------------
@@ -326,7 +333,17 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
                 $errors['closingtime'] = get_string('bbbduetimeoverstartingtime', 'bigbluebuttonbn');
             }
         }
-        
+
+        /*---- OpenStack integration ----*/
+        if(bigbluebuttonbn_get_cfg_openstack_integration()){
+          if ( $data['openingtime'] < bigbluebuttonbn_get_min_openingtime() ) {
+              $errors['openingtime'] = get_string('bbbconferencetoosoon', 'bigbluebuttonbn');
+          }elseif ( $data['openingtime'] > bigbluebuttonbn_get_max_openingtime() ) {
+              $errors['openingtime'] = get_string('bbbconferencetoolate', 'bigbluebuttonbn');
+          }
+        }
+        /*---- end of OpenStack integration ----*/
+
         if ( isset($data['voicebridge']) ) {
             if ( !bigbluebuttonbn_voicebridge_unique($data['voicebridge'], $data['instance'])) {
                 $errors['voicebridge'] = get_string('mod_form_field_voicebridge_notunique_error', 'bigbluebuttonbn');

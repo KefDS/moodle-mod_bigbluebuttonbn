@@ -34,6 +34,9 @@ $string['config_json_meeting_durations']='Duraciones de las conferencias';
 $string['config_json_meeting_durations_description']='Arreglo con las duraciones de conferencia en minutos. Deben estar en formato JSON: [30,60,90].';
 $string['config_openstack_integration']='Servidores BBB en demanda.';
 $string['config_openstack_integration_description']='Habilita la integración con OpenStack para manejar los servidores en demanda.';
+$string['bbbconferencetoolate']='No se puede reservar una conferencia con tanto tiempo de anticipación. Para más información comuníquese con el Administrador.';
+$string['bbbconferencetoosoon']='Esta conferencia no puede iniciar tan pronto. Para más información comuníquese con el Administrador.';
+
 
 
 //Meeting form
