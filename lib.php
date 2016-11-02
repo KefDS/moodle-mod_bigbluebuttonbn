@@ -739,11 +739,6 @@ function bigbluebuttonbn_get_cfg_heat_url() {
     return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_url)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_url): (isset($CFG->bigbluebuttonbn_heat_url)? trim($CFG->bigbluebuttonbn_heat_url): null));
 }
 
-function bigbluebuttonbn_get_cfg_json_meeting_durations() {
-    global $BIGBLUEBUTTONBN_CFG, $CFG;
-    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_meeting_durations)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_meeting_durations): (isset($CFG->bigbluebuttonbn_json_meeting_durations)? trim($CFG->bigbluebuttonbn_json_meeting_durations): '[30,60,120]'));
-}
-
 function bigbluebuttonbn_get_cfg_heat_region() {
     global $BIGBLUEBUTTONBN_CFG, $CFG;
     return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_region)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_region): (isset($CFG->bigbluebuttonbn_heat_region)? trim($CFG->bigbluebuttonbn_heat_region): null));
@@ -752,6 +747,21 @@ function bigbluebuttonbn_get_cfg_heat_region() {
 function bigbluebuttonbn_get_cfg_json_stack_parameters() {
     global $BIGBLUEBUTTONBN_CFG, $CFG;
     return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters): (isset($CFG->bigbluebuttonbn_json_stack_parameters)? trim($CFG->bigbluebuttonbn_json_stack_parameters): null));
+}
+
+function bigbluebuttonbn_get_cfg_json_meeting_durations() {
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_meeting_durations)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_meeting_durations): (isset($CFG->bigbluebuttonbn_json_meeting_durations)? trim($CFG->bigbluebuttonbn_json_meeting_durations): '[30,60,120]'));
+}
+
+function bigbluebuttonbn_get_cfg_min_openingtime() {
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_min_openingtime)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_min_openingtime): (isset($CFG->bigbluebuttonbn_min_openingtime)? trim($CFG->bigbluebuttonbn_min_openingtime): '00:30'));
+}
+
+function bigbluebuttonbn_get_cfg_max_openingtime(){
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_openingtime)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_openingtime): (isset($CFG->bigbluebuttonbn_max_openingtime)? trim($CFG->bigbluebuttonbn_max_openingtime): '30:00'));
 }
 
 function bigbluebuttonbn_get_cfg_openstack_username() {
@@ -767,14 +777,6 @@ function bigbluebuttonbn_get_cfg_openstack_password() {
 function bigbluebuttonbn_get_cfg_openstack_tenant_id() {
     global $BIGBLUEBUTTONBN_CFG, $CFG;
     return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_tenant_id)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_tenant_id): (isset($CFG->bigbluebuttonbn_openstack_tenant_id)? trim($CFG->bigbluebuttonbn_openstack_tenant_id): null));
-}
-
-
-////Get upcoming opening meetings whithin the next minutes
-function  bigbluebuttonbn_get_upcomming_meetings($minutes) {
-    global $DB;
-    $creation_time = time()+($minutes*60);
-  return $meetings = $DB->get_records_sql('SELECT * FROM {bigbluebuttonbn} WHERE openingtime < ? AND openstack_stack_name IS NULL', array($creation_time));
 }
 
 //---- end of Openstack integration ----

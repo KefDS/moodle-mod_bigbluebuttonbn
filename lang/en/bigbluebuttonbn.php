@@ -21,6 +21,10 @@ $string['config_heat_url']='OpenStack Server URL';
 $string['config_heat_url_description']='The URL of your OpenStack server (with Heat) used for the creation of the BBB servers.';
 $string['config_json_stack_parameters']='Stack parameters';
 $string['config_json_stack_parameters_description']='Arguments for Heat template, used for stack creation. They must be in JSON format: {"param1" : "val1", "param2" : "val2"}.';
+$string['config_min_openingtime']='Minimum opening time';
+$string['config_min_openingtime_description']='Minimum limit of time to schedule a meeting. It should be in a D:H format, where D is number of days and H is number of hours. Eg: "00:15" indicates zero days and fifteen minutes.';
+$string['config_max_openingtime']='Maximum opening time';
+$string['config_max_openingtime_description']='Maximum anticipation to schedule a meeting. It should be in a D:H format, where D is number of days and H is number of hours. Eg: "100:00" will be a hundred days and zero minutes.';
 $string['config_openstack_credentials']='OpenStack Credentials';
 $string['config_openstack_credentials_description']='Credentials to access OpenStack services.';
 $string['config_openstack_username']='Username';
@@ -33,13 +37,12 @@ $string['config_json_meeting_durations']='Meeting Durations';
 $string['config_json_meeting_durations_description']='Array of meeting durations in minutes. They must be in JSON format: [30,60,90].';
 $string['config_openstack_integration']='BBB servers on demand';
 $string['config_openstack_integration_description']='Enables OpenStack integration for managing BBB servers on demand.';
-$string['bbbconferencetoolate']='You cannot schedule a conference with that amount of anticipation.. For further information please contact the Administrator.';
-$string['bbbconferencetoosoon']='This opeining time is too soon. For further information please contact the Administrator.';
-
 
 //Meeting form
 $string['mod_form_field_meeting_duration']='Duration';
 $string['mod_form_field_meeting_duration_help']='Meeting duration (in minutes)';
+$string['bbbconferencetoosoon']='This opeining time is too soon. For further information please contact the Administrator.';
+$string['bbbconferencetoolate']='You cannot schedule a conference with that amount of anticipation.. For further information please contact the Administrator.';
 
 //Tasks for OpenStack communication
 $string['task_openstack_async_communication']= 'Creating BBB meeting servers with OpenStack';
