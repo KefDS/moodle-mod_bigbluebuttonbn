@@ -15,6 +15,17 @@ global $BIGBLUEBUTTONBN_CFG;
 
 require_once(dirname(__FILE__).'/locallib.php');
 
+
+/*---- OpenStack integration ----*/
+//Regex values used for validation
+$bbb_server_regex= '/^\S{0,60}\/bigbluebutton\/$/'; //Validates BBB server instance
+$heat_url_regex='/^\S{0,60}5000\/v2.0$/'; //Validates API version
+$small_length_string_regex= '/^\S{0,15}$/';
+$medium_length_string_regex= '/^\S{0,40}$/';
+$json_object_regex= '/^.{0,60}$/';
+$json_array_regex='/\[\d+(,\d+)*\]$/';
+/*---- end of OpenStack integration ----*/
+
 if ($ADMIN->fulltree) {
 
     if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_server_url) ||
@@ -28,13 +39,13 @@ if ($ADMIN->fulltree) {
             $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_server_url',
                     get_string( 'config_server_url', 'bigbluebuttonbn' ),
                     get_string( 'config_server_url_description', 'bigbluebuttonbn' ),
-                    bigbluebuttonbn_get_cfg_server_url_default()));
+                    bigbluebuttonbn_get_cfg_server_url_default(), $bbb_server_regex));
         }
         if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_shared_secret) ) {
             $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_shared_secret',
                     get_string( 'config_shared_secret', 'bigbluebuttonbn' ),
                     get_string( 'config_shared_secret_description', 'bigbluebuttonbn' ),
-                    bigbluebuttonbn_get_cfg_shared_secret_default()));
+                    bigbluebuttonbn_get_cfg_shared_secret_default(), $medium_length_string_regex));
         }
 
         //---- OpenStack integration ----
@@ -64,28 +75,28 @@ if ($ADMIN->fulltree) {
             $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_heat_url',
                 get_string( 'config_heat_url', 'bigbluebuttonbn' ),
                 get_string( 'config_heat_url_description', 'bigbluebuttonbn' ),
-                null));
+                null, $heat_url_regex));
         }
         if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_region) ){
             //Region of Heat service
             $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_heat_region',
                 get_string( 'config_heat_region', 'bigbluebuttonbn' ),
                 get_string( 'config_heat_region_description', 'bigbluebuttonbn' ),
-                null));
+                null, $small_length_string_regex));
         }
         if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_meeting_durations)){
             //Meeting durations
             $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_json_meeting_durations',
                 get_string('config_json_meeting_durations', 'bigbluebuttonbn'),
                 get_string('config_json_meeting_durations_description','bigbluebuttonbn'),
-                null));
+                null, $json_array_regex));
         }
         if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters)){
             //Parameters for stack creation in JSON representation
             $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_json_stack_parameters',
                 get_string( 'config_json_stack_parameters', 'bigbluebuttonbn' ),
                 get_string( 'config_json_stack_parameters_description', 'bigbluebuttonbn' ),
-                null));
+                null,$json_object_regex));
         }
     }
 
@@ -103,22 +114,22 @@ if ($ADMIN->fulltree) {
             $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_openstack_username',
                 get_string( 'config_openstack_username', 'bigbluebuttonbn' ),
                 get_string( 'config_openstack_username_description', 'bigbluebuttonbn' ),
-                null));
+                null, $small_length_string_regex));
         }
         if(!isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_password)){
             $settings->add( new admin_setting_configpasswordunmask('bigbluebuttonbn_openstack_password',
                 get_string( 'config_openstack_password', 'bigbluebuttonbn' ),
                 get_string( 'config_openstack_password_description', 'bigbluebuttonbn' ),
-                null));
+                null, $small_length_string_regex));
         }
         if(!isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_tenant_id)){
             $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_openstack_tenant_id',
                 get_string( 'config_openstack_tenant_id', 'bigbluebuttonbn' ),
                 get_string( 'config_openstack_tenant_id_description', 'bigbluebuttonbn' ),
-                null));
+                null, $medium_length_string_regex));
         }
     }
-    
+
     //---- end of OpenStack integration ----
 
     //// Configuration for 'recording' feature
