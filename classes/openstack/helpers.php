@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Auxiliary functions.
  *
@@ -24,5 +23,24 @@ class helpers {
         $array = (array) $object;
         $prefix = chr(0) . '*' . chr(0);
         return $array[$prefix . $value];
+    }
+
+
+    // DataBase queries
+
+    public static function get_upcomming_meetings_by_minutes($minutes) {
+        global $DB;
+        $creation_time = time() + ($minutes*60);
+        return $meetings = $DB->get_records_sql('SELECT * FROM {bigbluebuttonbn} WHERE openingtime < ? AND openstack_stack_name IS NULL', [$creation_time]);
+    }
+
+    public static function get_meetings_by_state($state) {
+        global $DB;
+        return $DB->get_records_sql('SELECT * FROM {bigbluebuttonbn} WHERE bbb_server_status  = ?', [$state]);
+    }
+
+    public static function get_finished_meetings(){
+        global $DB;
+        return $DB->get_records_sql( 'SELECT * FROM  {bigbluebuttonbn} WHERE ( openingtime + ( bbb_meeting_duration*60 ) ) > ?', [time()]);
     }
 }

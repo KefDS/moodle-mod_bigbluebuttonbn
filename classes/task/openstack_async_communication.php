@@ -1,9 +1,12 @@
 <?php
-
 namespace mod_bigbluebuttonbn\task;
 
+require_once dirname(dirname(__DIR__)) . '/lib.php';
+require_once dirname(__DIR__) . "/openstack/moodle_bbb_openstack_stacks_management_tasks.php";
+require_once dirname(__DIR__) . "/openstack/exception_handlers/archive_log_exception_handler.php";
+require_once dirname(__DIR__) . "/openstack/error_communicators/moodle_message_api_communicator.php";
 
-//require_once(dirname(dirname(dirname(__FILE__))).'/lib.php');
+use mod_bigbluebuttonbn\openstack;
 
 class openstack_async_communication extends \core\task\scheduled_task {
     public function get_name() {
@@ -11,24 +14,9 @@ class openstack_async_communication extends \core\task\scheduled_task {
     }
 
     public function execute() {
-        $closest_starting_meetings =  $this->bigbluebuttonbn_get_upcomming_meetings(60);
-        if($closest_starting_meetings) {
-            foreach ($closest_starting_meetings as $meeting) {
-                $this->start_meeting($meeting);
-            }
-        }
-    }
-
-    private function start_meeting($meeting) {
-        // TODO_BBB: Llamar a las clases hechas
-        global $DB;
-        $meeting->openstack_stack_name = "TheCronJobWasHere";
-        $DB->update_record('bigbluebuttonbn', $meeting);
-    }
-
-    private function  bigbluebuttonbn_get_upcomming_meetings($minutes){
-        global $DB;
-        $creation_time = time()+($minutes*60);
-        return $meetings = $DB->get_records_sql('SELECT * FROM {bigbluebuttonbn} WHERE openingtime < ? AND openstack_stack_name IS NULL', array($creation_time));
+        $async_tasks = new openstack\moodle_bbb_openstack_stacks_management_tasks(
+            new openstack\archive_log_exception_handler(),
+            new openstack\moodle_message_api_communicator());
+        $async_tasks->do_tasks();
     }
 }

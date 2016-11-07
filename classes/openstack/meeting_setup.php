@@ -6,67 +6,83 @@
  * @author Kevin Delgado (kevin.delgadosandi [at] ucr.ac.cr)
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v2 or later
  */
-
 namespace mod_bigbluebuttonbn\openstack;
-use OpenCloud\OpenStack;
+
+use core\session\exception;
+
+require_once dirname(__FILE__) . '/bbb_host_management.php';
 
 class meeting_setup {
     private $meeting;
     private $bbb_servers_management;
-    private $error_handler;
 
-    function __construct($meeting, $error_handler = null) {
+    function __construct($meeting, $orchestration_service) {
         $this->meeting = $meeting;
-
-        $openstack_client = new OpenStack(bigbluebuttonbn_get_cfg_heat_url(), [
-            'username' => bigbluebuttonbn_get_cfg_openstack_username(),
-            'password' => bigbluebuttonbn_get_cfg_openstack_password(),
-            'tenantId' => bigbluebuttonbn_get_cfg_openstack_tenant_id()
-        ]);
-        $openstack_client->authenticate();
-        $this->bbb_servers_management = new bbb_servers_management($openstack_client, bigbluebuttonbn_get_cfg_heat_region());
-        $this->error_handler = $error_handler ? new simple_file_error_handler() : $error_handler;
+        $this->bbb_servers_management = new bbb_host_management($orchestration_service);
     }
 
     function create_meeting_host() {
         global $DB;
         try {
-            $bbb_host_name = $this->bbb_servers_management->create_bbb_host($this->meeting->meetingid, json_decode(bigbluebuttonbn_get_cfg_json_stack_parameters()));
+            $stack_params = json_decode(bigbluebuttonbn_get_cfg_json_stack_parameters(), true);
+            $bbb_host_name = $this->bbb_servers_management->create_bbb_host($this->meeting->meetingid, $stack_params);
 
             $this->meeting->openstack_stack_name = $bbb_host_name;
-            $this->meeting->host_state = 'In Progress';
+            $this->meeting->bbb_server_status = 'In Progress';
             $DB->update_record('bigbluebuttonbn', $this->meeting);
         }
-        catch (Exception $e) {
-            $this->error_handler->handle_error($e);
-            // TODO_BBB: Poner estado de la BD en failed?
+        catch (\Exception $exception) {
+            $this->failed_meeting_setup();
+
+            $exception_message = "The bbb host cannot be created." . "Meeting id: " . $this->meeting->meetingid . ".\nStack parameters: " .
+                var_export($stack_params, true) . ".\n" .
+                $exception->getMessage();
+
+            throw new \Exception($exception_message);
         }
     }
 
     function get_meeting_host_info() {
         global $DB;
         try {
-            $bbb_host_data = $this->bbb_servers_management->get_stack_outputs($this->meeting->meetingid);
-            if($bbb_host_data) {
-                $this->meeting->bbb_server_url = $bbb_host_data['url'];
-                $this->meeting->shared_secret = $bbb_host_data['shared_key'];
-                $this->meeting->host_state = 'Ready';
+            $bbb_host_information = $this->bbb_servers_management->get_stack_outputs($this->meeting->meetingid);
+            if($bbb_host_information) {
+                $this->meeting->bbb_server_url = $bbb_host_information['url'];
+                $this->meeting->shared_secret = $bbb_host_information['shared_key'];
+
+                $this->meeting->bbb_server_status = 'Ready';
                 $DB->update_record('bigbluebuttonbn', $this->meeting);
             }
         }
-        catch (Exception $e) {
-            $this->error_handler->handle_error($e);
-            // TODO_BBB: Poner estado de la BD en failed?
+        catch (\Exception $exception) {
+            $this->failed_meeting_setup();
+            $exception_error = $exception->getMessage() . " Meeting id: " . $this->meeting->meetingid;
+            throw new exception($exception_error);
         }
     }
 
     function delete_meeting_host() {
+        global $DB;
         try {
             $this->bbb_servers_management->delete_bbb_host($this->meeting->meetingid);
+            $this->meeting->bbb_server_status = 'Deleted';
+            $DB->update_record('bigbluebuttonbn', $this->meeting);
         }
-        catch (Exception $e) {
-            $this->error_handler->handle_error($e);
-            // TODO_BBB: ?
+        catch (\Exception $exception) {
+            $this->meeting->bbb_server_status = 'Delete Error';
+            $DB->update_record('bigbluebuttonbn', $this->meeting);
+
+            $exception_message = "The bbb host cannot be destroyed. Try delete it manually. Meeting id: " . $this->meeting->meetingid . "\n" .
+            $exception->getMessage();
+            throw new \Exception($exception_message);
         }
+    }
+
+
+    // Auxiliary methods
+    private function failed_meeting_setup() {
+        global $DB;
+        $this->meeting->bbb_server_status = 'Failed';
+        $DB->update_record('bigbluebuttonbn', $this->meeting);
     }
 }
