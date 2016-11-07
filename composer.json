@@ -1,10 +1,11 @@
 {
-    "name": "blindsidenetworks/moodle-mod_bigbluebuttonbn",
-    "type": "moodle-mod",
-    "require": {
-        "composer/installers": "~1.0"
-    },
-    "extra": {
-        "installer-name": "bigbluebuttonbn"
-    }
+  "name": "blindsidenetworks/moodle-mod_bigbluebuttonbn",
+  "type": "moodle-mod",
+  "require": {
+    "composer/installers": "~1.0",
+    "rackspace/php-opencloud": "*"
+  },
+  "extra": {
+    "installer-name": "bigbluebuttonbn"
+  }
 }
