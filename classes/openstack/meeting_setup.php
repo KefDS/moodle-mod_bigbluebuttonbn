@@ -8,8 +8,6 @@
  */
 namespace mod_bigbluebuttonbn\openstack;
 
-use core\session\exception;
-
 require_once dirname(__FILE__) . '/bbb_host_management.php';
 
 class meeting_setup {
@@ -34,7 +32,7 @@ class meeting_setup {
         catch (\Exception $exception) {
             $this->failed_meeting_setup();
 
-            $exception_message = "The bbb host cannot be created." . "Meeting id: " . $this->meeting->meetingid . ".\nStack parameters: " .
+            $exception_message = "The bbb host cannot be created. Stack parameters: " .
                 var_export($stack_params, true) . ".\n" .
                 $exception->getMessage();
 
@@ -56,8 +54,7 @@ class meeting_setup {
         }
         catch (\Exception $exception) {
             $this->failed_meeting_setup();
-            $exception_error = $exception->getMessage() . " Meeting id: " . $this->meeting->meetingid;
-            throw new exception($exception_error);
+            throw $exception;
         }
     }
 
@@ -72,14 +69,13 @@ class meeting_setup {
             $this->meeting->bbb_server_status = 'Delete Error';
             $DB->update_record('bigbluebuttonbn', $this->meeting);
 
-            $exception_message = "The bbb host cannot be destroyed. Try delete it manually. Meeting id: " . $this->meeting->meetingid . "\n" .
-            $exception->getMessage();
+            $exception_message = "The bbb host cannot be destroy. Try delete it manually. Meeting id: " . $this->meeting->meetingid . "\n" .
+                $exception->getMessage();
             throw new \Exception($exception_message);
         }
     }
 
 
-    // Auxiliary methods
     private function failed_meeting_setup() {
         global $DB;
         $this->meeting->bbb_server_status = 'Failed';

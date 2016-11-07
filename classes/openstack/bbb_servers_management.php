@@ -8,51 +8,54 @@
  */
 namespace mod_bigbluebuttonbn\openstack;
 
-class bbb_host_management {
-    const DEFAULT_TIMEOUT_MINUTES = 14;
+require_once('../../vendor/autoload.php');
+use OpenCloud\OpenStack;
 
-    private $orchestration_service;
+class bbb_servers_management {
+    private $openstack_connection;
+    private $region;
 
-    function __construct($orchestration_service) {
-        $this->orchestration_service = $orchestration_service;
+    function __construct(OpenStack $openstack_connection, $region) {
+        $this->openstack_connection = $openstack_connection;
+        $this->region = $region;
     }
 
     function create_bbb_host($meeting_id, $stack_parameters) {
         $stack_name = $this->get_bbb_host_name($meeting_id);
         $stack_parameters['name'] = $stack_name;
-        $stack_parameters['timeoutMins'] = self::DEFAULT_TIMEOUT_MINUTES;
 
-        $this->orchestration_service->createStack($stack_parameters);
+        $service = $this->get_orchestration_service();
+        $service->createStack($stack_parameters);
         return $stack_name;
     }
 
     function get_stack_outputs($meeting_id) {
-        // TODO_BBB: Hash implementation
-        $stack = $this->orchestration_service->getStack($this->get_bbb_host_name($meeting_id));
+        $stack = $this->get_orchestration_service()->getStack($this->get_bbb_host_name($meeting_id));
         if($this->get_bbb_server_status($stack) == "CREATE_COMPLETE") {
             return [
                 'url' => $this->get_bbb_server_ip($stack),
                 'shared_key' => $this->get_bbb_server_shared_key($stack)
             ];
         }
-        // Server not ready
-        elseif($this->get_bbb_server_status($stack) == "CREATE_IN_PROGRESS") {
-            return null;
-        }
-        // Other state is an error (for now)
-        throw new \Exception("Error in BBB server creation. Stack status: " . $this->get_bbb_server_status($stack));
+        return null;
     }
 
     function  delete_bbb_host($meeting_id) {
         $stack_name = $this->get_bbb_host_name($meeting_id);
-        $this->orchestration_service->getStack($stack_name)->delete();
+        $service = $this->get_orchestration_service();
+        $stack = $service->getStack($stack_name);
+        $stack->delete();
     }
 
 
     // Auxiliary functions
 
     private function get_bbb_host_name($meeting_id) {
-        return "moodle_bbb_host_of_meeting_" . $meeting_id;
+        return "moodle_bbb_host_meeting_" . $meeting_id;
+    }
+
+    private function get_orchestration_service() {
+        return $this->openstack_connection->orchestrationService('heat', $this->region);
     }
 
     private function get_bbb_server_status($stack) {
