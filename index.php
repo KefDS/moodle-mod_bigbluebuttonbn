@@ -57,6 +57,10 @@ $table = new html_table();
 $table->head  = array ($strweek, $heading_name, $heading_group, $heading_users, $heading_viewer, $heading_moderator, $heading_recording, $heading_actions );
 $table->align = array ('center', 'left', 'center', 'center', 'center',  'center', 'center' );
 
+/*---- OpenStack integration ----*/
+$openStack_integration_enabled= bigbluebuttonbn_get_cfg_openstack_integration();
+/*--- end of OpenStack integration ----*/
+
 $endpoint = bigbluebuttonbn_get_cfg_server_url();
 $shared_secret = bigbluebuttonbn_get_cfg_shared_secret();
 $logoutURL = $CFG->wwwroot;
@@ -86,6 +90,13 @@ if ($submit === 'end') {
 
         echo get_string('index_ending', 'bigbluebuttonbn');
 
+        /*---- OpenStack integration ----*/
+        if($openStack_integration_enabled){
+            $endpoint = bigbluebuttonbn_get_meeting_server_url($bigbluebuttonbn->meetingid);
+            $shared_secret =  bigbluebuttonbn_get_meeting_shared_secret($bigbluebuttonbn->meetingid);
+        }
+        /*---- end of OpenStack integration ----*/
+
         $meetingID = $bigbluebuttonbn->meetingid.'-'.$course->id.'-'.$bigbluebuttonbn->id;
         $modPW = $bigbluebuttonbn->moderatorpass;
         if( $g != '0'  ) {
@@ -108,6 +119,13 @@ foreach ($bigbluebuttonbns as $bigbluebuttonbn) {
         $moderator = bigbluebuttonbn_is_moderator($USER->id, get_user_roles($context, $USER->id, true), $bigbluebuttonbn->participants);
     }
     $administrator = has_capability('moodle/category:manage', $context);
+
+    /*---- OpenStack integration ----*/
+    if($openStack_integration_enabled){
+        $endpoint = bigbluebuttonbn_get_meeting_server_url($bigbluebuttonbn->meetingid);
+        $shared_secret =  bigbluebuttonbn_get_meeting_shared_secret($bigbluebuttonbn->meetingid);
+    }
+    /*---- end of OpenStack integration  ---- */
 
     if ( groups_get_activity_groupmode($cm) > 0 ){
         $table->data[] = displayBigBlueButtonRooms($endpoint, $shared_secret, ($administrator || $moderator), $course, $bigbluebuttonbn, (object) array('id'=>0, 'name'=>get_string('allparticipants')));
@@ -145,6 +163,13 @@ function displayBigBlueButtonRooms($endpoint, $shared_secret, $moderator, $cours
     } else {
         $modPW = $bigbluebuttonbn->moderatorpass;
         $attPW = $bigbluebuttonbn->viewerpass;
+
+        /*---- OpenStack integration ----*/
+        if(bigbluebuttonbn_get_cfg_openstack_integration()){
+            $endpoint = bigbluebuttonbn_get_meeting_server_url($bigbluebuttonbn->meetingid);
+            $shared_secret =  bigbluebuttonbn_get_meeting_shared_secret($bigbluebuttonbn->meetingid);
+        }
+        /*---- end of OpenStack integration  ---- */
 
         $meetingID = $bigbluebuttonbn->meetingid.'-'.$course->id.'-'.$bigbluebuttonbn->id;
         //

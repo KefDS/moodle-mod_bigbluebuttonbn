@@ -69,8 +69,9 @@ $bbbsession['managerecordings'] = ($bbbsession['administrator'] || has_capabilit
 /*---- OpenStack integration ----*/
 
 $openStack_integration_enabled = bigbluebuttonbn_get_cfg_openstack_integration();
-$bbbsession['endpoint'] = ($openStack_integration_enabled())? bigbluebutton_get_meeting_server_url($meetingid): bigbluebuttonbn_get_cfg_server_url();
-$bbbsession['shared_secret']  = ($openStack_integration_enabled())? bigbluebutton_get_meeting_shared_secret($meetingid): bigbluebuttonbn_get_cfg_shared_secret();
+$meetingid = $bbbsession['bigbluebuttonbn']->meetingid;
+$bbbsession['endpoint'] = ($openStack_integration_enabled)? bigbluebuttonbn_get_meeting_server_url($meetingid): bigbluebuttonbn_get_cfg_server_url();
+$bbbsession['shared_secret']  = ($openStack_integration_enabled)? bigbluebuttonbn_get_meeting_shared_secret($meetingid): bigbluebuttonbn_get_cfg_shared_secret();
 
 /*---- end of OpenStack integration ---*/
 

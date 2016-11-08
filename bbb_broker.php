@@ -20,6 +20,7 @@ $params['idx'] = optional_param('idx', '', PARAM_TEXT);  //meetingID, the BBB me
 $params['bigbluebuttonbn'] = optional_param('bigbluebuttonbn', 0, PARAM_INT);
 $params['signed_parameters'] = optional_param('signed_parameters', '', PARAM_TEXT);
 
+
 //---- OpenStack integration variables ----
 
 $heat_url= bigbluebuttonbn_get_cfg_heat_url();

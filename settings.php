@@ -22,7 +22,7 @@ $bbb_server_regex= '/^\S{0,60}\/bigbluebutton\/$/'; //Validates BBB server insta
 $heat_url_regex='/^\S{0,60}5000\/v2.0$/'; //Validates API version
 $small_length_string_regex= '/^\S{0,15}$/';
 $medium_length_string_regex= '/^\S{0,40}$/';
-$json_object_regex= '/^.{0,60}$/';
+$json_object_regex= '/./';//'/^.{0,150}$/';
 $json_array_regex='/\[\d+(,\d+)*\]$/';
 $days_hours_regex = '/^\d{1,3}:\d{1,2}$/';
 /*---- end of OpenStack integration ----*/

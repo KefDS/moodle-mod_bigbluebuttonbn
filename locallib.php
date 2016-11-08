@@ -797,8 +797,14 @@ function bigbluebuttonbn_bbb_broker_get_meeting_info($meetingid, $password, $for
     global $CFG;
 
     $meeting_info = array();
-    $endpoint = bigbluebuttonbn_get_cfg_server_url();
-    $shared_secret = bigbluebuttonbn_get_cfg_shared_secret();
+
+    /*---- OpenStack integration ----*/
+    $meetingid_bbb = substr($meetingid, 0, strpos($meetingid, '-'));
+    $openStack_integration_enabled = bigbluebuttonbn_get_cfg_openstack_integration();
+    $endpoint = ($openStack_integration_enabled())? bigbluebutton_get_meeting_server_url($meetingid_bbb): bigbluebuttonbn_get_cfg_server_url();
+    $shared_secret = ($openStack_integration_enabled())? bigbluebutton_get_meeting_shared_secret($meetingid_bbb): bigbluebuttonbn_get_cfg_shared_secret();
+    /*---- end of OpenStack integration ---*/
+
     $cache_ttl = bigbluebuttonbn_get_cfg_waitformoderator_cache_ttl();
 
     $cache = cache::make_from_params(cache_store::MODE_APPLICATION, 'mod_bigbluebuttonbn', 'meetings_cache');
@@ -819,8 +825,12 @@ function bigbluebuttonbn_bbb_broker_get_meeting_info($meetingid, $password, $for
 function bigbluebuttonbn_bbb_broker_do_end_meeting($meetingid, $password){
     global $CFG;
 
-    $endpoint = bigbluebuttonbn_get_cfg_server_url();
-    $shared_secret = bigbluebuttonbn_get_cfg_shared_secret();
+    /*---- OpenStack integration ----*/
+    $meetingid_bbb = substr($meetingid, 0, strpos($meetingid, '-'));
+    $openStack_integration_enabled = bigbluebuttonbn_get_cfg_openstack_integration();
+    $endpoint = ($openStack_integration_enabled())? bigbluebutton_get_meeting_server_url($meetingid_bbb): bigbluebuttonbn_get_cfg_server_url();
+    $shared_secret = ($openStack_integration_enabled())? bigbluebutton_get_meeting_shared_secret($meetingid_bbb): bigbluebuttonbn_get_cfg_shared_secret();
+    /*---- end of OpenStack integration ---*/
 
     bigbluebuttonbn_doEndMeeting($meetingid, $password, $endpoint, $shared_secret);
 }
@@ -1618,20 +1628,27 @@ function bigbluebuttonbn_html2text($html, $len) {
     return $text;
 }
 
-/*---- OpenStack integration ----*/
+//<<<<<<< HEAD
 
-//Get upcoming opening meetings whithin the next minutes
-function  bigbluebuttonbn_get_upcomming_meetings($minutes) {
+/*---- OpenStack integration ---- */
+
+//Get BBB server URL. Used when creation on demand is enabled.
+function bigbluebuttonbn_get_meeting_server_url($meetingid){
     global $DB;
-    $creation_time = time()+($minutes*60);
-    return $meetings = $DB->get_records_sql('SELECT * FROM {bigbluebuttonbn} WHERE openingtime < ? AND openstack_stack_name IS NULL', array($creation_time));
+    return $DB->get_field('bigbluebuttonbn','bbb_server_url',array('meetingid'=>$meetingid), 'MUST_EXIST');
+}
+
+//Get BBB server shared secret. Used when creation on demand is enabled.
+function bigbluebuttonbn_get_meeting_shared_secret($meetingid){
+    global $DB;
+    return $DB->get_field('bigbluebuttonbn','bbb_shared_secret',array('meetingid'=>$meetingid), 'MUST_EXIST');
 }
 
 //Get minimun time to schedule a meeting
 function bigbluebuttonbn_get_min_openingtime(){
     $time_dd_hh = bigbluebuttonbn_get_cfg_min_openingtime();
     $time= explode( ':',  $time_dd_hh );
-    return ( $time[0] * 24 * 3600 + $time[1] * 3600 + time());
+    return ( $time[0] * 24 * 3600 + $time[1] * 60 + time());
 }
 
 //Get maximun anticipation time to schedule a meeting
