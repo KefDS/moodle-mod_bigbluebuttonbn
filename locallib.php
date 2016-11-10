@@ -1635,20 +1635,20 @@ function bigbluebuttonbn_html2text($html, $len) {
 //Get BBB server URL. Used when creation on demand is enabled.
 function bigbluebuttonbn_get_meeting_server_url($meetingid){
     global $DB;
-    return $DB->get_record('bigbluebuttonbn', array('bbb_server_url' => $meetingid));
+    return $DB->get_field('bigbluebuttonbn','bbb_server_url',array('meetingid'=>$meetingid), 'MUST_EXIST');
 }
 
 //Get BBB server shared secret. Used when creation on demand is enabled.
 function bigbluebuttonbn_get_meeting_shared_secret($meetingid){
     global $DB;
-    return $DB->get_record('bigbluebuttonbn', array('bbb_shared_secret' => $meetingid));
+    return $DB->get_field('bigbluebuttonbn','bbb_shared_secret',array('meetingid'=>$meetingid), 'MUST_EXIST');
 }
 
 //Get minimun time to schedule a meeting
 function bigbluebuttonbn_get_min_openingtime(){
     $time_dd_hh = bigbluebuttonbn_get_cfg_min_openingtime();
     $time= explode( ':',  $time_dd_hh );
-    return ( $time[0] * 24 * 3600 + $time[1] * 3600 + time());
+    return ( $time[0] * 24 * 3600 + $time[1] * 60 + time());
 }
 
 //Get maximun anticipation time to schedule a meeting
