@@ -52,7 +52,7 @@ class bbb_host_management {
     // Auxiliary functions
 
     private function get_bbb_host_name($meeting_id) {
-        return "moodle_bbb_host_of_meeting_" . $meeting_id;
+        return "bbb_conference_" . $meeting_id;
     }
 
     private function get_bbb_server_status($stack) {

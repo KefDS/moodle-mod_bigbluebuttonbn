@@ -19,7 +19,7 @@ class meeting_setup {
         global $DB;
         try {
             $stack_params = json_decode(bigbluebuttonbn_get_cfg_json_stack_parameters(), true);
-            $bbb_host_name = $this->bbb_servers_management->create_bbb_host($this->meeting->meetingid, $stack_params);
+            $bbb_host_name = $this->bbb_servers_management->create_bbb_host($this->meeting->id, $stack_params);
             $this->meeting->openstack_stack_name = $bbb_host_name;
             $this->meeting->bbb_server_status = 'In Progress';
             $DB->update_record('bigbluebuttonbn', $this->meeting);
@@ -35,7 +35,7 @@ class meeting_setup {
     function get_meeting_host_info() {
         global $DB;
         try {
-            $bbb_host_information = $this->bbb_servers_management->get_stack_outputs($this->meeting->meetingid);
+            $bbb_host_information = $this->bbb_servers_management->get_stack_outputs($this->meeting->id);
             if($bbb_host_information) {
                 $this->meeting->bbb_server_url = $bbb_host_information['url'];
                 $this->meeting->shared_secret = $bbb_host_information['shared_key'];
@@ -51,7 +51,7 @@ class meeting_setup {
     function delete_meeting_host() {
         global $DB;
         try {
-            $this->bbb_servers_management->delete_bbb_host($this->meeting->meetingid);
+            $this->bbb_servers_management->delete_bbb_host($this->meeting->id);
             $this->meeting->bbb_server_status = 'Deleted';
             $DB->update_record('bigbluebuttonbn', $this->meeting);
         }

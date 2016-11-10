@@ -1,6 +1,6 @@
 <?php
 namespace mod_bigbluebuttonbn\task;
-require_once dirname(dirname(__DIR__)) . '/lib.php';
+require_once dirname(dirname(__DIR__)) . "/lib.php";
 require_once dirname(__DIR__) . "/openstack/moodle_bbb_openstack_stacks_management_tasks.php";
 require_once dirname(__DIR__) . "/openstack/exception_handlers/archive_log_exception_handler.php";
 require_once dirname(__DIR__) . "/openstack/error_communicators/moodle_message_api_communicator.php";
