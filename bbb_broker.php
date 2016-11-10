@@ -20,20 +20,6 @@ $params['idx'] = optional_param('idx', '', PARAM_TEXT);  //meetingID, the BBB me
 $params['bigbluebuttonbn'] = optional_param('bigbluebuttonbn', 0, PARAM_INT);
 $params['signed_parameters'] = optional_param('signed_parameters', '', PARAM_TEXT);
 
-//---- OpenStack integration variables ----
-
-$heat_url= bigbluebuttonbn_get_cfg_heat_url();
-$heat_region = bigbluebuttonbn_get_cfg_heat_region();
-$stack_parameters = bigbluebuttonbn_get_cfg_json_stack_parameters();
-$parametros = json_decode($stack_parameters);
-$opensack_username = bigbluebuttonbn_get_cfg_openstack_username();
-$openstack_password = bigbluebuttonbn_get_cfg_openstack_password();
-$openstack_tenant_id =bigbluebuttonbn_get_cfg_openstack_tenant_id();
-
-//---- end of OpenStack integration ----
-
-
-
 $endpoint = bigbluebuttonbn_get_cfg_server_url();
 $shared_secret = bigbluebuttonbn_get_cfg_shared_secret();
 
