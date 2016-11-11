@@ -17264,3 +17264,95 @@ Client error response
 [reason phrase] Not Found
 [url] http://os-kilo-01.core.ucr.ac.cr:8004/v1/61d90c9e171a43dba0e197c824851be3/stacks/bbb_conference_189
 
+[2016-11-11 15:46:02] The bbb host cannot be destroy. Try delete it manually. Meeting id: f85788419561b21d1926923a40a701847f16818c
+Client error response
+[status code] 404
+[reason phrase] Not Found
+[url] http://os-kilo-01.core.ucr.ac.cr:8004/v1/61d90c9e171a43dba0e197c824851be3/stacks/bbb_conference_188
+
+[2016-11-11 15:46:02] The bbb host cannot be destroy. Try delete it manually. Meeting id: 776c6d496a21cbec6f05f8ed612c9a6818e8b3ec
+Client error response
+[status code] 404
+[reason phrase] Not Found
+[url] http://os-kilo-01.core.ucr.ac.cr:8004/v1/61d90c9e171a43dba0e197c824851be3/stacks/bbb_conference_189
+
+[2016-11-11 15:46:02] The bbb host cannot be destroy. Try delete it manually. Meeting id: 9171f78be5a619d32efbf55d8254664894fe4b56
+Client error response
+[status code] 404
+[reason phrase] Not Found
+[url] http://os-kilo-01.core.ucr.ac.cr:8004/v1/61d90c9e171a43dba0e197c824851be3/stacks/bbb_conference_190
+
+[2016-11-11 15:48:08] The bbb host cannot be destroy. Try delete it manually. Meeting id: f85788419561b21d1926923a40a701847f16818c
+Client error response
+[status code] 404
+[reason phrase] Not Found
+[url] http://os-kilo-01.core.ucr.ac.cr:8004/v1/61d90c9e171a43dba0e197c824851be3/stacks/bbb_conference_188
+
+[2016-11-11 15:48:08] The bbb host cannot be destroy. Try delete it manually. Meeting id: 776c6d496a21cbec6f05f8ed612c9a6818e8b3ec
+Client error response
+[status code] 404
+[reason phrase] Not Found
+[url] http://os-kilo-01.core.ucr.ac.cr:8004/v1/61d90c9e171a43dba0e197c824851be3/stacks/bbb_conference_189
+
+[2016-11-11 15:48:08] The bbb host cannot be destroy. Try delete it manually. Meeting id: 9171f78be5a619d32efbf55d8254664894fe4b56
+Client error response
+[status code] 404
+[reason phrase] Not Found
+[url] http://os-kilo-01.core.ucr.ac.cr:8004/v1/61d90c9e171a43dba0e197c824851be3/stacks/bbb_conference_190
+
+[2016-11-11 15:51:02] Error in BBB server creation. Stack status: CREATE_FAILED
+
+[2016-11-11 15:51:02] The bbb host cannot be destroy. Try delete it manually. Meeting id: 776c6d496a21cbec6f05f8ed612c9a6818e8b3ec
+Client error response
+[status code] 404
+[reason phrase] Not Found
+[url] http://os-kilo-01.core.ucr.ac.cr:8004/v1/61d90c9e171a43dba0e197c824851be3/stacks/bbb_conference_189
+
+[2016-11-11 15:51:02] The bbb host cannot be destroy. Try delete it manually. Meeting id: 9171f78be5a619d32efbf55d8254664894fe4b56
+Client error response
+[status code] 404
+[reason phrase] Not Found
+[url] http://os-kilo-01.core.ucr.ac.cr:8004/v1/61d90c9e171a43dba0e197c824851be3/stacks/bbb_conference_190
+
+[2016-11-11 15:51:02] The bbb host cannot be destroy. Try delete it manually. Meeting id: f85788419561b21d1926923a40a701847f16818c
+Client error response
+[status code] 404
+[reason phrase] Not Found
+[url] http://os-kilo-01.core.ucr.ac.cr:8004/v1/61d90c9e171a43dba0e197c824851be3/stacks/bbb_conference_188
+
+[2016-11-11 15:59:02] The bbb host cannot be destroy. Try delete it manually. Meeting id: 776c6d496a21cbec6f05f8ed612c9a6818e8b3ec
+Client error response
+[status code] 404
+[reason phrase] Not Found
+[url] http://os-kilo-01.core.ucr.ac.cr:8004/v1/61d90c9e171a43dba0e197c824851be3/stacks/bbb_conference_189
+
+[2016-11-11 15:59:02] The bbb host cannot be destroy. Try delete it manually. Meeting id: 9171f78be5a619d32efbf55d8254664894fe4b56
+Client error response
+[status code] 404
+[reason phrase] Not Found
+[url] http://os-kilo-01.core.ucr.ac.cr:8004/v1/61d90c9e171a43dba0e197c824851be3/stacks/bbb_conference_190
+
+[2016-11-11 15:59:02] The bbb host cannot be destroy. Try delete it manually. Meeting id: f85788419561b21d1926923a40a701847f16818c
+Client error response
+[status code] 404
+[reason phrase] Not Found
+[url] http://os-kilo-01.core.ucr.ac.cr:8004/v1/61d90c9e171a43dba0e197c824851be3/stacks/bbb_conference_188
+
+[2016-11-11 16:00:05] The bbb host cannot be destroy. Try delete it manually. Meeting id: 776c6d496a21cbec6f05f8ed612c9a6818e8b3ec
+Client error response
+[status code] 404
+[reason phrase] Not Found
+[url] http://os-kilo-01.core.ucr.ac.cr:8004/v1/61d90c9e171a43dba0e197c824851be3/stacks/bbb_conference_189
+
+[2016-11-11 16:00:05] The bbb host cannot be destroy. Try delete it manually. Meeting id: 9171f78be5a619d32efbf55d8254664894fe4b56
+Client error response
+[status code] 404
+[reason phrase] Not Found
+[url] http://os-kilo-01.core.ucr.ac.cr:8004/v1/61d90c9e171a43dba0e197c824851be3/stacks/bbb_conference_190
+
+[2016-11-11 16:00:05] The bbb host cannot be destroy. Try delete it manually. Meeting id: f85788419561b21d1926923a40a701847f16818c
+Client error response
+[status code] 404
+[reason phrase] Not Found
+[url] http://os-kilo-01.core.ucr.ac.cr:8004/v1/61d90c9e171a43dba0e197c824851be3/stacks/bbb_conference_188
+

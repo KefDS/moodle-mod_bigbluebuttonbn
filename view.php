@@ -120,7 +120,7 @@ $bbbsession['originTag'] = 'moodle-mod_bigbluebuttonbn ('.$module_version.')';
 
 /*---- Openstack integration ----*/
 
-if ( bigbluebuttonbn_get_cfg_openstack_integration() && ( time() > $bigbluebuttonbn->openingtime ) ) {
+if ( bigbluebuttonbn_get_cfg_openstack_integration() && ( time() > $bigbluebuttonbn->openingtime ) && ( time() < $bigbluebuttonbn->closingtime ) ) {
     // Validates if the BigBlueButton server is running
     $serverVersion = bigbluebuttonbn_getServerVersion($bbbsession['endpoint']);
     if (!isset($serverVersion)) { //Server is not working
