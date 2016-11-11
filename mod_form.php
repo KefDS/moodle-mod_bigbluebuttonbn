@@ -48,6 +48,8 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
         $preuploadpresentation_enabled = bigbluebuttonbn_get_cfg_preuploadpresentation_enabled();
         $sendnotifications_enabled = bigbluebuttonbn_get_cfg_sendnotifications_enabled();
 
+        
+
         /*---- OpenStack integration ----*/
         if (bigbluebuttonbn_get_cfg_openstack_integration()){
             //Validates if the BigBlueButton server is running
