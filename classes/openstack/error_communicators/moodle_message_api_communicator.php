@@ -46,7 +46,7 @@ class moodle_message_api_communicator implements error_communicator
         $message->subject = 'Error al reservar la sala de video conferencia';
         $message->fullmessage = "No se pudo reservar la sala de conferencia, contacte al administrador y brindele la sigueiente información:\n - Curso: $course->fullname \n - Nombre conferencia: $meeting->name \n - ID Conferencia: $meeting->meetingid \n - Nombre del stack: $meeting->openstack_stack_name \n - Error: $meeting->bbb_server_status";
         $message->fullmessageformat = FORMAT_MARKDOWN;
-        $course_path = "'$CFG->wwwroot'/course/view.php?id='$course->id'";
+        $course_path = "$CFG->wwwroot/course/view.php?id=$course->id";
         $message->fullmessagehtml = "<p>No se pudo reservar la sala de conferencia, contacte al administrador y brindele la siguiente información:</p><ul><li><b>Curso: </b><a href='$course_path'>$course->fullname</a></li><li><b>Nombre conferencia: </b>$meeting->name</li><li><b>ID Conferencia: </b>$meeting->meetingid</li><li><b>Nombre del stack: </b>$meeting->openstack_stack_name</li><li><b>Error: </b>$meeting->bbb_server_status</li></ul>";
         $message->smallmessage = 'No se pudo reservar la sala';
         $message->notification = 1;
