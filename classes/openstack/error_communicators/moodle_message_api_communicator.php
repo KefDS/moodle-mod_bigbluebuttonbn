@@ -17,11 +17,11 @@ class moodle_message_api_communicator implements error_communicator
     {
         global $DB;
         $context = context_course::instance($meeting->course);
-        $course_name = $DB->get_field_select('course', 'fullname', "id = '$meeting->course'");
+        $course = $DB->get_record_select('course', "id = '$meeting->course'");
         $teacher_role_id = $DB->get_field_select('role', 'id', "shortname = 'editingteacher'");
         $user_from = $DB->get_field_select('user', 'id', "username = 'soporte.metics'");
         $user_to = $DB->get_field_select('role_assignments', 'userid', "contextid = '$context->id' AND roleid = '$teacher_role_id'");
-        $message_id = message_send($this->create_message($meeting, intval($user_from), $user_to, $course_name));
+        $message_id = message_send($this->create_message($meeting, intval($user_from), $user_to, $course));
 
     }
 
@@ -35,17 +35,19 @@ class moodle_message_api_communicator implements error_communicator
      * @param $course_name : name of the moodle course
      * @return An object "message" with the information about the error of the meeting
      */
-    private function create_message($meeting, $user_from, $user_to, $course_name)
+    private function create_message($meeting, $user_from, $user_to, $course)
     {
+        global $CFG;
         $message = new stdClass();
         $message->component = 'mod_bigbluebuttonbn';    // Nombre del modulo que va a enviar el mensaje
         $message->name = 'error';   // Nombre que hay en messages.php
         $message->userfrom = $user_from;
         $message->userto = $user_to;
         $message->subject = 'Error al reservar la sala de video conferencia';
-        $message->fullmessage = "No se pudo reservar la sala de conferencia, contacte al administrador y brindele la sigueiente información:\n - Curso: $course_name \n - Nombre conferencia: $meeting->name \n - ID Conferencia: $meeting->meetingid \n - Error: $meeting->bbb_server_status";
+        $message->fullmessage = "No se pudo reservar la sala de conferencia, contacte al administrador y brindele la sigueiente información:\n - Curso: $course->fullname \n - Nombre conferencia: $meeting->name \n - ID Conferencia: $meeting->meetingid \n - Nombre del stack: $meeting->openstack_stack_name \n - Error: $meeting->bbb_server_status";
         $message->fullmessageformat = FORMAT_MARKDOWN;
-        $message->fullmessagehtml = "<p>No se pudo reservar la sala de conferencia, contacte al administrador y brindele la siguiente información:</p><ul><li><b>Curso: </b>$course_name</li><li><b>Nombre conferencia: </b>$meeting->name</li><li><b>ID Conferencia: </b>$meeting->meetingid</li><li><b>Error: </b>$meeting->bbb_server_status</li></ul>";
+        $course_path = "'$CFG->wwwroot'/course/view.php?id='$course->id'";
+        $message->fullmessagehtml = "<p>No se pudo reservar la sala de conferencia, contacte al administrador y brindele la siguiente información:</p><ul><li><b>Curso: </b><a href='$course_path'>$course->fullname</a></li><li><b>Nombre conferencia: </b>$meeting->name</li><li><b>ID Conferencia: </b>$meeting->meetingid</li><li><b>Nombre del stack: </b>$meeting->openstack_stack_name</li><li><b>Error: </b>$meeting->bbb_server_status</li></ul>";
         $message->smallmessage = 'No se pudo reservar la sala';
         $message->notification = 1;
         return $message;
