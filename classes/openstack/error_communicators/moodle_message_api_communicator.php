@@ -38,7 +38,8 @@ class moodle_message_api_communicator implements error_communicator
     private function create_message($meeting, $user_from, $user_to, $course_name)
     {
         $message = new stdClass();
-        $message->component = 'moodle';
+        $message->component = 'mod_bigbluebuttonbn';    // Nombre del modulo que va a enviar el mensaje
+        $message->name = 'error';   // Nombre que hay en messages.php
         $message->userfrom = $user_from;
         $message->userto = $user_to;
         $message->subject = 'Error al reservar la sala de video conferencia';
@@ -46,6 +47,7 @@ class moodle_message_api_communicator implements error_communicator
         $message->fullmessageformat = FORMAT_MARKDOWN;
         $message->fullmessagehtml = "<p>No se pudo reservar la sala de conferencia, contacte al administrador y brindele la siguiente información:</p><ul><li><b>Curso: </b>$course_name</li><li><b>Nombre conferencia: </b>$meeting->name</li><li><b>ID Conferencia: </b>$meeting->meetingid</li><li><b>Error: </b>$meeting->bbb_server_status</li></ul>";
         $message->smallmessage = 'No se pudo reservar la sala';
+        $message->notification = 1;
         return $message;
     }
 }
