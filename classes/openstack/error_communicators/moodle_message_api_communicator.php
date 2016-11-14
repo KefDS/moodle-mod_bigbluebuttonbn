@@ -17,7 +17,7 @@ class moodle_message_api_communicator implements error_communicator
     {
         global $DB;
         $context = context_course::instance($meeting->course);
-        $course_name = $DB->get_field_select('course', 'fullname', "id = '$meeting->course");
+        $course_name = $DB->get_field_select('course', 'fullname', "id = '$meeting->course'");
         $teacher_role_id = $DB->get_field_select('role', 'id', "shortname = 'editingteacher'");
         $user_from = $DB->get_field_select('user', 'id', "username = 'soporte.metics'");
         $user_to = $DB->get_field_select('role_assignments', 'userid', "contextid = '$context->id' AND roleid = '$teacher_role_id'");
