@@ -21,7 +21,7 @@ class moodle_message_api_communicator implements error_communicator
         $teacher_role_id = $DB->get_field_select('role', 'id', "shortname = 'editingteacher'");
         $user_from = $DB->get_field_select('user', 'id', "username = 'soporte.metics'");
         $user_to = $DB->get_field_select('role_assignments', 'userid', "contextid = '$context->id' AND roleid = '$teacher_role_id'");
-        $message_id = message_send($this->create_message($meeting, $user_from, $user_to, $course_name));
+        $message_id = message_send($this->create_message($meeting, intval($user_from), $user_to, $course_name));
 
     }
 
