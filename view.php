@@ -12,46 +12,6 @@
 require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
 require_once(dirname(__FILE__) . '/locallib.php');
 
-// Pruebas mensaje error
-$meeting = $DB->get_record_select('bigbluebuttonbn', "id = '206'");
-$context = context_course::instance($meeting->course);
-$course = $DB->get_record_select('course', "id = '$meeting->course'");
-$teacher_role_id = $DB->get_field_select('role', 'id', "shortname = 'editingteacher'");
-$user_from = $DB->get_field_select('user', 'id', "username = 'soporte.metics'");
-$user_to = "23";
-//$user_to = $DB->get_field_select('role_assignments', 'userid', "contextid = '$context->id' AND roleid = '$teacher_role_id'");
-$message = new stdClass();
-$message->component = 'mod_bigbluebuttonbn';    // Nombre del modulo que va a enviar el mensaje
-$message->name = 'error';   // Nombre que hay en messages.php
-$message->userfrom = intval($user_from);    // Por el funcionamiento interno del plugin, se tiene que convertir a int
-$message->userto = $user_to;
-$message->subject = 'Error al reservar la sala de video conferencia';
-$message->fullmessage = "No se pudo reservar la sala de conferencia, contacte al administrador y brindele la sigueiente información:\n - Curso: $course->fullname \n - Nombre conferencia: $meeting->name \n - ID Conferencia: $meeting->meetingid \n - Nombre del stack: $meeting->openstack_stack_name \n - Error: $meeting->bbb_server_status";
-$message->fullmessageformat = FORMAT_MARKDOWN;
-$course_path = "'$CFG->wwwroot'/course/view.php?id='$course->id'";
-$message->fullmessagehtml = "<p>No se pudo reservar la sala de conferencia, contacte al administrador y brindele la siguiente información:</p><ul><li><b>Curso: </b><a href='$course_path'>$course->fullname</a></li><li><b>Nombre conferencia: </b>$meeting->name</li><li><b>ID Conferencia: </b>$meeting->meetingid</li><li><b>Nombre del stack: </b>$meeting->openstack_stack_name</li><li><b>Error: </b>$meeting->bbb_server_status</li></ul>";
-$message->smallmessage = 'No se pudo reservar la sala';
-$message->notification = 1;
-$message_id = message_send($message);
-// Fin pruebas mensaje error
-
-
-// Pruebas
-/*
-require_once dirname(__FILE__) . "/vendor/autoload.php";
-require_once dirname(__FILE__) . "/classes/openstack/error_communicators/moodle_message_api_communicator.php";
-require_once dirname(__FILE__) . "/classes/openstack/exception_handlers/archive_log_exception_handler.php";
-require_once dirname(__FILE__) . "/classes/openstack/moodle_bbb_openstack_stacks_management_tasks.php";
-use mod_bigbluebuttonbn\openstack;
-
-$tmp = new openstack\moodle_bbb_openstack_stacks_management_tasks(
-    new openstack\archive_log_exception_handler(),
-    new openstack\moodle_message_api_communicator()
-);
-$tmp->do_tasks();*/
-// Fin Pruebas
-
-
 $id = required_param('id', PARAM_INT);              // Course Module ID, or
 $b = optional_param('n', 0, PARAM_INT);            // bigbluebuttonbn instance ID
 $group = optional_param('group', 0, PARAM_INT);    // group instance ID
