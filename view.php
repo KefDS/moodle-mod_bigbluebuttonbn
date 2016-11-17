@@ -16,25 +16,6 @@ $id = required_param('id', PARAM_INT);              // Course Module ID, or
 $b = optional_param('n', 0, PARAM_INT);            // bigbluebuttonbn instance ID
 $group = optional_param('group', 0, PARAM_INT);    // group instance ID
 
-// Pruebas mensaje error
-$meeting = $DB->get_record_select('bigbluebuttonbn', "id = '191'");
-$context = context_course::instance($meeting->course);
-$teacher_role_id = $DB->get_field_select('role', 'id', "shortname = 'editingteacher'");
-$user_from = $DB->get_record_select('user', "username = 'soporte.metics'");
-$user_to = $DB->get_record_select('role_assignments', "contextid = '$context->id' AND roleid = '$teacher_role_id'");
-$message = new stdClass();
-$message->component = 'moodle';
-$message->userfrom = $user_from;
-$message->userto = $user_to;
-$message->subject = 'Error al reservar la sala de video conferencia';
-$message->fullmessage = "No se pudo reservar la sala de conferencia, contacte al administrador y brindele la sigueiente información: Error -> $meeting->bbb_server_status, Conferencia -> $meeting->meetingid";
-$message->fullmessageformat = FORMAT_MARKDOWN;
-$message->fullmessagehtml = "<p>No se pudo reservar la sala de conferencia, contacte al administrador y brindele la siguiente información:</p><ul><li><b>Error: </b>$meeting->bbb_server_status</li><li><b>Conferencia: </b>$meeting->meetingid</li></ul>";
-$message->smallmessage = 'No se pudo reservar la sala';
-$message_id = message_send($message);
-// Fin pruebas mensaje error
-
-
 if ($id) {
     $cm = get_coursemodule_from_id('bigbluebuttonbn', $id, 0, false, MUST_EXIST);
     $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
@@ -85,8 +66,21 @@ $bbbsession['administrator'] = has_capability('moodle/category:manage', $context
 $bbbsession['managerecordings'] = ($bbbsession['administrator'] || has_capability('mod/bigbluebuttonbn:managerecordings', $context));
 
 // BigBlueButton server data
-$bbbsession['endpoint'] = bigbluebuttonbn_get_cfg_server_url();
-$bbbsession['shared_secret'] = bigbluebuttonbn_get_cfg_shared_secret();
+/*---- OpenStack integration ----*/
+
+if(bigbluebuttonbn_get_cfg_openstack_integration()){
+    $meetingid = $bbbsession['bigbluebuttonbn']->meetingid;
+    $bbbsession['endpoint'] = bigbluebuttonbn_get_meeting_server_url($meetingid);
+    $bbbsession['shared_secret']  = bigbluebuttonbn_get_meeting_shared_secret($meetingid);
+
+}else{
+    $bbbsession['endpoint'] = bigbluebuttonbn_get_cfg_server_url();
+    $bbbsession['shared_secret']  = bigbluebuttonbn_get_cfg_shared_secret();
+}
+
+
+
+/*---- end of OpenStack integration ---*/
 
 // Server data
 $bbbsession['modPW'] = $bigbluebuttonbn->moderatorpass;
