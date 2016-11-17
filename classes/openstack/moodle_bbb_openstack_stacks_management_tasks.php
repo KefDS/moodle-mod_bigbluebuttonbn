@@ -6,6 +6,7 @@
  * @author Kevin Delgado (kevin.delgadosandi [at] ucr.ac.cr)
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v2 or later
  */
+
 namespace mod_bigbluebuttonbn\openstack;
 
 require_once dirname(dirname(dirname(__FILE__))) . '/vendor/autoload.php';
@@ -27,6 +28,7 @@ class moodle_bbb_openstack_stacks_management_tasks {
         $this->admin_exception_handler = $admin_exception_handler;
         $this->user_error_communicator = $user_error_communicator;
     }
+
     public function do_tasks() {
         // Error with network, openstack server or openstack configuration in moodle
         try {
@@ -57,10 +59,8 @@ class moodle_bbb_openstack_stacks_management_tasks {
     private function communicate_tasks_error_to_users() {
         global $DB;
         $upcomming_meetings = $this->get_upcoming_meetings();
-
         // TODO_BBB: Situación más compleja (podría dar chance a otra ronda de cron job antes de ponerla como fallida)
         $waiting_host_meetings = $this->get_meetings_by_state("In Progress");
-
         $involved_meetings = array_merge($upcomming_meetings, $waiting_host_meetings);
 
         foreach ($involved_meetings as $meeting) {

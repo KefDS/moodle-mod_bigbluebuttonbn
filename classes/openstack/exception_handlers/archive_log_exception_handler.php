@@ -2,7 +2,6 @@
 namespace mod_bigbluebuttonbn\openstack;
 
 require_once dirname(dirname(__FILE__)) . '/interfaces/exception_handler.php';
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/log/openstack_errors';
 
 class archive_log_exception_handler implements exception_handler  {
     public function handle_exception(\Exception $exception) {
