@@ -6,7 +6,10 @@
  * @author Kevin Delgado (kevin.delgadosandi [at] ucr.ac.cr)
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v2 or later
  */
+
 namespace mod_bigbluebuttonbn\openstack;
+
+require_once dirname(__FILE__) . "/bbb_stack.php";
 
 class bbb_host_management {
     const DEFAULT_TIMEOUT_MINUTES = 14;
@@ -27,20 +30,9 @@ class bbb_host_management {
     }
 
     function get_stack_outputs($meeting_id) {
-        // TODO_BBB: Hash implementation
         $stack = $this->orchestration_service->getStack($this->get_bbb_host_name($meeting_id));
-        if($this->get_bbb_server_status($stack) == "CREATE_COMPLETE") {
-            return [
-                'url' => $this->get_bbb_server_ip($stack),
-                'shared_key' => $this->get_bbb_server_shared_key($stack)
-            ];
-        }
-        // Server not ready
-        elseif($this->get_bbb_server_status($stack) == "CREATE_IN_PROGRESS") {
-            return null;
-        }
-        // Other state is an error (for now)
-        throw new \Exception("Error in BBB server creation. Stack status: " . $this->get_bbb_server_status($stack));
+        $bbb_stack = new bbb_stack($stack);
+        return $bbb_stack->get_bbb_host_data();
     }
 
     function  delete_bbb_host($meeting_id) {
@@ -49,21 +41,7 @@ class bbb_host_management {
     }
 
 
-    // Auxiliary functions
-
     private function get_bbb_host_name($meeting_id) {
-        return "bbb_conference_" . $meeting_id;
-    }
-
-    private function get_bbb_server_status($stack) {
-        return helpers::get_protected_value('status', $stack);
-    }
-
-    private function get_bbb_server_ip($stack) {
-        return helpers::get_output_value('bbb_url', $stack);
-    }
-
-    private function get_bbb_server_shared_key($stack) {
-        return helpers::get_output_value('bbb_shared_key', $stack);
+        return "bbb_meeting_" . $meeting_id;
     }
 }

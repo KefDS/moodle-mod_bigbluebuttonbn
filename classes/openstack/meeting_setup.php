@@ -6,18 +6,24 @@
  * @author Kevin Delgado (kevin.delgadosandi [at] ucr.ac.cr)
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v2 or later
  */
+
 namespace mod_bigbluebuttonbn\openstack;
+
 require_once dirname(__FILE__) . '/bbb_host_management.php';
+
 class meeting_setup {
     private $meeting;
     private $bbb_servers_management;
+
     function __construct($meeting, $orchestration_service) {
         $this->meeting = $meeting;
         $this->bbb_servers_management = new bbb_host_management($orchestration_service);
     }
+
     function create_meeting_host() {
         global $DB;
         try {
+            // TODO_BBB: Change json format to several textarea
             $stack_params = json_decode(bigbluebuttonbn_get_cfg_json_stack_parameters(), true);
             $bbb_host_name = $this->bbb_servers_management->create_bbb_host($this->meeting->id, $stack_params);
             $this->meeting->openstack_stack_name = $bbb_host_name;
@@ -32,13 +38,14 @@ class meeting_setup {
             throw new \Exception($exception_message);
         }
     }
+
     function get_meeting_host_info() {
         global $DB;
         try {
             $bbb_host_information = $this->bbb_servers_management->get_stack_outputs($this->meeting->id);
             if($bbb_host_information) {
-                $this->meeting->bbb_server_url = $bbb_host_information['url'];
-                $this->meeting->shared_secret = $bbb_host_information['shared_key'];
+                $this->meeting->bbb_server_url = $bbb_host_information['bbb_url'];
+                $this->meeting->bbb_shared_secret = $bbb_host_information['bbb_shared_key'];
                 $this->meeting->bbb_server_status = 'Ready';
                 $DB->update_record('bigbluebuttonbn', $this->meeting);
             }
@@ -48,6 +55,7 @@ class meeting_setup {
             throw $exception;
         }
     }
+
     function delete_meeting_host() {
         global $DB;
         try {
@@ -63,6 +71,7 @@ class meeting_setup {
             throw new \Exception($exception_message);
         }
     }
+
     private function failed_meeting_setup() {
         global $DB;
         $this->meeting->bbb_server_status = 'Failed';
