@@ -22,7 +22,7 @@ $bbb_server_regex= '/^\S{0,60}\/bigbluebutton\/$/'; //Validates BBB server insta
 $heat_url_regex='/^\S{0,60}5000\/v2.0$/'; //Validates API version
 $small_length_string_regex= '/^\S{0,15}$/';
 $medium_length_string_regex= '/^\S{0,40}$/';
-$json_object_regex= '/./';//'/^.{0,150}$/';
+$json_object_regex= '/^.{0,60}$/';
 $json_array_regex='/\[\d+(,\d+)*\]$/';
 $days_hours_regex = '/^\d{1,3}:\d{1,2}$/';
 /*---- end of OpenStack integration ----*/
@@ -92,7 +92,7 @@ if ($ADMIN->fulltree) {
             $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_json_stack_parameters',
                 get_string( 'config_json_stack_parameters', 'bigbluebuttonbn' ),
                 get_string( 'config_json_stack_parameters_description', 'bigbluebuttonbn' ),
-                null,$json_object_regex));
+                null));
         }
         if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_meeting_durations)){
             //Meeting durations
