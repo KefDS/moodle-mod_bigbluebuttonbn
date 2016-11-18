@@ -51,8 +51,17 @@ $string['task_openstack_async_communication']= 'Creación de servidores de confe
 
 //----end of OpenStack integration----
 
-
+$string['view_message_room_closed'] = 'La videoconferencia está cerrada.';
+$string['view_message_room_ready'] = 'La videoconferencia esta lista.';
+$string['view_message_room_open'] = 'La videoconferencia está abierta';
+$string['view_message_conference_room_ready'] = 'La videoconferencia está lista. Puede ingresar cuando guste.';
 $string['view_message_conference_not_started'] = 'Esta videoconferencia aún no ha iniciado';
+$string['view_message_conference_wait_for_moderator'] = 'Esperando al moderador para entrar.';
+$string['view_message_conference_in_progress'] = 'La conferencia ya ha empezado.';
+$string['view_message_conference_has_ended'] = 'La conferencia ya ha finalizado.';
+$string['view_message_tab_close'] = 'Esta ventana/pestaña debe cerrarse manualmente.';
+
+
 $string['mod_form_field_openingtime'] = 'Apertura de ingreso';
 $string['mod_form_field_closingtime'] = 'Cierre de ingreso';
 $string['mod_form_field_openingtime_help'] = 'Hora de inicio para que los participantes entren a la conferencia.';

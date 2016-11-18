@@ -78,8 +78,6 @@ if(bigbluebuttonbn_get_cfg_openstack_integration()){
     $bbbsession['shared_secret']  = bigbluebuttonbn_get_cfg_shared_secret();
 }
 
-
-
 /*---- end of OpenStack integration ---*/
 
 // Server data
@@ -122,26 +120,33 @@ $bbbsession['originTag'] = 'moodle-mod_bigbluebuttonbn (' . $module_version . ')
 /////   BigBlueButton Session Setup Ends   /////
 ////////////////////////////////////////////////
 
-// Validates if the BigBlueButton server is running
-$serverVersion = bigbluebuttonbn_getServerVersion($bbbsession['endpoint']);
-if (!isset($serverVersion)) { //Server is not working
-    if ($bbbsession['administrator'])
-        print_error('view_error_unable_join', 'bigbluebuttonbn', $CFG->wwwroot . '/admin/settings.php?section=modsettingbigbluebuttonbn');
-    else if ($bbbsession['moderator'])
-        print_error('view_error_unable_join_teacher', 'bigbluebuttonbn', $CFG->wwwroot . '/course/view.php?id=' . $bigbluebuttonbn->course);
-    else
-        print_error('view_error_unable_join_student', 'bigbluebuttonbn', $CFG->wwwroot . '/course/view.php?id=' . $bigbluebuttonbn->course);
-} else {
-    $xml = bigbluebuttonbn_wrap_xml_load_file(bigbluebuttonbn_getMeetingsURL($bbbsession['endpoint'], $bbbsession['shared_secret']));
-    if (!isset($xml) || !isset($xml->returncode) || $xml->returncode == 'FAILED') { // The shared secret is wrong
+/*---- OpenStack integration ----*/
+
+if( !bigbluebuttonbn_get_cfg_openstack_integration() ){
+    
+    // Validates if the BigBlueButton server is running
+    $serverVersion = bigbluebuttonbn_getServerVersion($bbbsession['endpoint']);
+    if (!isset($serverVersion)) { //Server is not working
         if ($bbbsession['administrator'])
             print_error('view_error_unable_join', 'bigbluebuttonbn', $CFG->wwwroot . '/admin/settings.php?section=modsettingbigbluebuttonbn');
         else if ($bbbsession['moderator'])
             print_error('view_error_unable_join_teacher', 'bigbluebuttonbn', $CFG->wwwroot . '/course/view.php?id=' . $bigbluebuttonbn->course);
         else
             print_error('view_error_unable_join_student', 'bigbluebuttonbn', $CFG->wwwroot . '/course/view.php?id=' . $bigbluebuttonbn->course);
-    }
+    } else {
+        $xml = bigbluebuttonbn_wrap_xml_load_file(bigbluebuttonbn_getMeetingsURL($bbbsession['endpoint'], $bbbsession['shared_secret']));
+        if (!isset($xml) || !isset($xml->returncode) || $xml->returncode == 'FAILED') { // The shared secret is wrong
+            if ($bbbsession['administrator'])
+                print_error('view_error_unable_join', 'bigbluebuttonbn', $CFG->wwwroot . '/admin/settings.php?section=modsettingbigbluebuttonbn');
+            else if ($bbbsession['moderator'])
+                print_error('view_error_unable_join_teacher', 'bigbluebuttonbn', $CFG->wwwroot . '/course/view.php?id=' . $bigbluebuttonbn->course);
+            else
+                print_error('view_error_unable_join_student', 'bigbluebuttonbn', $CFG->wwwroot . '/course/view.php?id=' . $bigbluebuttonbn->course);
+        }
+    }    
 }
+
+/*---- end of OpenStack integration ----*/
 
 // Mark viewed by user (if required)
 $completion = new completion_info($course);
