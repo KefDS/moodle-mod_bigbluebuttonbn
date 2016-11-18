@@ -92,7 +92,7 @@ if ($ADMIN->fulltree) {
             $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_json_stack_parameters',
                 get_string( 'config_json_stack_parameters', 'bigbluebuttonbn' ),
                 get_string( 'config_json_stack_parameters_description', 'bigbluebuttonbn' ),
-                null,$json_object_regex));
+                null));
         }
         if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_meeting_durations)){
             //Meeting durations

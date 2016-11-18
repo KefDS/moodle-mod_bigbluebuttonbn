@@ -20,8 +20,14 @@ $params['idx'] = optional_param('idx', '', PARAM_TEXT);  //meetingID, the BBB me
 $params['bigbluebuttonbn'] = optional_param('bigbluebuttonbn', 0, PARAM_INT);
 $params['signed_parameters'] = optional_param('signed_parameters', '', PARAM_TEXT);
 
-$endpoint = bigbluebuttonbn_get_cfg_server_url();
-$shared_secret = bigbluebuttonbn_get_cfg_shared_secret();
+
+$openStack_integration_enabled = bigbluebuttonbn_get_cfg_openstack_integration();
+//Get the meetingID
+$meetingid_bbb = substr($params['id'], 0, strpos($params['id'], '-'));
+
+$endpoint = ($openStack_integration_enabled)? bigbluebuttonbn_get_meeting_server_url($meetingid_bbb): bigbluebuttonbn_get_cfg_server_url();
+$shared_secret = ($openStack_integration_enabled)? bigbluebuttonbn_get_meeting_shared_secret($meetingid_bbb): bigbluebuttonbn_get_cfg_shared_secret();
+
 
 $error = '';
 
