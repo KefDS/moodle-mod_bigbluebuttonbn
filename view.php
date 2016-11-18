@@ -228,7 +228,7 @@ $bbbsession['contextActivityDescription'] = bigbluebuttonbn_html2text($bbbsessio
 $bbbsession['contextActivityTags'] = "";
 
 $now = time();
-if (!empty($bigbluebuttonbn->openingtime) && $now < $bigbluebuttonbn->openingtime) {
+if (!empty($bigbluebuttonbn->openingtime) && $now < $bigbluebuttonbn->openingtime) { //TO DO
     //CALLING BEFORE
     $bigbluebuttonbn_view = 'before';
 
@@ -236,7 +236,7 @@ if (!empty($bigbluebuttonbn->openingtime) && $now < $bigbluebuttonbn->openingtim
     $SESSION->bigbluebuttonbn_bbbsession = $bbbsession;
     bigbluebuttonbn_view_before($bbbsession);
 
-} else if (!empty($bigbluebuttonbn->closingtime) && $now > $bigbluebuttonbn->closingtime) {
+} else if (!empty($bigbluebuttonbn->closingtime) && $now > $bigbluebuttonbn->closingtime) { //TO DO
     //CALLING AFTER
     $bigbluebuttonbn_view = 'after';
     $bbbsession['presentation'] = bigbluebuttonbn_get_presentation_array($context, $bigbluebuttonbn->presentation);

@@ -799,10 +799,16 @@ function bigbluebuttonbn_bbb_broker_get_meeting_info($meetingid, $password, $for
     $meeting_info = array();
 
     /*---- OpenStack integration ----*/
-    $meetingid_bbb = substr($meetingid, 0, strpos($meetingid, '-'));
-    $openStack_integration_enabled = bigbluebuttonbn_get_cfg_openstack_integration();
-    $endpoint = ($openStack_integration_enabled())? bigbluebutton_get_meeting_server_url($meetingid_bbb): bigbluebuttonbn_get_cfg_server_url();
-    $shared_secret = ($openStack_integration_enabled())? bigbluebutton_get_meeting_shared_secret($meetingid_bbb): bigbluebuttonbn_get_cfg_shared_secret();
+    
+    if(bigbluebuttonbn_get_cfg_openstack_integration()){
+        $meetingid_bbb = substr($meetingid, 0, strpos($meetingid, '-'));
+        $endpoint = bigbluebuttonbn_get_meeting_server_url($meetingid_bbb);
+        $shared_secret = bigbluebuttonbn_get_meeting_shared_secret($meetingid_bbb); 
+
+    }else{
+        $endpoint = bigbluebuttonbn_get_cfg_server_url();
+        $shared_secret = bigbluebuttonbn_get_cfg_shared_secret();
+    }
     /*---- end of OpenStack integration ---*/
 
     $cache_ttl = bigbluebuttonbn_get_cfg_waitformoderator_cache_ttl();
@@ -826,10 +832,16 @@ function bigbluebuttonbn_bbb_broker_do_end_meeting($meetingid, $password){
     global $CFG;
 
     /*---- OpenStack integration ----*/
-    $meetingid_bbb = substr($meetingid, 0, strpos($meetingid, '-'));
-    $openStack_integration_enabled = bigbluebuttonbn_get_cfg_openstack_integration();
-    $endpoint = ($openStack_integration_enabled())? bigbluebutton_get_meeting_server_url($meetingid_bbb): bigbluebuttonbn_get_cfg_server_url();
-    $shared_secret = ($openStack_integration_enabled())? bigbluebutton_get_meeting_shared_secret($meetingid_bbb): bigbluebuttonbn_get_cfg_shared_secret();
+
+    if(bigbluebuttonbn_get_cfg_openstack_integration()){
+        $meetingid_bbb = substr($meetingid, 0, strpos($meetingid, '-'));
+        $endpoint = bigbluebuttonbn_get_meeting_server_url($meetingid_bbb);
+        $shared_secret = bigbluebuttonbn_get_meeting_shared_secret($meetingid_bbb);
+
+    }else{
+        $endpoint = bigbluebuttonbn_get_cfg_server_url();
+        $shared_secret = bigbluebuttonbn_get_cfg_shared_secret();
+    }
     /*---- end of OpenStack integration ---*/
 
     bigbluebuttonbn_doEndMeeting($meetingid, $password, $endpoint, $shared_secret);
@@ -1627,8 +1639,6 @@ function bigbluebuttonbn_html2text($html, $len) {
         $text = substr($text, 0, $len);
     return $text;
 }
-
-//<<<<<<< HEAD
 
 /*---- OpenStack integration ---- */
 
