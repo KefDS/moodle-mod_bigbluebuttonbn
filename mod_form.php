@@ -60,7 +60,7 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
                 print_error( 'general_error_unable_connect', 'bigbluebuttonbn', $CFG->wwwroot.'/admin/settings.php?section=modsettingbigbluebuttonbn' );
             }
         }
-        /*---- end of OpenStack integration ----*/
+        /*---- end of OpenStack integration ---- */
 
         $mform =& $this->_form;
         $current_activity =& $this->current;
