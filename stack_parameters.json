@@ -1,0 +1,9 @@
+{
+  "parameters": {
+    "key_name": "dev-key",
+    "flavor": "m1.small",
+    "image": "imagen-bbb.multiversa.ucr.ac.cr.qcow2.vmdk",
+    "private_net": "metics",
+    "public_net": "public"
+  }
+}

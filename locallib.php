@@ -1642,6 +1642,18 @@ function bigbluebuttonbn_html2text($html, $len) {
 
 /*---- OpenStack integration ---- */
 
+//Get the contents of a JSON file especified in a URL and return an associative array of them
+function bigbluebutton_get_url_json_contents($json_url){
+    $curl_resource = curl_init();
+    curl_setopt($curl_resource, CURLOPT_URL, $json_url);
+    curl_setopt($curl_resource, CURLOPT_SSL_VERIFYPEER, 1); //Verifies peer certificate
+    curl_setopt($curl_resource, CURLOPT_SSL_VERIFYHOST, 2); //Verifies the common name provided in the certificates mathces the one in the URL
+    curl_setopt($curl_resource, CURLOPT_RETURNTRANSFER, 1);
+    $contents = curl_exec($curl_resource);
+    curl_close($curl_resource);
+    return json_decode($contents,true);
+}
+
 //Get BBB server URL. Used when creation on demand is enabled.
 function bigbluebuttonbn_get_meeting_server_url($meetingid){
     global $DB;
