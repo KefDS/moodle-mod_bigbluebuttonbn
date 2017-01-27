@@ -18,13 +18,13 @@ require_once(dirname(__FILE__).'/locallib.php');
 
 /*---- OpenStack integration ----*/
 //Regex values used for validation
-$bbb_server_regex= '/^\S{0,60}\/bigbluebutton\/$/'; //Validates BBB server instance
-$heat_url_regex='/^\S{0,60}5000\/v2.0$/'; //Validates API version
-$small_length_string_regex= '/^\S{0,15}$/';
-$medium_length_string_regex= '/^\S{0,40}$/';
-$json_object_regex= '/^.{0,60}$/';
-$json_array_regex='/\[\d+(,\d+)*\]$/';
-$days_hours_regex = '/^\d{1,3}:\d{1,2}$/';
+$bbb_server_regex= '/^https?\:\/\/([a-zA-Z0-9\-\.]+\.[a-zA-Z0-9]{2,3})(\/[a-zA-Z0-9\-\.]+)*(\/bigbluebutton\/)$/'; //Validates BBB server instance
+$heat_url_regex='/^https?\:\/\/([a-zA-Z0-9\-\.]+\.[a-zA-Z0-9]{2,3})(\/[a-zA-Z0-9\-\.]+)*(:5000\/v2.0)$/'; //Validates API version
+$hash_regex='/^[[:xdigit:]]{0,40}$/';
+$default_text_regex= '/^[a-zA-Z0-9-_.[:space:]]{0,40}$/';
+$url_regex='/^https?\:\/\/([a-zA-Z0-9\-\.]+\.[a-zA-Z0-9]{2,3})(\/[a-zA-Z0-9\-\.]+)*$/';
+$durations_array_regex='/^\[\d{1,3}(,\d{1,3}){0,10}\]$/';
+$days_hours_minutes_regex = '/^\d{1,3}[Dd]-\d{1,2}[Hh]-\d{1,2}[mM]$/';
 /*---- end of OpenStack integration ----*/
 
 if ($ADMIN->fulltree) {
@@ -46,7 +46,7 @@ if ($ADMIN->fulltree) {
             $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_shared_secret',
                 get_string( 'config_shared_secret', 'bigbluebuttonbn' ),
                 get_string( 'config_shared_secret_description', 'bigbluebuttonbn' ),
-                bigbluebuttonbn_get_cfg_shared_secret_default(), $medium_length_string_regex));
+                bigbluebuttonbn_get_cfg_shared_secret_default(), $hash_regex));
         }
 
         //---- OpenStack integration ----
@@ -64,10 +64,11 @@ if ($ADMIN->fulltree) {
     ////Configurations for stacks and OpenStack API
     if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_url) ||
         !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_region) ||
-        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters) ||
-        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_meeting_durations)||
-        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_min_openingtime)||
-        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_openingtime)) {
+        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters_url) ||
+        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_meeting_durations) ||
+        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_min_openingtime) ||
+        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_openingtime) ||
+        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_yaml_stack_template) ) {
         $settings->add( new admin_setting_heading('bigbluebuttonbn_config_cloud',
             get_string('config_cloud', 'bigbluebuttonbn'),
             get_string('config_cloud_description', 'bigbluebuttonbn'),
@@ -85,35 +86,42 @@ if ($ADMIN->fulltree) {
             $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_heat_region',
                 get_string( 'config_heat_region', 'bigbluebuttonbn' ),
                 get_string( 'config_heat_region_description', 'bigbluebuttonbn' ),
-                null, $small_length_string_regex));
+                null, $default_text_regex));
         }
-        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters)){
+        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_yaml_stack_template_url)){
+            //YAML file with stack template
+            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_yaml_stack_template_url',
+                get_string( 'config_yaml_stack_template_url', 'bigbluebuttonbn' ),
+                get_string( 'config_yaml_stack_template_url_description', 'bigbluebuttonbn' ),
+                null,$url_regex));
+        }
+        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters_url)){
             //Parameters for stack creation in JSON representation
-            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_json_stack_parameters',
-                get_string( 'config_json_stack_parameters', 'bigbluebuttonbn' ),
-                get_string( 'config_json_stack_parameters_description', 'bigbluebuttonbn' ),
-                null));
+            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_json_stack_parameters_url',
+                get_string( 'config_json_stack_parameters_url', 'bigbluebuttonbn' ),
+                get_string( 'config_json_stack_parameters_url_description', 'bigbluebuttonbn' ),
+                null,$url_regex));
         }
-        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_meeting_durations)){
+        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_meeting_durations)){
             //Meeting durations
-            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_json_meeting_durations',
-                get_string('config_json_meeting_durations', 'bigbluebuttonbn'),
-                get_string('config_json_meeting_durations_description','bigbluebuttonbn'),
-                null, $json_array_regex));
+            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_meeting_durations',
+                get_string('config_meeting_durations', 'bigbluebuttonbn'),
+                get_string('config_meeting_durations_description','bigbluebuttonbn'),
+                null, $durations_array_regex));
         }
         if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_min_openingtime)){
             //Describes how soon a meeting can be scheduled
             $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_min_openingtime',
                 get_string('config_min_openingtime', 'bigbluebuttonbn'),
                 get_string('config_min_openingtime_description','bigbluebuttonbn'),
-                null, $days_hours_regex));
+                null, $days_hours_minutes_regex));
         }
         if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_openingtime)){
             //Describes how anticipated a meeting can be scheduled
             $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_max_openingtime',
                 get_string('config_max_openingtime', 'bigbluebuttonbn'),
                 get_string('config_max_openingtime_description','bigbluebuttonbn'),
-                null, $days_hours_regex));
+                null, $days_hours_minutes_regex));
         }
     }
 
@@ -131,19 +139,19 @@ if ($ADMIN->fulltree) {
             $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_openstack_username',
                 get_string( 'config_openstack_username', 'bigbluebuttonbn' ),
                 get_string( 'config_openstack_username_description', 'bigbluebuttonbn' ),
-                null, $small_length_string_regex));
+                null, $default_text_regex));
         }
         if(!isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_password)){
             $settings->add( new admin_setting_configpasswordunmask('bigbluebuttonbn_openstack_password',
                 get_string( 'config_openstack_password', 'bigbluebuttonbn' ),
                 get_string( 'config_openstack_password_description', 'bigbluebuttonbn' ),
-                null, $small_length_string_regex));
+                null, $default_text_regex));
         }
         if(!isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_tenant_id)){
             $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_openstack_tenant_id',
                 get_string( 'config_openstack_tenant_id', 'bigbluebuttonbn' ),
                 get_string( 'config_openstack_tenant_id_description', 'bigbluebuttonbn' ),
-                null, $medium_length_string_regex));
+                null, $hash_regex));
         }
     }
 

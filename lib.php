@@ -744,9 +744,14 @@ function bigbluebuttonbn_get_cfg_heat_region() {
     return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_region)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_region): (isset($CFG->bigbluebuttonbn_heat_region)? trim($CFG->bigbluebuttonbn_heat_region): null));
 }
 
-function bigbluebuttonbn_get_cfg_json_stack_parameters() {
+function bigbluebuttonbn_get_cfg_yaml_template_url(){
     global $BIGBLUEBUTTONBN_CFG, $CFG;
-    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters): (isset($CFG->bigbluebuttonbn_json_stack_parameters)? trim($CFG->bigbluebuttonbn_json_stack_parameters): null));
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_yaml_stack_template_url)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_yaml_stack_template_url): (isset($CFG->bigbluebuttonbn_yaml_stack_template_url)? trim($CFG->bigbluebuttonbn_yaml_stack_template_url): null));
+}
+
+function bigbluebuttonbn_get_cfg_json_stack_parameters_url() {
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters_url)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters_url): (isset($CFG->bigbluebuttonbn_json_stack_parameters_url)? trim($CFG->bigbluebuttonbn_json_stack_parameters_url): null));
 }
 
 function bigbluebuttonbn_get_cfg_json_meeting_durations() {
