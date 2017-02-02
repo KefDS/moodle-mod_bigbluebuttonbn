@@ -22,7 +22,7 @@ $bbb_server_regex= '/^https?\:\/\/([a-zA-Z0-9\-\.]+\.[a-zA-Z0-9]{2,3})(\/[a-zA-Z
 $heat_url_regex='/^https?\:\/\/([a-zA-Z0-9\-\.]+\.[a-zA-Z0-9]{2,3})(\/[a-zA-Z0-9\-\.]+)*(:5000\/v2.0)$/'; //Validates API version
 $hash_regex='/^[[:xdigit:]]{0,40}$/';
 $default_text_regex= '/^[a-zA-Z0-9-_.[:space:]]{0,40}$/';
-$url_regex='/^https?\:\/\/([a-zA-Z0-9\-\.]+\.[a-zA-Z0-9]{2,3})(\/[a-zA-Z0-9\-\.]+)*$/';
+$url_regex='/^https?\:\/\/([a-zA-Z0-9\-\.\_]+\.[a-zA-Z0-9]{2,3})(\/[a-zA-Z0-9\-\.\_]+)*$/';
 $durations_array_regex='/^\[\d{1,3}(,\d{1,3}){0,10}\]$/';
 $days_hours_minutes_regex = '/^\d{1,3}[Dd]-\d{1,2}[Hh]-\d{1,2}[mM]$/';
 /*---- end of OpenStack integration ----*/

@@ -1670,15 +1670,17 @@ function bigbluebuttonbn_get_meeting_shared_secret($meetingid){
 
 //Get minimun time to schedule a meeting
 function bigbluebuttonbn_get_min_openingtime(){
-    $time_dd_hh = bigbluebuttonbn_get_cfg_min_openingtime();
-    $time= explode( ':',  $time_dd_hh );
-    return ( $time[0] * 24 * 3600 + $time[1] * 60 + time());
+    $time_dd_hh_mm = bigbluebuttonbn_get_cfg_min_openingtime();
+    $time = explode('-', $time_dd_hh_mm);
+    $time = preg_replace('/\D+/', "", $time);
+    return ( $time[0] * 24 * 3600 + $time[1] * 3600 + $time[2] * 60 + time());
 }
 
 //Get maximun anticipation time to schedule a meeting
 function bigbluebuttonbn_get_max_openingtime(){
-    $time_dd_hh = bigbluebuttonbn_get_cfg_max_openingtime();
-    $time= explode( ':',  $time_dd_hh );
-    return ( $time[0] * 24 * 3600 + $time[1] * 3600 + time());
+    $time_dd_hh_mm = bigbluebuttonbn_get_cfg_max_openingtime();
+    $time = explode('-', $time_dd_hh_mm);
+    $time = preg_replace('/\D+/', "", $time);
+    return ( $time[0] * 24 * 3600 + $time[1] * 3600 + $time[2] * 60 + time());
 }
 /*---- end of OpenStack integration ----*/
