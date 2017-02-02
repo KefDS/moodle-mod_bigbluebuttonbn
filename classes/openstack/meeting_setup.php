@@ -23,7 +23,8 @@ class meeting_setup {
     function create_meeting_host() {
         global $DB;
         try {
-            $stack_params = bigbluebutton_get_url_json_contents(bigbluebuttonbn_get_cfg_json_stack_parameters_url());
+            $stack_params_url = bigbluebuttonbn_get_cfg_json_stack_parameters_url();
+            $stack_params = json_decode(file_get_contents($stack_params_url), true);
             $templateURL = bigbluebuttonbn_get_cfg_yaml_template_url();
             $bbb_host_name = $this->bbb_servers_management->create_bbb_host($this->meeting->id, $stack_params, $templateURL);
             $this->meeting->openstack_stack_name = $bbb_host_name;
