@@ -35,8 +35,6 @@ $string['config_openstack_password']='Contraseña';
 $string['config_openstack_password_description']='Contraseña para conectarse a los servicios de OpenStack.';
 $string['config_openstack_tenant_id']='Tenant ID';
 $string['config_openstack_tenant_id_description']='Identificador del projecto (<i>tenant</i>) para conectarse a los servicios de OpenStack. ';
-$string['config_shared_secret_on_demand']='Shared Secret de los servidores de BigBlueButton';
-$string['config_shared_secret_on_demand_description']='El <i>secret salt</i> de los servidores de BigBlueButton.';
 $string['config_meeting_durations']='Duraciones de las conferencias';
 $string['config_meeting_durations_description']='Arreglo con las duraciones de conferencia en minutos. Deben estar en el siguiente formato: [30,60,90].';
 $string['config_openstack_integration']='Servidores BBB en demanda.';
@@ -52,8 +50,255 @@ $string['mod_form_field_openingtime_help'] = 'Hora de inicio para que los partic
 $string['mod_form_field_closingtime_help'] = 'Hora de cierre para que los participantes entren a la conferencia.';
 $string['bbbconferencetoosoon']='Esta conferencia no puede iniciar tan pronto. Para más información comuníquese con el Administrador.';
 $string['bbbconferencetoolate']='No se puede reservar una conferencia con tanto tiempo de anticipación. Para más información comuníquese con el Administrador.';
+$string['bbbconferenceopeningsoon']='Esta conferencia ya comenzó o lo hará pronto, por lo que no es posible cambiar esta configuración.';
 
 //Tasks for OpenStack communication
 $string['task_openstack_async_communication']= 'Creación de servidores de conferencias BBB con OpenStack';
 
 //----end of OpenStack integration----
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$string['view_message_room_closed'] = 'This room is closed.';
+$string['view_message_room_ready'] = 'This room is ready.';
+$string['view_message_room_open'] = 'This room is open.';
+$string['view_message_conference_room_ready'] = 'This conference room is ready. You can join the session now.';
+$string['view_message_conference_not_started'] = 'La confrencia aún no ha comenzado.';
+$string['view_message_conference_wait_for_moderator'] = 'Waiting for a moderator to join.';
+$string['view_message_conference_in_progress'] = 'This conference is in progress.';
+$string['view_message_conference_has_ended'] = 'This conference has ended.';
+$string['view_message_tab_close'] = 'This tab/window must be closed manually';

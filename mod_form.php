@@ -47,7 +47,7 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
         $preuploadpresentation_enabled = bigbluebuttonbn_get_cfg_preuploadpresentation_enabled();
         $sendnotifications_enabled = bigbluebuttonbn_get_cfg_sendnotifications_enabled();
 
-        
+
 
         /*---- OpenStack integration ----*/
         if (bigbluebuttonbn_get_cfg_openstack_integration()){
@@ -189,30 +189,30 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
         $mform->setType('participants', PARAM_TEXT);
 
         $html_participant_selection = ''.
-             '<div id="fitem_bigbluebuttonbn_participant_selection" class="fitem fitem_fselect">'."\n".
-             '  <div class="fitemtitle">'."\n".
-             '    <label for="bigbluebuttonbn_participant_selectiontype">'.get_string('mod_form_field_participant_add', 'bigbluebuttonbn').' </label>'."\n".
-             '  </div>'."\n".
-             '  <div class="felement fselect">'."\n".
-             '    <select id="bigbluebuttonbn_participant_selection_type" onchange="bigbluebuttonbn_participant_selection_set(); return 0;">'."\n".
-             '      <option value="all" selected="selected">'.get_string('mod_form_field_participant_list_type_all', 'bigbluebuttonbn').'</option>'."\n".
-             '      <option value="role">'.get_string('mod_form_field_participant_list_type_role', 'bigbluebuttonbn').'</option>'."\n".
-             '      <option value="user">'.get_string('mod_form_field_participant_list_type_user', 'bigbluebuttonbn').'</option>'."\n".
-             '    </select>'."\n".
-             '    &nbsp;&nbsp;'."\n".
-             '    <select id="bigbluebuttonbn_participant_selection" disabled="disabled">'."\n".
-             '      <option value="all" selected="selected">---------------</option>'."\n".
-             '    </select>'."\n".
-             '    &nbsp;&nbsp;'."\n".
-             '    <input value="'.get_string('mod_form_field_participant_list_action_add', 'bigbluebuttonbn').'" type="button" id="id_addselectionid" onclick="bigbluebuttonbn_participant_add(); return 0;" />'."\n".
-             '  </div>'."\n".
-             '</div>'."\n".
-             '<div id="fitem_bigbluebuttonbn_participant_list" class="fitem">'."\n".
-             '  <div class="fitemtitle">'."\n".
-             '    <label for="bigbluebuttonbn_participant_list">'.get_string('mod_form_field_participant_list', 'bigbluebuttonbn').' </label>'."\n".
-             '  </div>'."\n".
-             '  <div class="felement fselect">'."\n".
-             '    <table id="participant_list_table">'."\n";
+            '<div id="fitem_bigbluebuttonbn_participant_selection" class="fitem fitem_fselect">'."\n".
+            '  <div class="fitemtitle">'."\n".
+            '    <label for="bigbluebuttonbn_participant_selectiontype">'.get_string('mod_form_field_participant_add', 'bigbluebuttonbn').' </label>'."\n".
+            '  </div>'."\n".
+            '  <div class="felement fselect">'."\n".
+            '    <select id="bigbluebuttonbn_participant_selection_type" onchange="bigbluebuttonbn_participant_selection_set(); return 0;">'."\n".
+            '      <option value="all" selected="selected">'.get_string('mod_form_field_participant_list_type_all', 'bigbluebuttonbn').'</option>'."\n".
+            '      <option value="role">'.get_string('mod_form_field_participant_list_type_role', 'bigbluebuttonbn').'</option>'."\n".
+            '      <option value="user">'.get_string('mod_form_field_participant_list_type_user', 'bigbluebuttonbn').'</option>'."\n".
+            '    </select>'."\n".
+            '    &nbsp;&nbsp;'."\n".
+            '    <select id="bigbluebuttonbn_participant_selection" disabled="disabled">'."\n".
+            '      <option value="all" selected="selected">---------------</option>'."\n".
+            '    </select>'."\n".
+            '    &nbsp;&nbsp;'."\n".
+            '    <input value="'.get_string('mod_form_field_participant_list_action_add', 'bigbluebuttonbn').'" type="button" id="id_addselectionid" onclick="bigbluebuttonbn_participant_add(); return 0;" />'."\n".
+            '  </div>'."\n".
+            '</div>'."\n".
+            '<div id="fitem_bigbluebuttonbn_participant_list" class="fitem">'."\n".
+            '  <div class="fitemtitle">'."\n".
+            '    <label for="bigbluebuttonbn_participant_list">'.get_string('mod_form_field_participant_list', 'bigbluebuttonbn').' </label>'."\n".
+            '  </div>'."\n".
+            '  <div class="felement fselect">'."\n".
+            '    <table id="participant_list_table">'."\n";
 
         // Add participant list
         foreach($participant_list as $participant){
@@ -249,11 +249,11 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
         }
 
         $html_participant_selection .= ''.
-             '    </table>'."\n".
-             '  </div>'."\n".
-             '</div>'."\n".
-             '<script type="text/javascript" src="'.$CFG->wwwroot.'/mod/bigbluebuttonbn/mod_form.js">'."\n".
-             '</script>'."\n";
+            '    </table>'."\n".
+            '  </div>'."\n".
+            '</div>'."\n".
+            '<script type="text/javascript" src="'.$CFG->wwwroot.'/mod/bigbluebuttonbn/mod_form.js">'."\n".
+            '</script>'."\n";
 
         $mform->addElement('html', $html_participant_selection);
 
@@ -261,10 +261,10 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
         $mform->addElement('html', '<script type="text/javascript">var bigbluebuttonbn_participant_selection = {"all": [], "role": '.json_encode($roles).', "user": '.bigbluebuttonbn_get_users_json($users).'}; </script>');
         $mform->addElement('html', '<script type="text/javascript">var bigbluebuttonbn_participant_list = '.json_encode($participant_list).'; </script>');
         $bigbluebuttonbn_strings = Array( "as" => get_string('mod_form_field_participant_list_text_as', 'bigbluebuttonbn'),
-                                          "viewer" => get_string('mod_form_field_participant_bbb_role_viewer', 'bigbluebuttonbn'),
-                                          "moderator" => get_string('mod_form_field_participant_bbb_role_moderator', 'bigbluebuttonbn'),
-                                          "remove" => get_string('mod_form_field_participant_list_action_remove', 'bigbluebuttonbn'),
-                                    );
+            "viewer" => get_string('mod_form_field_participant_bbb_role_viewer', 'bigbluebuttonbn'),
+            "moderator" => get_string('mod_form_field_participant_bbb_role_moderator', 'bigbluebuttonbn'),
+            "remove" => get_string('mod_form_field_participant_list_action_remove', 'bigbluebuttonbn'),
+        );
         $mform->addElement('html', '<script type="text/javascript">var bigbluebuttonbn_strings = '.json_encode($bigbluebuttonbn_strings).'; </script>');
         //-------------------------------------------------------------------------------
         // Third block ends here
@@ -295,12 +295,12 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
 
         /*---- OpenStack integration ----*/
         if(bigbluebuttonbn_get_cfg_openstack_integration()){
-          $mform->addRule('openingtime', null, 'required', null, 'client');
-          $mform->addRule('closingtime', null, 'required', null, 'client');
-          $durations = json_decode(bigbluebuttonbn_get_cfg_json_meeting_durations());
-          $durations = array_combine($durations, $durations);
-          $mform->addElement('select', 'bbb_meeting_duration', get_string('mod_form_field_meeting_duration', 'bigbluebuttonbn'), $durations);
-          $mform->addHelpButton('bbb_meeting_duration', 'mod_form_field_meeting_duration', 'bigbluebuttonbn');
+            $mform->addRule('openingtime', null, 'required', null, 'client');
+            $mform->addRule('closingtime', null, 'required', null, 'client');
+            $durations = json_decode(bigbluebuttonbn_get_cfg_json_meeting_durations());
+            $durations = array_combine($durations, $durations);
+            $mform->addElement('select', 'bbb_meeting_duration', get_string('mod_form_field_meeting_duration', 'bigbluebuttonbn'), $durations);
+            $mform->addHelpButton('bbb_meeting_duration', 'mod_form_field_meeting_duration', 'bigbluebuttonbn');
         }
         /*---- end of OpenStack integration ----*/
 
@@ -333,6 +333,7 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
     }
 
     function validation($data, $files) {
+        global $DB;
         $errors = parent::validation($data, $files);
 
         if ( isset($data['openingtime']) && isset($data['closingtime']) ) {
@@ -343,11 +344,31 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
 
         /*---- OpenStack integration ----*/
         if(bigbluebuttonbn_get_cfg_openstack_integration()){
-          if ( $data['openingtime'] < bigbluebuttonbn_get_min_openingtime() ) {
-              $errors['openingtime'] = get_string('bbbconferencetoosoon', 'bigbluebuttonbn');
-          }elseif ( $data['openingtime'] > bigbluebuttonbn_get_max_openingtime() ) {
-              $errors['openingtime'] = get_string('bbbconferencetoolate', 'bigbluebuttonbn');
-          }
+
+            $course_module_id = optional_param('update', 0, PARAM_INT); //Checks if course is being updated
+
+            //Prevents creation of meetings to soon or to anticipated
+            if ( $data['openingtime'] < bigbluebuttonbn_get_min_openingtime() && $course_module_id == 0) {
+                $errors['openingtime'] = get_string('bbbconferencetoosoon', 'bigbluebuttonbn');
+            }
+            if ( $data['openingtime'] > bigbluebuttonbn_get_max_openingtime() ) {
+                $errors['openingtime'] = get_string('bbbconferencetoolate', 'bigbluebuttonbn');
+            }
+
+            //Prevents editing conferences specific settings near creation of machines
+            if($course_module_id){
+                if(bigbluebuttonbn_get_previous_setting($course_module_id, 'openingtime') < bigbluebuttonbn_get_min_openingtime()){
+
+                    if(bigbluebuttonbn_get_previous_setting($course_module_id, 'openingtime') != $data['openingtime']){
+                        $errors['openingtime'] = get_string('bbbconferenceopeningsoon', 'bigbluebuttonbn');
+                    }
+                    if(bigbluebuttonbn_get_previous_setting($course_module_id, 'bbb_meeting_duration') != $data['bbb_meeting_duration']){
+                        $errors['bbb_meeting_duration'] = get_string('bbbconferenceopeningsoon', 'bigbluebuttonbn');
+                    }
+
+                }
+            }
+
         }
         /*---- end of OpenStack integration ----*/
 

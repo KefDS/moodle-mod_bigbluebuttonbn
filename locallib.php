@@ -1656,19 +1656,27 @@ function bigbluebuttonbn_get_meeting_shared_secret($meetingid){
     return trim($shared_secret);
 }
 
-//Get minimun time to schedule a meeting
+//Get minimun time to schedule a meeting.
 function bigbluebuttonbn_get_min_openingtime(){
     $time_dd_hh_mm = bigbluebuttonbn_get_cfg_min_openingtime();
     $time = explode('-', $time_dd_hh_mm);
     $time = preg_replace('/\D+/', "", $time);
-    return ( $time[0] * 24 * 3600 + $time[1] * 3600 + $time[2] * 60 + time());
+    return ( $time[0] * 24 * 3600 + $time[1] * 3600 + $time[2] * 60 + time() );
 }
 
-//Get maximun anticipation time to schedule a meeting
+//Get maximun anticipation time to schedule a meeting.
 function bigbluebuttonbn_get_max_openingtime(){
     $time_dd_hh_mm = bigbluebuttonbn_get_cfg_max_openingtime();
     $time = explode('-', $time_dd_hh_mm);
     $time = preg_replace('/\D+/', "", $time);
-    return ( $time[0] * 24 * 3600 + $time[1] * 3600 + $time[2] * 60 + time());
+    return ( $time[0] * 24 * 3600 + $time[1] * 3600 + $time[2] * 60 + time() );
 }
+
+//Get previous setting
+function bigbluebuttonbn_get_previous_setting($course_module_id, $conference_setting){
+    global $DB;
+    $cm = get_coursemodule_from_id('bigbluebuttonbn', $course_module_id, 0, false, MUST_EXIST);
+    return $DB->get_field('bigbluebuttonbn', $conference_setting, array('id' => $cm->instance), 'MUST_EXIST');
+}
+
 /*---- end of OpenStack integration ----*/

@@ -44,7 +44,8 @@ $string['config_openstack_integration_description']='Enables OpenStack integrati
 $string['mod_form_field_meeting_duration']='Duration';
 $string['mod_form_field_meeting_duration_help']='Meeting duration (in minutes)';
 $string['bbbconferencetoosoon']='This opeining time is too soon. For further information please contact the Administrator.';
-$string['bbbconferencetoolate']='You cannot schedule a conference with that amount of anticipation.. For further information please contact the Administrator.';
+$string['bbbconferencetoolate']='You can\'t schedule a conference with that amount of anticipation.. For further information please contact the Administrator.';
+$string['bbbconferenceopeningsoon']='The conference already started or will do it soon. You can no longer change this setting.';
 
 //Tasks for OpenStack communication
 $string['task_openstack_async_communication']= 'Creating BBB meeting servers with OpenStack';

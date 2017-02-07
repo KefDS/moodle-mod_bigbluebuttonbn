@@ -41,7 +41,6 @@ class bbb_host_management {
         $this->orchestration_service->getStack($stack_name)->delete();
     }
 
-
     private function get_bbb_host_name($meeting_id) {
         return "bbb_meeting_" . $meeting_id;
     }
