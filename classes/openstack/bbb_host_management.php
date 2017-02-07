@@ -20,9 +20,10 @@ class bbb_host_management {
         $this->orchestration_service = $orchestration_service;
     }
 
-    function create_bbb_host($meeting_id, $stack_parameters) {
+    function create_bbb_host($meeting_id, $stack_parameters, $templateURL) {
         $stack_name = $this->get_bbb_host_name($meeting_id);
         $stack_parameters['name'] = $stack_name;
+        $stack_parameters ['templateUrl']= $templateURL;
         $stack_parameters['timeoutMins'] = self::DEFAULT_TIMEOUT_MINUTES;
 
         $this->orchestration_service->createStack($stack_parameters);

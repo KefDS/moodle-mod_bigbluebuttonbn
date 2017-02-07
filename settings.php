@@ -22,7 +22,7 @@ $bbb_server_regex= '/^https?\:\/\/([a-zA-Z0-9\-\.]+\.[a-zA-Z0-9]{2,3})(\/[a-zA-Z
 $heat_url_regex='/^https?\:\/\/([a-zA-Z0-9\-\.]+\.[a-zA-Z0-9]{2,3})(\/[a-zA-Z0-9\-\.]+)*(:5000\/v2.0)$/'; //Validates API version
 $hash_regex='/^[[:xdigit:]]{0,40}$/';
 $default_text_regex= '/^[a-zA-Z0-9-_.[:space:]]{0,40}$/';
-$url_regex='/^https?\:\/\/([a-zA-Z0-9\-\.]+\.[a-zA-Z0-9]{2,3})(\/[a-zA-Z0-9\-\.]+)*$/';
+$url_regex='/^https?\:\/\/([a-zA-Z0-9\-\.\_]+\.[a-zA-Z0-9]{2,3})(\/[a-zA-Z0-9\-\.\_]+)*$/';
 $durations_array_regex='/^\[\d{1,3}(,\d{1,3}){0,10}\]$/';
 $days_hours_minutes_regex = '/^\d{1,3}[Dd]-\d{1,2}[Hh]-\d{1,2}[mM]$/';
 /*---- end of OpenStack integration ----*/
@@ -64,7 +64,7 @@ if ($ADMIN->fulltree) {
     ////Configurations for stacks and OpenStack API
     if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_url) ||
         !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_region) ||
-        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters) ||
+        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters_url) ||
         !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_meeting_durations) ||
         !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_min_openingtime) ||
         !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_openingtime) ||
@@ -88,18 +88,18 @@ if ($ADMIN->fulltree) {
                 get_string( 'config_heat_region_description', 'bigbluebuttonbn' ),
                 null, $default_text_regex));
         }
-        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_yaml_stack_template)){
+        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_yaml_stack_template_url)){
             //YAML file with stack template
-            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_yaml_stack_template',
-                get_string( 'config_yaml_stack_template', 'bigbluebuttonbn' ),
-                get_string( 'config_yaml_stack_template_description', 'bigbluebuttonbn' ),
+            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_yaml_stack_template_url',
+                get_string( 'config_yaml_stack_template_url', 'bigbluebuttonbn' ),
+                get_string( 'config_yaml_stack_template_url_description', 'bigbluebuttonbn' ),
                 null,$url_regex));
         }
-        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters)){
+        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters_url)){
             //Parameters for stack creation in JSON representation
-            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_json_stack_parameters',
-                get_string( 'config_json_stack_parameters', 'bigbluebuttonbn' ),
-                get_string( 'config_json_stack_parameters_description', 'bigbluebuttonbn' ),
+            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_json_stack_parameters_url',
+                get_string( 'config_json_stack_parameters_url', 'bigbluebuttonbn' ),
+                get_string( 'config_json_stack_parameters_url_description', 'bigbluebuttonbn' ),
                 null,$url_regex));
         }
         if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_meeting_durations)){

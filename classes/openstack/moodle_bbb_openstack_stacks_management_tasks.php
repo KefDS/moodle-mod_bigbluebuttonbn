@@ -73,7 +73,6 @@ class moodle_bbb_openstack_stacks_management_tasks {
 
     private function create_bbb_host_for_upcoming_meetings() {
         $upcoming_meetings = $this->get_upcoming_meetings();
-
         foreach ($upcoming_meetings as $meeting) {
             $this->create_bbb_host_for_upcoming_meeting($meeting);
         }
