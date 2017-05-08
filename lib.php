@@ -756,7 +756,7 @@ function bigbluebuttonbn_get_cfg_json_stack_parameters_url() {
 
 function bigbluebuttonbn_get_cfg_json_meeting_durations() {
     global $BIGBLUEBUTTONBN_CFG, $CFG;
-    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_meeting_durations)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_meeting_durations): (isset($CFG->bigbluebuttonbn_json_meeting_durations)? trim($CFG->bigbluebuttonbn_json_meeting_durations): '[30,60,120]'));
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_meeting_durations)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_meeting_durations): (isset($CFG->bigbluebuttonbn_json_meeting_durations)? trim($CFG->bigbluebuttonbn_meeting_durations): '[30,60,120]'));
 }
 
 function bigbluebuttonbn_get_cfg_min_openingtime() {

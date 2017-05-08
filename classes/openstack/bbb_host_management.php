@@ -12,7 +12,7 @@ namespace mod_bigbluebuttonbn\openstack;
 require_once dirname(__FILE__) . "/bbb_stack.php";
 
 class bbb_host_management {
-    const DEFAULT_TIMEOUT_MINUTES = 14;
+    const DEFAULT_TIMEOUT_MINUTES = 20;
 
     private $orchestration_service;
 
@@ -29,6 +29,7 @@ class bbb_host_management {
         $this->orchestration_service->createStack($stack_parameters);
         return $stack_name;
     }
+
 
     function get_stack_outputs($meeting_id) {
         $stack = $this->orchestration_service->getStack($this->get_bbb_host_name($meeting_id));
