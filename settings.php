@@ -40,13 +40,13 @@ if ($ADMIN->fulltree) {
             $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_server_url',
                 get_string( 'config_server_url', 'bigbluebuttonbn' ),
                 get_string( 'config_server_url_description', 'bigbluebuttonbn' ),
-                bigbluebuttonbn_get_cfg_server_url_default(), $bbb_server_regex));
+                BIGBLUEBUTTONBN_DEFAULT_SERVER_URL, $bbb_server_regex));
         }
         if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_shared_secret) ) {
             $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_shared_secret',
                 get_string( 'config_shared_secret', 'bigbluebuttonbn' ),
                 get_string( 'config_shared_secret_description', 'bigbluebuttonbn' ),
-                bigbluebuttonbn_get_cfg_shared_secret_default(), $hash_regex));
+                BIGBLUEBUTTONBN_DEFAULT_SHARED_SECRET, $hash_regex));
         }
 
         //---- OpenStack integration ----

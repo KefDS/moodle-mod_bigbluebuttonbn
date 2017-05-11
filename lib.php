@@ -43,6 +43,9 @@ $BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_scheduled_duration_enabled = 0;
  * Remove this block when restored
  */
 
+const BIGBLUEBUTTONBN_DEFAULT_SERVER_URL = "http://test-install.blindsidenetworks.com/bigbluebutton/";
+const BIGBLUEBUTTONBN_DEFAULT_SHARED_SECRET = "8cd8ef52e8e101574e400365b55e11a6";
+
 const BIGBLUEBUTTONBN_LOG_EVENT_CREATE = "Create";
 const BIGBLUEBUTTONBN_LOG_EVENT_JOIN = "Join";
 const BIGBLUEBUTTONBN_LOG_EVENT_LOGOUT = "Logout";
@@ -337,6 +340,48 @@ function bigbluebuttonbn_get_post_actions() {
     return array('update', 'add', 'create', 'join', 'end', 'left', 'publish', 'unpublish', 'delete');
 }
 
+
+/**
+ * @global object
+ * @global object
+ * @param array $courses
+ * @param array $htmlarray Passed by reference
+ */
+function bigbluebuttonbn_print_overview($courses, &$htmlarray) {
+    global $USER, $CFG;
+
+    if (empty($courses) || !is_array($courses) || count($courses) == 0) {
+        return array();
+    }
+
+    if (!$bigbluebuttonbns = get_all_instances_in_courses('bigbluebuttonbn', $courses)) {
+        return;
+    }
+
+    foreach ($bigbluebuttonbns as $bigbluebuttonbn) {
+        $now = time();
+        if ( $bigbluebuttonbn->openingtime and (!$bigbluebuttonbn->closingtime or $bigbluebuttonbn->closingtime > $now)) { // A bigbluebuttonbn is scheduled.
+            $str = '<div class="bigbluebuttonbn overview"><div class="name">'.
+                 get_string('modulename', 'bigbluebuttonbn').': <a '.($bigbluebuttonbn->visible ? '' : ' class="dimmed"').
+                 ' href="'.$CFG->wwwroot.'/mod/bigbluebuttonbn/view.php?id='.$bigbluebuttonbn->coursemodule.'">'.
+                 $bigbluebuttonbn->name.'</a></div>';
+            if ( $bigbluebuttonbn->openingtime > $now ) {
+                $str .= '<div class="info">'.get_string('starts_at', 'bigbluebuttonbn').': '.userdate($bigbluebuttonbn->openingtime).'</div>';
+            } else {
+                $str .= '<div class="info">'.get_string('started_at', 'bigbluebuttonbn').': '.userdate($bigbluebuttonbn->openingtime).'</div>';
+            }
+            $str .= '<div class="info">'.get_string('ends_at', 'bigbluebuttonbn').': '.userdate($bigbluebuttonbn->closingtime).'</div></div>';
+
+            if (empty($htmlarray[$bigbluebuttonbn->course]['bigbluebuttonbn'])) {
+                $htmlarray[$bigbluebuttonbn->course]['bigbluebuttonbn'] = $str;
+            } else {
+                $htmlarray[$bigbluebuttonbn->course]['bigbluebuttonbn'] .= $str;
+            }
+        }
+    }
+}
+
+
 /**
  * Given a course_module object, this function returns any
  * "extra" information that may be needed when printing
@@ -350,7 +395,7 @@ function bigbluebuttonbn_get_post_actions() {
 function bigbluebuttonbn_get_coursemodule_info($coursemodule) {
     global $CFG, $DB;
 
-    if ( !$bigbluebuttonbn = $DB->get_record('bigbluebuttonbn', array('id'=>$coursemodule->instance), 'id, name, intro, introformat, newwindow')) {
+    if ( !$bigbluebuttonbn = $DB->get_record('bigbluebuttonbn', array('id'=>$coursemodule->instance), 'id, name, intro, introformat')) {
         return NULL;
     }
 
@@ -388,8 +433,6 @@ function bigbluebuttonbn_process_pre_save(&$bigbluebuttonbn) {
         $bigbluebuttonbn->timemodified = time();
     }
 
-    if (! isset($bigbluebuttonbn->newwindow))
-        $bigbluebuttonbn->newwindow = 0;
     if (! isset($bigbluebuttonbn->wait))
         $bigbluebuttonbn->wait = 0;
     if (! isset($bigbluebuttonbn->record))
@@ -473,7 +516,7 @@ function bigbluebuttonbn_process_post_save(&$bigbluebuttonbn) {
         if ($bigbluebuttonbn->closingtime ) {
             $msg->activity_closingtime = calendar_day_representation($bigbluebuttonbn->closingtime).' '.$at.' '.calendar_time_representation($bigbluebuttonbn->closingtime);
         }
-        $msg->activity_owner = $USER->firstname.' '.$USER->lastname;
+        $msg->activity_owner = fullname($USER);
 
         $message_text .= '<p><b>'.$msg->activity_title.'</b> '.get_string('email_body_notification_meeting_details', 'bigbluebuttonbn').':';
         $message_text .= '<table border="0" style="margin: 5px 0 0 20px"><tbody>';
@@ -664,7 +707,7 @@ function bigbluebuttonbn_send_notification($sender, $bigbluebuttonbn, $message="
 
     //Complete message
     $msg = new stdClass();
-    $msg->user_name = $sender->firstname.' '.$sender->lastname;
+    $msg->user_name = fullname($sender);
     $msg->user_email = $sender->email;
     $msg->course_name = "$course->fullname";
     $message .= '<p><hr/><br/>'.get_string('email_footer_sent_by', 'bigbluebuttonbn').' '.$msg->user_name.'('.$msg->user_email.') ';
@@ -673,12 +716,11 @@ function bigbluebuttonbn_send_notification($sender, $bigbluebuttonbn, $message="
     $users = bigbluebuttonbn_get_users($context);
     foreach( $users as $user ) {
         if( $user->id != $sender->id ){
-            error_log("Sending msg to ".$user->firstname." ".$user->lastname.".");
             $messageid = message_post_message($sender, $user, $message, FORMAT_HTML);
             if (!empty($messageid)) {
-                error_log("Msg sent to ".$user->firstname." ".$user->lastname.".");
+                error_log("Msg to ".$msg->user_name." was sent.");
             } else {
-                error_log("Msg was NOT sent.");
+                error_log("Msg to ".$msg->user_name." was NOT sent.");
             }
         }
     }
