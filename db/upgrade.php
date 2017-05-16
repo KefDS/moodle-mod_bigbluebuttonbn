@@ -280,7 +280,7 @@ function xmldb_bigbluebuttonbn_upgrade($oldversion=0) {
 
         upgrade_mod_savepoint(true, 2016011305, 'bigbluebuttonbn');
     }
-    
+
 
     if ($result && $oldversion < 2016051910) {
         // Update the bigbluebuttonbn table
@@ -294,49 +294,14 @@ function xmldb_bigbluebuttonbn_upgrade($oldversion=0) {
         upgrade_mod_savepoint(true, 2016051910, 'bigbluebuttonbn');
     }
 
+
     /*---- OpenStack integration ----*/
-    
-    if ( $result && $oldversion < 2017042000) {
-        
-        // Define field bbb_server_url to be added to bigbluebuttonbn.
-        $table = new xmldb_table('bigbluebuttonbn');
-        $field = new xmldb_field('bbb_server_url', XMLDB_TYPE_CHAR, '256', null, null, null, null, 'userlimit');
 
-        // Conditionally launch add field bbb_server_url.
-        if (!$dbman->field_exists($table, $field)) {
-            $dbman->add_field($table, $field);
-        }
-        
-        // Define field bbb_shared_secret to be added to bigbluebuttonbn.
-        $table = new xmldb_table('bigbluebuttonbn');
-        $field = new xmldb_field('bbb_shared_secret', XMLDB_TYPE_CHAR, '256', null, null, null, null, 'bbb_server_url');
-
-        // Conditionally launch add field bbb_shared_secret.
-        if (!$dbman->field_exists($table, $field)) {
-            $dbman->add_field($table, $field);
-        }
-      
-        // Define field openstack_stack_name to be added to bigbluebuttonbn.
-        $table = new xmldb_table('bigbluebuttonbn');
-        $field = new xmldb_field('openstack_stack_name', XMLDB_TYPE_CHAR, '256', null, null, null, null, 'bbb_shared_secret');
-
-        // Conditionally launch add field openstack_stack_name.
-        if (!$dbman->field_exists($table, $field)) {
-            $dbman->add_field($table, $field);
-        }
-
-        // Define field bbb_server_status to be added to bigbluebuttonbn.
-        $table = new xmldb_table('bigbluebuttonbn');
-        $field = new xmldb_field('bbb_server_status', XMLDB_TYPE_CHAR, '256', null, null, null, null, 'openstack_stack_name');
-
-        // Conditionally launch add field bbb_server_status.
-        if (!$dbman->field_exists($table, $field)) {
-            $dbman->add_field($table, $field);
-        }
+    if ($oldversion < 2016102600) {
 
         // Define field bbb_meeting_duration to be added to bigbluebuttonbn.
         $table = new xmldb_table('bigbluebuttonbn');
-        $field = new xmldb_field('bbb_meeting_duration', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'bbb_server_status');
+        $field = new xmldb_field('bbb_meeting_duration', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'userlimit');
 
         // Conditionally launch add field bbb_meeting_duration.
         if (!$dbman->field_exists($table, $field)) {
@@ -344,10 +309,66 @@ function xmldb_bigbluebuttonbn_upgrade($oldversion=0) {
         }
 
         // Bigbluebuttonbn savepoint reached.
-        upgrade_mod_savepoint(true, 2017042000, 'bigbluebuttonbn');
+        upgrade_mod_savepoint(true, 2016102600, 'bigbluebuttonbn');
+    }
+
+    if($oldversion < 2017042003){
+
+        //Define table bigbluebuttonbn_openstack to be created
+        $table = new xmldb_table('bigbluebuttonbn_openstack');
+
+        //Add fields to bigbluebuttonbn_openstack.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null, null);
+        $table->add_field('stack_name', XMLDB_TYPE_CHAR, '255', null, null, null, null, null);
+        $table->add_field('meetingid', XMLDB_TYPE_CHAR, '256', null, null, null, null, null);
+        $table->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, null, null, '0', null);
+        $table->add_field('bbb_server_status', XMLDB_TYPE_CHAR, '256', null, null, null, null, null);
+        $table->add_field('bbb_server_url', XMLDB_TYPE_CHAR, '256', null, null, null, null, null);
+        $table->add_field('bbb_server_shared_secret', XMLDB_TYPE_CHAR, '256', null, null, null, null, null);
+        $table->add_field('meeting_duration', XMLDB_TYPE_INTEGER, '10', null, null, null, null, null);
+        $table->add_field('creationgtime', XMLDB_TYPE_INTEGER, '10', null, null, null, '0', null);
+        $table->add_field('deletiontime', XMLDB_TYPE_INTEGER, '10', null, null, null, null, null);
+
+        // Adding keys to table bigbluebuttonbn_log
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+
+        // Conditionally launch create table for bigbluebuttonbn_openstack
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Bigbluebuttonbn savepoint reached.
+        upgrade_mod_savepoint(true, 2017042003, 'bigbluebuttonbn');
+    }
+
+
+    if($oldversion < 2017042004) {
+        //Define table bigbluebuttonbn_openstack to be created
+        $table = new xmldb_table('bigbluebuttonbn_os_logs');
+
+        //Add fields to bigbluebuttonbn_openstack.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null, null);
+        $table->add_field('event_time', XMLDB_TYPE_INTEGER, '10', null, null, null, null, null);
+        $table->add_field('stack_name', XMLDB_TYPE_CHAR, '255', null, null, null, null, null);
+        $table->add_field('log_level', XMLDB_TYPE_CHAR, '256', null, null, null, null, null);
+        $table->add_field('component', XMLDB_TYPE_CHAR, '256', null, null, null, null, null);
+        $table->add_field('event', XMLDB_TYPE_TEXT, null, null, null, null, null, null);
+        $table->add_field('event_details', XMLDB_TYPE_TEXT, null, null, null, null, null, null);
+
+        // Adding keys to table bigbluebuttonbn_log
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+        $table->add_key('foreign', XMLDB_KEY_FOREIGN, array('stack_name'), 'bigbluebuttonbn_openstack', array('stack_name'));
+
+        // Conditionally launch create table for bigbluebuttonbn_openstack
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Bigbluebuttonbn savepoint reached.
+        upgrade_mod_savepoint(true, 2017042004, 'bigbluebuttonbn');
     }
 
     /*---- end of OpenStack integration ----*/
-    
+
     return $result;
 }

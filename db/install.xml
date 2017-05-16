@@ -80,7 +80,7 @@
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-        <KEY NAME="bbb_openstack_meetingid" TYPE="foreign" FIELDS="meetingid" REFTABLE="bigbluebuttonbn_openstack" REFFIELDS="meetingid"/>
+        <KEY NAME="foreign" TYPE="foreign" FIELDS="stack_name" REFTABLE="bigbluebuttonbn_openstack" REFFIELDS="stack_name"/>
       </KEYS>
     </TABLE>
   </TABLES>
