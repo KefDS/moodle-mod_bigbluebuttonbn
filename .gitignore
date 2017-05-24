@@ -1,6 +1,6 @@
-log/*
-.composer.lock
-.composer.phar
+log/
+composer.lock
+composer.phar
 .buildpath
 .project
 .settings*

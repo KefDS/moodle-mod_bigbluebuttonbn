@@ -85,6 +85,7 @@ class moodle_bbb_openstack_stacks_management_tasks {
         catch (\Exception $exception) {
             $this->admin_exception_handler->handle_exception($exception);
             $this->user_error_communicator->communicate_error($meeting);
+            //#5 Agregar evento de fallo de conferencia
         }
     }
 
@@ -119,6 +120,7 @@ class moodle_bbb_openstack_stacks_management_tasks {
         }
         catch (\Exception $exception) {
             $this->admin_exception_handler->handle_exception($exception);
+            //Agregar a la bitácora
         }
     }
 

@@ -29,7 +29,8 @@ class meeting_setup {
             $bbb_host_name = $this->bbb_servers_management->create_bbb_host($this->meeting->id, $stack_params, $templateURL);
             $this->meeting->openstack_stack_name = $bbb_host_name;
             $this->meeting->bbb_server_status = 'In Progress';
-            $DB->update_record('bigbluebuttonbn', $this->meeting);
+            $DB->update_record('bigbluebuttonbn', $this->meeting); //Modificar otra tabla
+            //#4 Agregar evento de creación de conferencia a bitácora y a logs
         }
         catch (\Exception $exception) {
             $this->failed_meeting_setup();
@@ -49,6 +50,7 @@ class meeting_setup {
                 $this->meeting->bbb_shared_secret = $bbb_host_information['bbb_shared_key'];
                 $this->meeting->bbb_server_status = 'Ready';
                 $DB->update_record('bigbluebuttonbn', $this->meeting);
+                #6 ingresar a bitácora y cambiar estado
             }
         }
         catch (\Exception $exception) {
@@ -63,9 +65,11 @@ class meeting_setup {
             $this->bbb_servers_management->delete_bbb_host($this->meeting->id);
             $this->meeting->bbb_server_status = 'Deleted';
             $DB->update_record('bigbluebuttonbn', $this->meeting);
+            //#7 agregar a bitácora y actualizar estado
         }
         catch (\Exception $exception) {
             $this->meeting->bbb_server_status = 'Delete Error';
+            // #8 agregar y actualizar estado
             $DB->update_record('bigbluebuttonbn', $this->meeting);
             $exception_message = "The bbb host cannot be destroy. Try delete it manually. Meeting id: " . $this->meeting->meetingid . "\n" .
                 $exception->getMessage();
@@ -77,5 +81,6 @@ class meeting_setup {
         global $DB;
         $this->meeting->bbb_server_status = 'Failed';
         $DB->update_record('bigbluebuttonbn', $this->meeting);
+        //#6 ingresar a bitácora y cambiar estado
     }
 }
