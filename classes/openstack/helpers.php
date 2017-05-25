@@ -28,4 +28,9 @@ class helpers {
         global $DB;
         return $DB->get_record('bigbluebuttonbn', array('meetingid'=>$meetingid));
     }
+
+/*    function bigbluebuttonbn_add_openstack_event($event_record){
+        global $DB;
+        return $DB->insert_record('bigbluebuttonbn_os_logs', $event_record);
+    }*/
 }
