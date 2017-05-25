@@ -26,10 +26,6 @@
         <FIELD NAME="presentation" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="participants" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="userlimit" TYPE="int" LENGTH="3" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
-        <FIELD NAME="bbb_server_url" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="URL of the BigBlueButton server hosting the meeting. This field is used when  creation of servers on demand is enabled."/>
-        <FIELD NAME="bbb_shared_secret" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Shared secret of the BigBlueButton server hosting the meeting. This field is used when  creation of servers on demand is enabled."/>
-        <FIELD NAME="openstack_stack_name" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Name of the instance of the stack that hosts the BBB server."/>
-        <FIELD NAME="bbb_server_status" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Current status of the BBB server."/>
         <FIELD NAME="bbb_meeting_duration" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Duration of the BBB meeting. Needed for destroying the machine when using servers on demand."/>
       </FIELDS>
       <KEYS>
@@ -73,6 +69,7 @@
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="event_time" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Timestamp of the event."/>
+        <FIELD NAME="meetingid" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Id of the conference hosted in the stack."/>
         <FIELD NAME="stack_name" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Name of the instance of the stack that hosts the BBB server."/>
         <FIELD NAME="log_level" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Log level of the event."/>
         <FIELD NAME="component" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Component responsible for the event ocurrence."/>

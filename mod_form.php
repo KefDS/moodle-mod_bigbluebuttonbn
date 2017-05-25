@@ -371,27 +371,6 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
 
                 }
             }
-
-//            //Update or create record of conference managed by OpenStack
-//            if (empty($errors)){
-//
-//                //Construct record object
-//                $bbb_os_record = (object)[
-//                    'meetingid'=>$data['meetingid'],
-//                    'courseid'=>$data['course'],
-//                    'meeting_duration'=>$data['bbb_meeting_duration'],
-//                    'openingtime'=> $data['openingtime']
-//                ];
-//
-//                //Update record
-//                if ($course_module_id){
-//                    bigbluebuttonbn_update_os_conference($bbb_os_record);
-//                }else{ //Insert new record
-//                    bigbluebuttonbn_create_os_conference($bbb_os_record);
-//                }
-//            }
-
-
         }
         /*---- end of OpenStack integration ----*/
 

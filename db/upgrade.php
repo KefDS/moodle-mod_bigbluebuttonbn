@@ -351,6 +351,7 @@ function xmldb_bigbluebuttonbn_upgrade($oldversion=0) {
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null, null);
         $table->add_field('event_time', XMLDB_TYPE_INTEGER, '10', null, null, null, null, null);
         $table->add_field('stack_name', XMLDB_TYPE_CHAR, '255', null, null, null, null, null);
+        $table->add_field('meetingid', XMLDB_TYPE_CHAR, '256', null, null, null, null, null);
         $table->add_field('log_level', XMLDB_TYPE_CHAR, '256', null, null, null, null, null);
         $table->add_field('component', XMLDB_TYPE_CHAR, '256', null, null, null, null, null);
         $table->add_field('event', XMLDB_TYPE_TEXT, null, null, null, null, null, null);

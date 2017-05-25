@@ -27,9 +27,9 @@ class meeting_setup {
             $stack_params = json_decode(file_get_contents($stack_params_url), true);
             $templateURL = bigbluebuttonbn_get_cfg_yaml_template_url();
             $bbb_host_name = $this->bbb_servers_management->create_bbb_host($this->meeting->id, $stack_params, $templateURL);
-            $this->meeting->openstack_stack_name = $bbb_host_name;
+            $this->meeting->stack_name = $bbb_host_name;
             $this->meeting->bbb_server_status = 'In Progress';
-            $DB->update_record('bigbluebuttonbn', $this->meeting); //Modificar otra tabla
+            $DB->update_record('bigbluebuttonbn_openstack', $this->meeting);
             //#4 Agregar evento de creación de conferencia a bitácora y a logs
         }
         catch (\Exception $exception) {
@@ -47,7 +47,7 @@ class meeting_setup {
             $bbb_host_information = $this->bbb_servers_management->get_stack_outputs($this->meeting->id);
             if($bbb_host_information) {
                 $this->meeting->bbb_server_url = $bbb_host_information['bbb_url'];
-                $this->meeting->bbb_shared_secret = $bbb_host_information['bbb_shared_key'];
+                $this->meeting->bbb_server_shared_secret = $bbb_host_information['bbb_shared_key'];
                 $this->meeting->bbb_server_status = 'Ready';
                 $DB->update_record('bigbluebuttonbn', $this->meeting);
                 #6 ingresar a bitácora y cambiar estado

@@ -1674,14 +1674,14 @@ function bigbluebuttonbn_html2text($html, $len) {
 //Get BBB server URL. Used when creation on demand is enabled.
 function bigbluebuttonbn_get_meeting_server_url($meetingid){
     global $DB;
-    $url = $DB->get_field('bigbluebuttonbn','bbb_server_url',array('meetingid'=>$meetingid), 'MUST_EXIST');
+    $url = $DB->get_field('bigbluebuttonbn_openstack','bbb_server_url',array('meetingid'=>$meetingid), 'MUST_EXIST');
     return trim($url);
 }
 
 //Get BBB server shared secret. Used when creation on demand is enabled.
 function bigbluebuttonbn_get_meeting_shared_secret($meetingid){
     global $DB;
-    $shared_secret = $DB->get_field('bigbluebuttonbn','bbb_shared_secret',array('meetingid'=>$meetingid), 'MUST_EXIST');
+    $shared_secret = $DB->get_field('bigbluebuttonbn_openstack','bbb_server_shared_secret',array('meetingid'=>$meetingid), 'MUST_EXIST');
     return trim($shared_secret);
 }
 

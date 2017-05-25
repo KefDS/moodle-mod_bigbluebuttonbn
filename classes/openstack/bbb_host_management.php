@@ -10,6 +10,8 @@
 namespace mod_bigbluebuttonbn\openstack;
 
 require_once dirname(__FILE__) . "/bbb_stack.php";
+require_once dirname(__FILE__) . '/helpers.php';
+
 
 class bbb_host_management {
     const DEFAULT_TIMEOUT_MINUTES = 20;
@@ -42,7 +44,13 @@ class bbb_host_management {
         $this->orchestration_service->getStack($stack_name)->delete();
     }
 
-    private function get_bbb_host_name($meeting_id) {
-        return "bbb_meeting_" . $meeting_id;
+    private function get_bbb_host_name($meetingid) {
+        $host_name = "bbb_meeting_";
+        if(get_bbb_meeting($meetingid)){
+            $host_name = $host_name.$meetingid->id."_course_".$meetingid->course;
+        }else{
+            $host_name = $host_name."unknown_conference";
+        }
+        return $host_name;
     }
 }
