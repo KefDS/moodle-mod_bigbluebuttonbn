@@ -26,13 +26,15 @@ class meeting_setup {
             $stack_params_url = bigbluebuttonbn_get_cfg_json_stack_parameters_url();
             $stack_params = json_decode(file_get_contents($stack_params_url), true);
             $templateURL = bigbluebuttonbn_get_cfg_yaml_template_url();
-            $bbb_host_name = $this->bbb_servers_management->create_bbb_host($this->meeting->id, $stack_params, $templateURL);
+            echo($this->meeting->meetingid);
+            $bbb_host_name = $this->bbb_servers_management->create_bbb_host($this->meeting->meetingid, $stack_params, $templateURL);
             $this->meeting->stack_name = $bbb_host_name;
             $this->meeting->bbb_server_status = 'In Progress';
             $DB->update_record('bigbluebuttonbn_openstack', $this->meeting);
-            //#4 Agregar evento de creación de conferencia a bitácora y a logs
+            echo('creacion in Progress');
         }
         catch (\Exception $exception) {
+            echo('falló inicio de creación');
             $this->failed_meeting_setup();
             $exception_message = "The bbb host cannot be created. Stack parameters: " .
                 var_export($stack_params, true) . ".\n" .
@@ -49,8 +51,7 @@ class meeting_setup {
                 $this->meeting->bbb_server_url = $bbb_host_information['bbb_url'];
                 $this->meeting->bbb_server_shared_secret = $bbb_host_information['bbb_shared_key'];
                 $this->meeting->bbb_server_status = 'Ready';
-                $DB->update_record('bigbluebuttonbn', $this->meeting);
-                #6 ingresar a bitácora y cambiar estado
+                $DB->update_record('bigbluebuttonbn_openstack', $this->meeting);
             }
         }
         catch (\Exception $exception) {
@@ -80,7 +81,6 @@ class meeting_setup {
     private function failed_meeting_setup() {
         global $DB;
         $this->meeting->bbb_server_status = 'Failed';
-        $DB->update_record('bigbluebuttonbn', $this->meeting);
         //#6 ingresar a bitácora y cambiar estado
     }
 }

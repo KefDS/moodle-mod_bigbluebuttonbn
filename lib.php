@@ -192,7 +192,7 @@ function bigbluebuttonbn_delete_instance($id) {
 
     /*---- OpenStack integration ----*/
 
-    if(bigbluebuttonbn_openstack_managed_conference($bigbluebuttonbn)){
+    if(bigbluebuttonbn_openstack_managed_conference($bigbluebuttonbn) AND  $bigbluebuttonbn->openingtime < bigbluebuttonbn_get_min_openingtime()){
 
         $event_record = (object)[
             'event_time' => time(),
