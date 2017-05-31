@@ -18,7 +18,7 @@ use OpenCloud\OpenStack;
 
 class moodle_bbb_openstack_stacks_management_tasks {
     // CONSTANTS
-    const UPCOMING_MEETINGS_MINUTES = 30;
+    const UPCOMING_MEETINGS_MINUTES = 60;
 
     private $admin_exception_handler;
     private $user_error_communicator;
@@ -30,23 +30,24 @@ class moodle_bbb_openstack_stacks_management_tasks {
     }
 
     public function do_tasks() {
-        // Error with network, openstack server or openstack configuration in moodle
+        // Error with network, Openstack server or openstack configuration in moodle
         try {
             $this->orchestration_service = $this->get_openstack_orchestration_service();
         }
         catch (\Exception $exception) {
+            echo('eeerorr');
             $openstack_services_error = "Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.\n";
             $this->admin_exception_handler->handle_exception(new \Exception($openstack_services_error . $exception->getMessage()));
-            $this->communicate_tasks_error_to_users();
+            //$this->communicate_tasks_error_to_users();
             //Log event
-            $event_record =(['log_level'=>'ALERT', 'component'=>'OPENSTACK_CONNECTION', 'event'=>'CANT_ACCESS_OPENSTACK', 'event_details'=>$openstack_services_error]);
+            $event_record =(object)(['log_level'=>'ALERT', 'component'=>'OPENSTACK_CONNECTION', 'event'=>'CANT_ACCESS_OPENSTACK', 'event_details'=>$openstack_services_error]);
             helpers::bigbluebuttonbn_add_openstack_event($event_record);
             return;
         }
 
-        //$this->get_bbb_host_info_for_upcoming_meetings();
-        //$this->delete_bbb_host_for_finished_meetings();
+        $this->get_bbb_host_info_for_upcoming_meetings();
         $this->create_bbb_host_for_upcoming_meetings();
+        $this->delete_bbb_host_for_finished_meetings();
 
     }
 
@@ -86,14 +87,15 @@ class moodle_bbb_openstack_stacks_management_tasks {
             $meeting_setup = new meeting_setup($meeting, $this->orchestration_service);
             $meeting_setup->create_meeting_host();
             //Log event
-            $event_record =(['log_level'=>'INFO', 'component'=>'OPENSTACK', 'event'=>'CREATION_STARTED', 'event_details'=>'The BBB server creation has started']);
+            $event_record =(object)(['meetingid'=>$meeting->meetingid, 'stack_name'=>$meeting->stack_name, 'log_level'=>'INFO', 'component'=>'OPENSTACK', 'event'=>'CREATION_STARTED', 'event_details'=>'The BBB server creation has started']);
             helpers::bigbluebuttonbn_add_openstack_event($event_record);
+
         }
         catch (\Exception $exception) {
             $this->admin_exception_handler->handle_exception($exception);
             $this->user_error_communicator->communicate_error($meeting);
             //Log event
-            $event_record =(['log_level'=>'ERROR', 'component'=>'OPENSTACK', 'event'=>'CREATION_FAILED', 'event_details'=>$exception->getMessage()]);
+            $event_record =(object)(['meetingid'=>$meeting->meetingid, 'stack_name'=>$meeting->stack_name, 'log_level'=>'ERROR', 'component'=>'OPENSTACK', 'event'=>'CREATION_REQUEST_FAILED', 'event_details'=>$exception->getMessage()]);
             helpers::bigbluebuttonbn_add_openstack_event($event_record);
         }
     }
@@ -109,10 +111,17 @@ class moodle_bbb_openstack_stacks_management_tasks {
         try {
             $meeting_setup = new meeting_setup($meeting, $this->orchestration_service);
             $meeting_setup->get_meeting_host_info();
+            if($meeting->bbb_server_status == 'Ready'){
+                //Log event
+                $event_record =(object)(['meetingid'=>$meeting->meetingid, 'stack_name'=>$meeting->stack_name, 'log_level'=>'INFO', 'component'=>'OPENSTACK', 'event'=>'BBB_SERVER_READY', 'event_details'=>'The BBB server is ready to host the meeting.']);
+                helpers::bigbluebuttonbn_add_openstack_event($event_record);
+            }
         }
         catch(\Exception $exception) {
             $this->admin_exception_handler->handle_exception($exception);
             $this->user_error_communicator->communicate_error($meeting);
+            $event_record =(object)(['meetingid'=>$meeting->meetingid, 'stack_name'=>$meeting->stack_name, 'log_level'=>'ERROR', 'component'=>'OPENSTACK', 'event'=>'CREATION_FAILED', 'event_details'=>$exception->getMessage()]);
+            helpers::bigbluebuttonbn_add_openstack_event($event_record);
         }
     }
 
@@ -122,14 +131,20 @@ class moodle_bbb_openstack_stacks_management_tasks {
             $this->delete_bbb_host_for_finished_meeting($meeting);
         }
     }
+
     private function delete_bbb_host_for_finished_meeting($meeting) {
         try {
             $meeting_setup = new meeting_setup($meeting, $this->orchestration_service);
             $meeting_setup->delete_meeting_host();
+            //Log event
+            $event_record =(object)(['meetingid'=>$meeting->meetingid, 'stack_name'=>$meeting->stack_name, 'log_level'=>'INFO', 'component'=>'OPENSTACK', 'event'=>'DELETION_STARTED', 'event_details'=>'The deletion of the BBB server was accepted']);
+            helpers::bigbluebuttonbn_add_openstack_event($event_record);
         }
         catch (\Exception $exception) {
             $this->admin_exception_handler->handle_exception($exception);
-            //Agregar a la bitácora
+            //Log event
+            $event_record =(object)(['meetingid'=>$meeting->meetingid, 'stack_name'=>$meeting->stack_name, 'log_level'=>'ERROR', 'component'=>'OPENSTACK', 'event'=>'DELETION_START_FAILED', 'event_details'=>$exception->getMessage()]);
+            helpers::bigbluebuttonbn_add_openstack_event($event_record);
         }
     }
 
@@ -137,9 +152,10 @@ class moodle_bbb_openstack_stacks_management_tasks {
         return helpers::get_upcomming_meetings_by_minutes(self::UPCOMING_MEETINGS_MINUTES);
     }
     private function get_in_progress_meetings() {
-        return helpers::get_meetings_by_state("In Progress");
+        return helpers::get_meetings_by_state("Create In Progress");
     }
-    private function get_finished_meetings() {
+
+    private function get_finished_meetings(){
         return helpers::get_finished_meetings();
     }
 }

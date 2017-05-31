@@ -20,11 +20,12 @@ class bbb_host_management {
         $this->orchestration_service = $orchestration_service;
     }
 
-    function create_bbb_host($meetingid, $stack_parameters, $templateURL) {
-        $stack_name = $this->get_bbb_host_name($meetingid);
+    function create_bbb_host($meeting_id, $stack_parameters, $templateURL) {
+        $stack_name = $this->get_bbb_host_name($meeting_id);
         $stack_parameters['name'] = $stack_name;
         $stack_parameters ['templateUrl']= $templateURL;
         $stack_parameters['timeoutMins'] = self::DEFAULT_TIMEOUT_MINUTES;
+
         $this->orchestration_service->createStack($stack_parameters);
         return $stack_name;
     }
@@ -36,12 +37,12 @@ class bbb_host_management {
         return $bbb_stack->get_bbb_host_data();
     }
 
-    function  delete_bbb_host($meeting_id) {
+    function delete_bbb_host($meeting_id) {
         $stack_name = $this->get_bbb_host_name($meeting_id);
         $this->orchestration_service->getStack($stack_name)->delete();
     }
 
-    private function get_bbb_host_name($meetingid) {
-        return "bbb_" . $meetingid;
+    private function get_bbb_host_name($meeting_id) {
+        return "bbb_meeting_" . $meeting_id;
     }
 }

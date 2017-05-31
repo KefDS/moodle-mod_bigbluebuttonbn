@@ -19,17 +19,24 @@ class helpers {
         global $DB;
         return $DB->get_records_sql('SELECT * FROM {bigbluebuttonbn_openstack} WHERE bbb_server_status  = ?', [$state]);
     }
+
     public static function get_finished_meetings(){
         global $DB;
-        return $DB->get_records_sql('SELECT * FROM  {bigbluebuttonbn_openstack} WHERE ( openingtime + ( bbb_meeting_duration*60 ) ) < ? AND bbb_server_status <> ?', [time(), "Deleted"]);
+        return $DB->get_records_sql('SELECT * FROM  {bigbluebuttonbn_openstack} WHERE ( openingtime + ( meeting_duration*60 ) ) < ? AND bbb_server_status <> ?', [time(), "Deletion started"]);
     }
 
-    public static function bigbluebuttonbn_add_openstack_event($event_fields)
+    public static function get_bbb_openstack_field_by_meetingid($meetingid,$field){
+        global $DB;
+        $algo = $DB->get_record('bigbluebuttonbn_openstack', array('meetingid'=>$meetingid), $field);
+        return $algo;
+
+    }
+
+    public static function bigbluebuttonbn_add_openstack_event($event_record)
     {
         global $DB;
-        $event_fields->event_time = time();
-        $event_fields->event_details = date('m/d/Y h:i:s a', time()).' '.$event_fields->event_details;
-        $event_record = (object)$event_fields;
+        $event_record->event_time = time();
+        $event_record->event_details = date('m/d/Y h:i:s a', time()).' '.$event_record->event_details;
         return $DB->insert_record('bigbluebuttonbn_os_logs', $event_record);
     }
 }

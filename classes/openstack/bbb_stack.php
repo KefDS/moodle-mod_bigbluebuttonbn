@@ -24,16 +24,16 @@ class bbb_stack extends Stack {
     }
 
     public function get_bbb_host_data() {
+        echo($this->stack->status);
         if(preg_match("/COMPLETE/", $this->stack->status)) {
             return $this->get_bbb_host_outputs();
         }
-        elseif(preg_match("/PROGRESS/", $this->stack->status)) {
+        elseif(preg_match("/CREATE_IN_PROGRESS/", $this->stack->status)) {
             return null;
         }
-
+        echo($this->stack->status);
         // Other state is an error (for now)
-        $error_messaage = "Error in BBB server creation. Stack status: " .
-            $this->stack->status;
+        $error_messaage = "Error in BBB server creation. Stack status: " .$this->stack->status;
         throw new \Exception($error_messaage);
     }
 
