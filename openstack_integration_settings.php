@@ -48,11 +48,11 @@ if ($data = $os_logs_form->get_data()) {
     switch ($data->action) {// Case numbers are related with selection in dropdown
         case 1:
             $sesskey = required_param('sesskey', PARAM_RAW);
-            $params = array('sesskey' => $sesskey);
+            $params = array('sesskey' => $sesskey); //Used by Moodle to prevent XSS attacks
             $redirect = new moodle_url('/mod/bigbluebuttonbn/openstack_logs_download.php', $params);
             redirect($redirect);
         case 2:
-            bigbluebuttonbn_delete_os_logs_by_date('bigbluebuttonbn_os_logs', false);
+            bigbluebuttonbn_delete_os_logs_by_date('bigbluebuttonbn_os_logs', $SESSION->date_interval['select_all'], $SESSION->date_interval['begin'], $SESSION->date_interval['end']);
     }
 }
 

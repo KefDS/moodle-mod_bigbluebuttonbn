@@ -28,7 +28,7 @@ if (empty($SESSION->date_interval)) {
     redirect(new moodle_url('/mod/bigbluebuttonbn/openstack_integration_settings.php'));
 }
 
-// Set PAGE view settings
+// Set page view settings
 $PAGE->set_title("$SITE->shortname: " . get_string('os_logs_download_logs','bigbluebuttonbn'));
 $PAGE->navbar->add(get_string('bigbluebuttonbn', 'bigbluebuttonbn'), $CFG->wwwroot.'/'.$CFG->admin.'/settings.php?section=modsettingbigbluebuttonbn');
 $PAGE->navbar->add( get_string('openstack_integration','bigbluebuttonbn'), $CFG->wwwroot.'/mod/bigbluebuttonbn/openstack_integration_settings.php');
@@ -54,7 +54,7 @@ if ($dataformat){
     }else{
         $logs_records = $DB->get_records_sql('SELECT * FROM {bigbluebuttonbn_os_logs} WHERE event_time > ? AND event_time < ?', array( $SESSION->date_interval['begin'] , $SESSION->date_interval['end'] ));
     }
-    download_as_dataformat("OS_LOGS", $dataformat, $fields, $logs_records);
+    download_as_dataformat('openstack_logs_'.date('Y-m-d'), $dataformat, $fields, $logs_records);
     exit;
 }
 
@@ -62,5 +62,5 @@ if ($dataformat){
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading( get_string('os_logs_download_logs','bigbluebuttonbn'));
-echo $OUTPUT->download_dataformat_selector("Descargar Bitácoras", 'openstack_logs_download.php');
+echo $OUTPUT->download_dataformat_selector(get_string('os_logs_download','bigbluebuttonbn'), 'openstack_logs_download.php');
 echo $OUTPUT->footer();

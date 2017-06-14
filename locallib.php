@@ -1692,4 +1692,14 @@ function bigbluebuttonbn_get_previous_setting($course_module_id, $conference_set
     return $DB->get_field('bigbluebuttonbn', $conference_setting, array('id' => $cm->instance), 'MUST_EXIST');
 }
 
+function bigbluebuttonbn_delete_os_logs_by_date($table, $delete_all, $begin_datetime=null, $end_datetime=null){
+    global $DB;
+    if($delete_all){
+        return $DB->delete_records_select($table);
+    }else{
+        $select = 'event_time > '.$begin_datetime.' AND '.'event_time < '.$end_datetime;
+        return $DB->delete_records_select($table, $select);
+    }
+}
+
 /*---- end of OpenStack integration ----*/
