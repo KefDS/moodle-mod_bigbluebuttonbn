@@ -27,11 +27,20 @@ $durations_array_regex='/^\[\d{1,3}(,\d{1,3}){0,10}\]$/';
 $days_hours_minutes_regex = '/^\d{1,3}[Dd]-\d{1,2}[Hh]-\d{1,2}[mM]$/';
 /*---- end of OpenStack integration ----*/
 
+
+$openStacklink= "{$CFG->wwwroot}/mod/bigbluebuttonbn/openstack_integration_settings.php";
+$openStack_integration_description = "Use BBB servers on demand. To fully manage OpenStack Settings go to ";
+$openStacklink_html = <<< EOD
+{$openStack_integration_description}<a style="margin-top:.25em" href="{$openStacklink}">OpenStack integration</a> 
+EOD;
+
+
+
+
 if ($ADMIN->fulltree) {
 
     if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_server_url) ||
-        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_shared_secret) ||
-        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_integration) ) {
+        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_shared_secret) ) {
         $settings->add( new admin_setting_heading('bigbluebuttonbn_config_general',
             get_string('config_general', 'bigbluebuttonbn'),
             get_string('config_general_description', 'bigbluebuttonbn')));
@@ -48,8 +57,12 @@ if ($ADMIN->fulltree) {
                 get_string( 'config_shared_secret_description', 'bigbluebuttonbn' ),
                 BIGBLUEBUTTONBN_DEFAULT_SHARED_SECRET, $hash_regex));
         }
+    }
 
-        //---- OpenStack integration ----
+    /*---- OpenStack integration ----*/
+    if ( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_integration)){
+        $settings->add(new admin_setting_heading('bigbluebutton_manage_os_integration',  get_string('config_openstack_integration', 'bigbluebuttonbn').
+            $OUTPUT->help_icon('main_admin', 'lti'), $openStacklink_html));
         if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_integration) ){
             //Enable OpenStack integration
             $settings->add( new admin_setting_configcheckbox( 'bigbluebuttonbn_openstack_integration',
@@ -57,10 +70,9 @@ if ($ADMIN->fulltree) {
                 get_string('config_openstack_integration_description','bigbluebuttonbn'),
                 0));
         }
-        //---- end of OpenStack integration ----
-    }
 
-    //---- OpenStack integration ----
+
+    }
     ////Configurations for stacks and OpenStack API
     if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_url) ||
         !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_region) ||
@@ -155,7 +167,7 @@ if ($ADMIN->fulltree) {
         }
     }
 
-    //---- end of OpenStack integration ----
+    /*---- end of OpenStack integration ----*/
 
     //// Configuration for 'recording' feature
     if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_recording_default) ||

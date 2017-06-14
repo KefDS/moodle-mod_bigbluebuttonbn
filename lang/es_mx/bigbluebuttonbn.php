@@ -12,6 +12,30 @@ defined('MOODLE_INTERNAL') || die();
 
 //----OpenStack integration---
 
+//OpenStack integration settings
+$string['openstack_integration']="OpenStack Integration";
+$string['openstack_integration_settings']="OpenStack Integration Setings";
+$string['os_logs_explanation']='Seleccione qué hacer con las bitácoras de integración de OpenStack. Puede filtralas por fecha o seleccionar «Seleccionar todo» para seleccionar toda la información. ';
+$string['select_all']='Seleccionar todo';
+
+
+
+//OpenStack openstack_integration_forms
+$string['choose']='Escoja una';
+$string['os_logs_download']='Descargar';
+$string['os_logs_delete']='Eliminar';
+$string['os_logs_go']='Ir';
+$string['os_logs_selected_logs']='Acción:';
+$string['os_logs_management']='Manejo de bitácoras';
+$string['os_logs_begin_date']='Fecha de inicio';
+$string['os_logs_end_date']='Fecha final';
+
+
+//OpenStack openstack_logs_download.php
+$string['os_logs_download_logs']='Descargar bitácoras';
+
+
+
 //Plugin admin settings
 $string['config_cloud'] = 'Configuración General para servidores BBB en demanda';
 $string['config_cloud_description']='Esta configuración <b>se usa siempre</b> que se crean servidores de BBB en demanda.';

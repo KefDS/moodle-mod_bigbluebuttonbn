@@ -11,13 +11,34 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['activityoverview'] = 'You have upcoming bigbluebuttonbn sessions';
-//----OpenStack integration---
+
+/*----OpenStack integration---*/
+
+//OpenStack integration settings
+$string['openstack_integration']="OpenStack Integration";
+$string['openstack_integration_settings']="OpenStack Integration Setings";
+$string['os_logs_explanation']='Select an action to do with Openstack integration logs. You can filter them by date or select "Select all" to select all logs data. ';
+$string['select_all']='Select all';
+
+//OpenStack openstack_integration_forms.php
+$string['os_logs_choose']='Choose one';
+$string['os_logs_download']='Download';
+$string['os_logs_delete']='Delete';
+$string['os_logs_go']='Go';
+$string['os_logs_selected_logs']='Action:';
+$string['os_logs_management']='Logs management';
+$string['os_logs_begin_date']='Begin date';
+$string['os_logs_end_date']='End date';
+
+
+//OpenStack openstack_logs_download.php
+$string['os_logs_download_logs']='Download logs';
+
 
 //Plugin admin settings
 $string['config_cloud'] = 'General settings for BBB servers on demand';
 $string['config_cloud_description']='These settings are <b>always used</b> when creating  BBB servers on demand.';
 $string['config_heat_region']='Heat Region';
-$string['config_heat_region_description']='Region where Heat service operates.';
 $string['config_heat_url']='OpenStack Server URL';
 $string['config_heat_url_description']='The URL of your OpenStack server (with Heat) used for the creation of the BBB servers.';
 $string['config_yaml_stack_template_url']='Heat Template';
