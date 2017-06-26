@@ -78,7 +78,6 @@ class meeting_setup {
     private function failed_meeting_setup($state) {
         global $DB;
         $this->meeting->bbb_server_status = $state;
-        //#6 ingresar a bitácora y cambiar estado
         return $DB->update_record('bigbluebuttonbn_openstack', $this->meeting);
     }
 }

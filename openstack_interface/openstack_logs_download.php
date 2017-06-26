@@ -5,10 +5,7 @@
  * Date: 6/8/17
  * Time: 4:22 PM
  */
-
-global $BIGBLUEBUTTONBN_CFG;
-
-require_once('../../config.php');
+require_once('../../../config.php');
 require_once($CFG->libdir.'/adminlib.php');
 require_once($CFG->libdir.'/dataformatlib.php');
 
@@ -25,14 +22,14 @@ admin_externalpage_setup('managemodules');
 
 // Redirect if cant get date_interval values
 if (empty($SESSION->date_interval)) {
-    redirect(new moodle_url('/mod/bigbluebuttonbn/openstack_integration_settings.php'));
+    redirect(new moodle_url('/mod/bigbluebuttonbn/openstack_interface/openstack_integration_settings.php'));
 }
 
 // Set page view settings
 $PAGE->set_title("$SITE->shortname: " . get_string('os_logs_download_logs','bigbluebuttonbn'));
 $PAGE->navbar->add(get_string('bigbluebuttonbn', 'bigbluebuttonbn'), $CFG->wwwroot.'/'.$CFG->admin.'/settings.php?section=modsettingbigbluebuttonbn');
-$PAGE->navbar->add( get_string('openstack_integration','bigbluebuttonbn'), $CFG->wwwroot.'/mod/bigbluebuttonbn/openstack_integration_settings.php');
-$PAGE->navbar->add( get_string('os_logs_download_logs','bigbluebuttonbn'), $CFG->wwwroot.'/mod/bigbluebuttonbn/openstack_logs_download.php');
+$PAGE->navbar->add( get_string('openstack_integration','bigbluebuttonbn'), $CFG->wwwroot.'/mod/bigbluebuttonbn/openstack_interface/openstack_integration_settings.php');
+$PAGE->navbar->add( get_string('os_logs_download_logs','bigbluebuttonbn'), $CFG->wwwroot.'/mod/bigbluebuttonbn/openstack_interface/openstack_logs_download.php');
 
 // Defines the file final output format
 if ($dataformat){

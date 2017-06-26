@@ -340,3 +340,85 @@
 [reason phrase] Not Found
 [url] http://os-kilo-01.core.ucr.ac.cr:8004/v1/61d90c9e171a43dba0e197c824851be3/stacks/bbb_44
 
+[2017-06-16 07:30:02] Error in BBB server creation. Stack status: CREATE_FAILED
+
+[2017-06-16 14:00:02] Error in BBB server creation. Stack status: CREATE_FAILED
+
+[2017-06-16 14:30:02] Error in BBB server creation. Stack status: CREATE_FAILED
+
+[2017-06-16 17:15:55] Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.
+[curl] 6: Could not resolve host: os-kilo-01.core.ucr.ac.cr [url] http://os-kilo-01.core.ucr.ac.cr:5000/v2.0/tokens
+
+[2017-06-20 14:07:20] Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.
+[curl] 6: Could not resolve host: os-kilo-01.core.ucr.ac.cr [url] http://os-kilo-01.core.ucr.ac.cr:5000/v2.0/tokens
+
+[2017-06-20 14:15:01] Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.
+[curl] 6: Could not resolve host: os-kilo-01.core.ucr.ac.cr [url] http://os-kilo-01.core.ucr.ac.cr:5000/v2.0/tokens
+
+[2017-06-20 14:30:02] Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.
+[curl] 6: Could not resolve host: os-kilo-01.core.ucr.ac.cr [url] http://os-kilo-01.core.ucr.ac.cr:5000/v2.0/tokens
+
+[2017-06-20 14:45:02] Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.
+[curl] 6: Could not resolve host: os-kilo-01.core.ucr.ac.cr [url] http://os-kilo-01.core.ucr.ac.cr:5000/v2.0/tokens
+
+[2017-06-20 15:00:04] Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.
+[curl] 6: Could not resolve host: os-kilo-01.core.ucr.ac.cr [url] http://os-kilo-01.core.ucr.ac.cr:5000/v2.0/tokens
+
+[2017-06-20 15:15:02] Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.
+[curl] 6: Could not resolve host: os-kilo-01.core.ucr.ac.cr [url] http://os-kilo-01.core.ucr.ac.cr:5000/v2.0/tokens
+
+[2017-06-20 15:30:03] Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.
+[curl] 6: Could not resolve host: os-kilo-01.core.ucr.ac.cr [url] http://os-kilo-01.core.ucr.ac.cr:5000/v2.0/tokens
+
+[2017-06-20 15:45:01] Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.
+[curl] 6: Could not resolve host: os-kilo-01.core.ucr.ac.cr [url] http://os-kilo-01.core.ucr.ac.cr:5000/v2.0/tokens
+
+[2017-06-20 16:00:02] Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.
+[curl] 6: Could not resolve host: os-kilo-01.core.ucr.ac.cr [url] http://os-kilo-01.core.ucr.ac.cr:5000/v2.0/tokens
+
+[2017-06-23 14:46:23] Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.
+[curl] 6: Could not resolve host: os-kilo-01.core.ucr.ac.cr [url] http://os-kilo-01.core.ucr.ac.cr:5000/v2.0/tokens
+
+[2017-06-23 15:00:02] Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.
+[curl] 6: Could not resolve host: os-kilo-01.core.ucr.ac.cr [url] http://os-kilo-01.core.ucr.ac.cr:5000/v2.0/tokens
+
+[2017-06-23 15:17:09] Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.
+[curl] 6: Could not resolve host: os-kilo-01.core.ucr.ac.cr [url] http://os-kilo-01.core.ucr.ac.cr:5000/v2.0/tokens
+
+[2017-06-23 15:30:02] Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.
+[curl] 6: Could not resolve host: os-kilo-01.core.ucr.ac.cr [url] http://os-kilo-01.core.ucr.ac.cr:5000/v2.0/tokens
+
+[2017-06-23 15:45:02] Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.
+[curl] 6: Could not resolve host: os-kilo-01.core.ucr.ac.cr [url] http://os-kilo-01.core.ucr.ac.cr:5000/v2.0/tokens
+
+[2017-06-23 16:00:01] Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.
+[curl] 6: Could not resolve host: os-kilo-01.core.ucr.ac.cr [url] http://os-kilo-01.core.ucr.ac.cr:5000/v2.0/tokens
+
+[2017-06-23 16:51:39] Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.
+[curl] 6: Could not resolve host: os-kilo-01.core.ucr.ac.cr [url] http://os-kilo-01.core.ucr.ac.cr:5000/v2.0/tokens
+
+[2017-06-23 17:00:02] Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.
+[curl] 6: Could not resolve host: os-kilo-01.core.ucr.ac.cr [url] http://os-kilo-01.core.ucr.ac.cr:5000/v2.0/tokens
+
+[2017-06-23 17:15:02] Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.
+[curl] 6: Could not resolve host: os-kilo-01.core.ucr.ac.cr [url] http://os-kilo-01.core.ucr.ac.cr:5000/v2.0/tokens
+
+[2017-06-23 17:30:02] Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.
+[curl] 6: Could not resolve host: os-kilo-01.core.ucr.ac.cr [url] http://os-kilo-01.core.ucr.ac.cr:5000/v2.0/tokens
+
+[2017-06-23 17:45:02] Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.
+[curl] 6: Could not resolve host: os-kilo-01.core.ucr.ac.cr [url] http://os-kilo-01.core.ucr.ac.cr:5000/v2.0/tokens
+
+[2017-06-23 18:00:01] Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.
+[curl] 6: Could not resolve host: os-kilo-01.core.ucr.ac.cr [url] http://os-kilo-01.core.ucr.ac.cr:5000/v2.0/tokens
+
+[2017-06-23 18:21:07] Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.
+[curl] 6: Could not resolve host: os-kilo-01.core.ucr.ac.cr [url] http://os-kilo-01.core.ucr.ac.cr:5000/v2.0/tokens
+
+[2017-06-23 18:30:02] Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.
+[curl] 6: Could not resolve host: os-kilo-01.core.ucr.ac.cr [url] http://os-kilo-01.core.ucr.ac.cr:5000/v2.0/tokens
+
+[2017-06-24 12:02:02] Error in BBB server creation. Stack status: CREATE_FAILED
+
+[2017-06-24 12:03:02] Error in BBB server creation. Stack status: CREATE_FAILED
+

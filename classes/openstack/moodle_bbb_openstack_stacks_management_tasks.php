@@ -35,7 +35,6 @@ class moodle_bbb_openstack_stacks_management_tasks {
             $this->orchestration_service = $this->get_openstack_orchestration_service();
         }
         catch (\Exception $exception) {
-            echo('eeerorr');
             $openstack_services_error = "Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.\n";
             $this->admin_exception_handler->handle_exception(new \Exception($openstack_services_error . $exception->getMessage()));
             //$this->communicate_tasks_error_to_users();
@@ -115,13 +114,13 @@ class moodle_bbb_openstack_stacks_management_tasks {
                 //Log event
                 $event_record =(object)(['meetingid'=>$meeting->meetingid, 'stack_name'=>$meeting->stack_name, 'log_level'=>'INFO', 'component'=>'OPENSTACK', 'event'=>'BBB_SERVER_READY', 'event_details'=>'The BBB server is ready to host the meeting.']);
                 helpers::bigbluebuttonbn_add_openstack_event($event_record);
-            }
+            }//TO DO  revisar estados distintos a Ready
         }
         catch(\Exception $exception) {
-            $this->admin_exception_handler->handle_exception($exception);
-            $this->user_error_communicator->communicate_error($meeting);
             $event_record =(object)(['meetingid'=>$meeting->meetingid, 'stack_name'=>$meeting->stack_name, 'log_level'=>'ERROR', 'component'=>'OPENSTACK', 'event'=>'CREATION_FAILED', 'event_details'=>$exception->getMessage()]);
             helpers::bigbluebuttonbn_add_openstack_event($event_record);
+            $this->admin_exception_handler->handle_exception($exception);
+            $this->user_error_communicator->communicate_error($meeting);
         }
     }
 

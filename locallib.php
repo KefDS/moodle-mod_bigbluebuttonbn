@@ -828,11 +828,11 @@ function bigbluebuttonbn_bbb_broker_get_meeting_info($meetingid, $password, $for
     $meeting_info = array();
 
     /*---- OpenStack integration ----*/
-    
+
     if(bigbluebuttonbn_get_cfg_openstack_integration()){
         $meetingid_bbb = substr($meetingid, 0, strpos($meetingid, '-'));
         $endpoint = bigbluebuttonbn_get_meeting_server_url($meetingid_bbb);
-        $shared_secret = bigbluebuttonbn_get_meeting_shared_secret($meetingid_bbb); 
+        $shared_secret = bigbluebuttonbn_get_meeting_shared_secret($meetingid_bbb);
 
     }else{
         $endpoint = bigbluebuttonbn_get_cfg_server_url();
@@ -1278,40 +1278,40 @@ function bigbluebuttonbn_server_offers_bn_capabilities(){
 
 function bigbluebuttonbn_get_locales_for_ui() {
     $locales = array(
-            'not_started' => get_string('view_message_conference_not_started', 'bigbluebuttonbn'),
-            'wait_for_moderator' => get_string('view_message_conference_wait_for_moderator', 'bigbluebuttonbn'),
-            'in_progress' => get_string('view_message_conference_in_progress', 'bigbluebuttonbn'),
-            'started_at' => get_string('view_message_session_started_at', 'bigbluebuttonbn'),
-            'session_no_users' => get_string('view_message_session_no_users', 'bigbluebuttonbn'),
-            'session_has_user' => get_string('view_message_session_has_user', 'bigbluebuttonbn'),
-            'session_has_users' => get_string('view_message_session_has_users', 'bigbluebuttonbn'),
-            'has_joined' => get_string('view_message_has_joined', 'bigbluebuttonbn'),
-            'have_joined' => get_string('view_message_have_joined', 'bigbluebuttonbn'),
-            'user' => get_string('view_message_user', 'bigbluebuttonbn'),
-            'users' => get_string('view_message_users', 'bigbluebuttonbn'),
-            'viewer' => get_string('view_message_viewer', 'bigbluebuttonbn'),
-            'viewers' => get_string('view_message_viewers', 'bigbluebuttonbn'),
-            'moderator' => get_string('view_message_moderator', 'bigbluebuttonbn'),
-            'moderators' => get_string('view_message_moderators', 'bigbluebuttonbn'),
-            'publish' => get_string('view_recording_list_actionbar_publish', 'bigbluebuttonbn'),
-            'publishing' => get_string('view_recording_list_actionbar_publishing', 'bigbluebuttonbn'),
-            'unpublish' => get_string('view_recording_list_actionbar_unpublish', 'bigbluebuttonbn'),
-            'unpublishing' => get_string('view_recording_list_actionbar_unpublishing', 'bigbluebuttonbn'),
-            'modal_title' => get_string('view_recording_modal_title', 'bigbluebuttonbn'),
-            'modal_button' => get_string('view_recording_modal_button', 'bigbluebuttonbn'),
-            'userlimit_reached' => get_string('view_error_userlimit_reached', 'bigbluebuttonbn'),
-            'recording' => get_string('view_recording', 'bigbluebuttonbn'),
-            'recording_link' => get_string('view_recording_link', 'bigbluebuttonbn'),
-            'recording_link_warning' => get_string('view_recording_link_warning', 'bigbluebuttonbn'),
-            'unpublish_confirmation' => get_string('view_recording_unpublish_confirmation', 'bigbluebuttonbn'),
-            'unpublish_confirmation_warning_s' => get_string('view_recording_unpublish_confirmation_warning_s', 'bigbluebuttonbn'),
-            'unpublish_confirmation_warning_p' => get_string('view_recording_unpublish_confirmation_warning_p', 'bigbluebuttonbn'),
-            'delete_confirmation' => get_string('view_recording_delete_confirmation', 'bigbluebuttonbn'),
-            'delete_confirmation_warning_s' => get_string('view_recording_delete_confirmation_warning_s', 'bigbluebuttonbn'),
-            'delete_confirmation_warning_p' => get_string('view_recording_delete_confirmation_warning_p', 'bigbluebuttonbn'),
-            'import_confirmation' => get_string('view_recording_import_confirmation', 'bigbluebuttonbn'),
-            'conference_ended' => get_string('view_message_conference_has_ended', 'bigbluebuttonbn'),
-            'conference_not_started' => get_string('view_message_conference_not_started', 'bigbluebuttonbn'),
+        'not_started' => get_string('view_message_conference_not_started', 'bigbluebuttonbn'),
+        'wait_for_moderator' => get_string('view_message_conference_wait_for_moderator', 'bigbluebuttonbn'),
+        'in_progress' => get_string('view_message_conference_in_progress', 'bigbluebuttonbn'),
+        'started_at' => get_string('view_message_session_started_at', 'bigbluebuttonbn'),
+        'session_no_users' => get_string('view_message_session_no_users', 'bigbluebuttonbn'),
+        'session_has_user' => get_string('view_message_session_has_user', 'bigbluebuttonbn'),
+        'session_has_users' => get_string('view_message_session_has_users', 'bigbluebuttonbn'),
+        'has_joined' => get_string('view_message_has_joined', 'bigbluebuttonbn'),
+        'have_joined' => get_string('view_message_have_joined', 'bigbluebuttonbn'),
+        'user' => get_string('view_message_user', 'bigbluebuttonbn'),
+        'users' => get_string('view_message_users', 'bigbluebuttonbn'),
+        'viewer' => get_string('view_message_viewer', 'bigbluebuttonbn'),
+        'viewers' => get_string('view_message_viewers', 'bigbluebuttonbn'),
+        'moderator' => get_string('view_message_moderator', 'bigbluebuttonbn'),
+        'moderators' => get_string('view_message_moderators', 'bigbluebuttonbn'),
+        'publish' => get_string('view_recording_list_actionbar_publish', 'bigbluebuttonbn'),
+        'publishing' => get_string('view_recording_list_actionbar_publishing', 'bigbluebuttonbn'),
+        'unpublish' => get_string('view_recording_list_actionbar_unpublish', 'bigbluebuttonbn'),
+        'unpublishing' => get_string('view_recording_list_actionbar_unpublishing', 'bigbluebuttonbn'),
+        'modal_title' => get_string('view_recording_modal_title', 'bigbluebuttonbn'),
+        'modal_button' => get_string('view_recording_modal_button', 'bigbluebuttonbn'),
+        'userlimit_reached' => get_string('view_error_userlimit_reached', 'bigbluebuttonbn'),
+        'recording' => get_string('view_recording', 'bigbluebuttonbn'),
+        'recording_link' => get_string('view_recording_link', 'bigbluebuttonbn'),
+        'recording_link_warning' => get_string('view_recording_link_warning', 'bigbluebuttonbn'),
+        'unpublish_confirmation' => get_string('view_recording_unpublish_confirmation', 'bigbluebuttonbn'),
+        'unpublish_confirmation_warning_s' => get_string('view_recording_unpublish_confirmation_warning_s', 'bigbluebuttonbn'),
+        'unpublish_confirmation_warning_p' => get_string('view_recording_unpublish_confirmation_warning_p', 'bigbluebuttonbn'),
+        'delete_confirmation' => get_string('view_recording_delete_confirmation', 'bigbluebuttonbn'),
+        'delete_confirmation_warning_s' => get_string('view_recording_delete_confirmation_warning_s', 'bigbluebuttonbn'),
+        'delete_confirmation_warning_p' => get_string('view_recording_delete_confirmation_warning_p', 'bigbluebuttonbn'),
+        'import_confirmation' => get_string('view_recording_import_confirmation', 'bigbluebuttonbn'),
+        'conference_ended' => get_string('view_message_conference_has_ended', 'bigbluebuttonbn'),
+        'conference_not_started' => get_string('view_message_conference_not_started', 'bigbluebuttonbn'),
     );
     return $locales;
 }
@@ -1699,6 +1699,17 @@ function bigbluebuttonbn_delete_os_logs_by_date($table, $delete_all, $begin_date
     }else{
         $select = 'event_time > '.$begin_datetime.' AND '.'event_time < '.$end_datetime;
         return $DB->delete_records_select($table, $select);
+    }
+}
+
+
+function bigbluebuttonbn_count_records($table, $count_all, $begin_datetime=null, $end_datetime=null){
+    global $DB;
+    if($count_all){
+        $DB->count_records($table);
+    }else{
+        $select = 'event_time > '.$begin_datetime.' AND '.'event_time < '.$end_datetime;
+        return $DB->count_records_select($table, $select);
     }
 }
 

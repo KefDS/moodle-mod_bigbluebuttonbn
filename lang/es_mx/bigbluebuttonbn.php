@@ -10,18 +10,18 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
-//----OpenStack integration---
+/*----OpenStack integration---*/
 
 //OpenStack integration settings
-$string['openstack_integration']="OpenStack Integration";
-$string['openstack_integration_settings']="OpenStack Integration Setings";
+$string['openstack_integration']="Integración con OpenStack";
+$string['openstack_integration_settings']="Configuración de la Integración con OpenStack";
 $string['os_logs_explanation']='Seleccione qué hacer con las bitácoras de integración de OpenStack. Puede filtralas por fecha o seleccionar «Seleccionar todo» para seleccionar toda la información. ';
 $string['select_all']='Seleccionar todo';
-
-
+$string['openstack_servers_on_demand']= 'Usar servidores BBB en demanda. Para configurar la integración con OpenStack Settings diríjase a';
+$string['openstack_integration_help'] = 'Al usar la opcion de servidores BBB en demanda, se crea un único servidor de BBB para cada actividad de conferencia creada. El ciclo de vida de la confrencia se automatiza por completo y es manejado por OpenStack.';
 
 //OpenStack openstack_integration_forms
-$string['choose']='Escoja una';
+$string['os_logs_choose']='Escoja una';
 $string['os_logs_download']='Descargar';
 $string['os_logs_delete']='Eliminar';
 $string['os_logs_go']='Ir';
@@ -34,6 +34,10 @@ $string['os_logs_end_date']='Fecha final';
 //OpenStack openstack_logs_download.php
 $string['os_logs_download_logs']='Descargar bitácoras';
 
+//OpenStack openstack_logs_delete.php
+$string['os_logs_delete_logs']='Eliminar bitácoras';
+$string['os_logs_delete_confirmation_message']='La acción que desea realizar es irreversible y eliminará por completo {$a} registros de la tabla mdl_bigbluebuttonbn_os_logs correspondientes a las bitácoras de Integración con OpenStack.';
+$string['os_logs_delete_success'] = 'Se eliminaron correctamente {$a} registros';
 
 
 //Plugin admin settings
@@ -79,243 +83,7 @@ $string['bbbconferenceopeningsoon']='Esta conferencia ya comenzó o lo hará pro
 //Tasks for OpenStack communication
 $string['task_openstack_async_communication']= 'Creación de servidores de conferencias BBB con OpenStack';
 
-//----end of OpenStack integration----
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/*---- end of OpenStack integration ----*/
 
 $string['view_message_room_closed'] = 'This room is closed.';
 $string['view_message_room_ready'] = 'This room is ready.';

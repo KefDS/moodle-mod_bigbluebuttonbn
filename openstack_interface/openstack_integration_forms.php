@@ -11,7 +11,7 @@ defined('MOODLE_INTERNAL') || die;
 global $BIGBLUEBUTTONBN_CFG;
 
 require_once($CFG->libdir.'/formslib.php');
-require_once(dirname(__FILE__).'/locallib.php');
+require_once('../locallib.php');
 
 class os_logs_form extends moodleform {
     //Add elements to form
@@ -37,6 +37,7 @@ class os_logs_form extends moodleform {
         $mform->addElement('date_time_selector', 'logs_end_date', get_string('os_logs_end_date', 'bigbluebuttonbn'));
         $mform->addElement('checkbox', 'select_all', get_string('select_all', 'bigbluebuttonbn'));
         $mform->addElement('group', 'actionsgrp', get_string('os_logs_selected_logs', 'bigbluebuttonbn'), $objs, ' ', false);
+
 
 
     }

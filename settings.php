@@ -25,17 +25,17 @@ $default_text_regex= '/^[a-zA-Z0-9-_.[:space:]]{0,40}$/';
 $url_regex='/^https?\:\/\/([a-zA-Z0-9\-\.\_]+\.[a-zA-Z0-9]{2,3})(\/[a-zA-Z0-9\-\.\_]+)*$/';
 $durations_array_regex='/^\[\d{1,3}(,\d{1,3}){0,10}\]$/';
 $days_hours_minutes_regex = '/^\d{1,3}[Dd]-\d{1,2}[Hh]-\d{1,2}[mM]$/';
-/*---- end of OpenStack integration ----*/
 
-
-$openStacklink= "{$CFG->wwwroot}/mod/bigbluebuttonbn/openstack_integration_settings.php";
-$openStack_integration_description = "Use BBB servers on demand. To fully manage OpenStack Settings go to ";
+//Create OpenStackIntegration link
+$openStacklink= "{$CFG->wwwroot}/mod/bigbluebuttonbn/openstack_interface/openstack_integration_settings.php";
+$openStack_integration_description = get_string('openstack_servers_on_demand', 'bigbluebuttonbn');
+$openstack_integration = get_string('openstack_integration', 'bigbluebuttonbn');
 $openStacklink_html = <<< EOD
-{$openStack_integration_description}<a style="margin-top:.25em" href="{$openStacklink}">OpenStack integration</a> 
+{$openStack_integration_description}<a style="margin-top:.25em" href="{$openStacklink}"> {$openstack_integration}</a> 
 EOD;
 
 
-
+/*---- end of OpenStack integration ----*/
 
 if ($ADMIN->fulltree) {
 
@@ -62,7 +62,7 @@ if ($ADMIN->fulltree) {
     /*---- OpenStack integration ----*/
     if ( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_integration)){
         $settings->add(new admin_setting_heading('bigbluebutton_manage_os_integration',  get_string('config_openstack_integration', 'bigbluebuttonbn').
-            $OUTPUT->help_icon('main_admin', 'lti'), $openStacklink_html));
+            $OUTPUT->help_icon('openstack_integration', 'bigbluebuttonbn'), $openStacklink_html));
         if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_integration) ){
             //Enable OpenStack integration
             $settings->add( new admin_setting_configcheckbox( 'bigbluebuttonbn_openstack_integration',

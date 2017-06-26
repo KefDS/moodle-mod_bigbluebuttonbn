@@ -10,8 +10,6 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
-$string['activityoverview'] = 'You have upcoming bigbluebuttonbn sessions';
-
 /*----OpenStack integration---*/
 
 //OpenStack integration settings
@@ -19,6 +17,8 @@ $string['openstack_integration']="OpenStack Integration";
 $string['openstack_integration_settings']="OpenStack Integration Setings";
 $string['os_logs_explanation']='Select an action to do with Openstack integration logs. You can filter them by date or select "Select all" to select all logs data. ';
 $string['select_all']='Select all';
+$string['openstack_servers_on_demand']= 'Use BBB servers on demand. To fully manage OpenStack Settings go to ';
+$string['openstack_integration_help'] = 'BBB servers on demand creates a unique BBB server for each conference created. The lifecycle of a conference is fully automated and managed by OpenStack.';
 
 //OpenStack openstack_integration_forms.php
 $string['os_logs_choose']='Choose one';
@@ -33,6 +33,11 @@ $string['os_logs_end_date']='End date';
 
 //OpenStack openstack_logs_download.php
 $string['os_logs_download_logs']='Download logs';
+
+//OpenStack openstack_logs_delete.php
+$string['os_logs_delete_logs']='Delete logs';
+$string['os_logs_delete_confirmation_message']='This action will permanently delete {$a} records from the database table mdl_bigbluebuttonbn_os_logs, related with the logs of the OpenStack Integration feature.';
+$string['os_logs_delete_success'] = '{$a} Records were successfully deleted';
 
 
 //Plugin admin settings
@@ -74,8 +79,10 @@ $string['task_openstack_async_communication']= 'Creating BBB meeting servers wit
 
 
 
-//----end of OpenStack integration----
+/*---- end of OpenStack integration ----*/
 
+
+$string['activityoverview'] = 'You have upcoming bigbluebuttonbn sessions';
 $string['bbbduetimeoverstartingtime'] = 'The due time for this activity must be greater than the starting time';
 $string['bbbdurationwarning'] = 'The maximum duration for this session is %duration% minutes.';
 $string['bbbrecordwarning'] = 'This session may be recorded.';
