@@ -57,15 +57,15 @@
         <FIELD NAME="bbb_server_url" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="URL of the BigBlueButton server hosting the meeting. This field is used when creation of servers on demand is enabled."/>
         <FIELD NAME="bbb_server_shared_secret" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Shared secret of the BigBlueButton server hosting the meeting. This field is used when creation of servers on demand is enabled."/>
         <FIELD NAME="meeting_duration" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Duration of the BBB meeting. Needed for destroying the machine when using servers on demand."/>
-        <FIELD NAME="openingtime" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="openingtime" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Start time of the conference"/>
         <FIELD NAME="creationtime" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Timestamp when the meeting is scheduled to start."/>
-        <FIELD NAME="deletiontime" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Timestamp when is scheduled to end the meeting. Is the sum of openingtime plus the bbb_meeting_duration field."/>
+        <FIELD NAME="deletiontime" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Timestamp when is scheduled to end the meeting."/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="bigbluebuttonbn_openstack_logs" COMMENT="Table stores lifecycle events of the stacks hosting the meetings. Used only when OpenStack integration is enabled.">
+    <TABLE NAME="bigbluebuttonbn_os_logs" COMMENT="Table that stores lifecycle events of the stacks hosting the meetings. Used only when OpenStack integration is enabled.">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="event_time" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Timestamp of the event."/>
@@ -79,6 +79,19 @@
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
         <KEY NAME="foreign" TYPE="foreign" FIELDS="stack_name" REFTABLE="bigbluebuttonbn_openstack" REFFIELDS="stack_name"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="bigbluebuttonbn_reservations" COMMENT="Table that register BBB servers reservations. Used only when OpenStack integration is enabled.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="start_time" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Timestamp to start usign OpenStack resources."/>
+        <FIELD NAME="finish_time" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Timestamp to free OpenStack resources."/>
+        <FIELD NAME="reservation_date" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Reservation details in a human redable format"/>
+        <FIELD NAME="user" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Name of the user who ask for reservation."/>
+        <FIELD NAME="course" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Name of the course related to reservation."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
   </TABLES>

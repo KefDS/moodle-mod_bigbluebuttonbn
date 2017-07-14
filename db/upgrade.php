@@ -370,6 +370,31 @@ function xmldb_bigbluebuttonbn_upgrade($oldversion=0) {
         upgrade_mod_savepoint(true, 2017042004, 'bigbluebuttonbn');
     }
 
+
+    if($oldversion < 2017071000) {
+        //Define table bigbluebuttonbn_openstack to be created
+        $table = new xmldb_table('bigbluebuttonbn_reservations');
+
+        //Add fields to bigbluebuttonbn_openstack.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null, null);
+        $table->add_field('start_time', XMLDB_TYPE_INTEGER, '10', null, null, null, null, null);
+        $table->add_field('finish_time', XMLDB_TYPE_INTEGER, '10', null, null, null, null, null);
+        $table->add_field('reservation_date', XMLDB_TYPE_TEXT, null, null, null, null, null, null);
+        $table->add_field('user', XMLDB_TYPE_CHAR, '256', null, null, null, null, null);
+        $table->add_field('course', XMLDB_TYPE_CHAR, '256', null, null, null, null, null);
+
+        // Adding keys to table bigbluebuttonbn_log
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+
+        // Conditionally launch create table for bigbluebuttonbn_openstack
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Bigbluebuttonbn savepoint reached.
+        upgrade_mod_savepoint(true, 2017071000, 'bigbluebuttonbn');
+    }
+
     /*---- end of OpenStack integration ----*/
 
     return $result;
