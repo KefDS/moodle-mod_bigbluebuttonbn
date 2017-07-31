@@ -208,13 +208,8 @@ function bigbluebuttonbn_delete_instance($id) {
         bigbluebuttonbn_add_openstack_event($event_record);
         //Delete the associated record
         bigbluebuttonbn_delete_os_conference($bigbluebuttonbn->meetingid);
-
-        // Posible improvement: treat differently depending on current machine status
-        /*if(){
-            $event_record->details = date('m/d/Y h:i:s a', time()).'User deleted conference before it started';
-        }elseif(){
-            $event_record->details = date('m/d/Y h:i:s a', time()).'User deleted conference managed by OpenStack';
-        }*/
+        //Delete form reservation record
+        bigbluebuttonbn_delete_reservation($bigbluebuttonbn->meetingid);
 
     }
     //Conference is deleted before its openingtime
@@ -513,7 +508,13 @@ function bigbluebuttonbn_process_post_save(&$bigbluebuttonbn) {
             ];
             //Log OpenStack event
             bigbluebuttonbn_add_openstack_event($event_record);
-
+            //if TODO Módulo activado
+            //Add metting id to reservation
+            $reservation_data = (object)[
+                'meetingid'=>$bigbluebuttonbn_meetingid,
+                'id'=>$bigbluebuttonbn->reservation_id
+            ];
+            bigbluebuttonbn_add_meetingid_to_reservation($reservation_data);
         }
 
         /*---- end of OpenStack integration*/
@@ -527,7 +528,7 @@ function bigbluebuttonbn_process_post_save(&$bigbluebuttonbn) {
         if (bigbluebuttonbn_openstack_managed_conference($bigbluebuttonbn)){
 
             //Get conference meetingid
-            $bbb_openstack_meetingid = bigbluebuttonbn_get_openstack_meetingid($bigbluebuttonbn->id);
+            $bbb_openstack_meetingid = bigbluebuttonbn_get_openstack_meetingid_by_id($bigbluebuttonbn->id);
             //Construct record object
             $bbb_os_record = (object)[
                 'courseid'=>$bigbluebuttonbn->course,
@@ -886,6 +887,30 @@ function bigbluebuttonbn_create_or_update_os_conference($data){
     }
 }
 
+//----Reservations
+//Add or edit new reservation
+function bigbluebuttonbn_create_or_update_bbb_servers_reservation($data){
+    global $DB;
+    if ($data->meetingid){//Update record
+        $data->id = $DB->get_field('bigbluebuttonbn_reservations','id',array('meetingid'=>$data->meetingid));
+        return $DB->update_record('bigbluebuttonbn_reservations', $data);
+    }else{//Insert new record
+        return $DB->insert_record('bigbluebuttonbn_reservations', $data);
+    }
+}
+
+//Insert meeting id in reservation table
+function bigbluebuttonbn_add_meetingid_to_reservation($data){
+    global $DB;
+    return $DB->update_record('bigbluebuttonbn_reservations',$data);
+}
+
+//Delete reservation
+function bigbluebuttonbn_delete_reservation($meetingid){
+    global $DB;
+    return $DB->delete_records('bigbluebuttonbn_reservations',array('meetingid'=>$meetingid));
+}
+
 function bigbluebuttonbn_delete_os_conference($meetingid){
     global $DB;
     return $DB->delete_records('bigbluebuttonbn_openstack',array('meetingid'=>$meetingid));
@@ -972,5 +997,20 @@ function bigbluebuttonbn_get_cfg_openstack_tenant_id() {
     return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_tenant_id)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_tenant_id): (isset($CFG->bigbluebuttonbn_openstack_tenant_id)? trim($CFG->bigbluebuttonbn_openstack_tenant_id): null));
 }
 
+function bigbluebuttonbn_get_cfg_max_simultaneous_instances() {
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_simultaneous_instances)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_simultaneous_instances): (isset($CFG->bigbluebuttonbn_max_simultaneous_instances)? trim($CFG->bigbluebuttonbn_max_simultaneous_instances): null));
+}
+
+function bigbluebuttonbn_get_cfg_reservation_users_list_logic(){
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_reservation_user_list_logic)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_reservation_user_list_logic): (isset($CFG->bigbluebuttonbn_reservation_user_list_logic)? trim($CFG->bigbluebuttonbn_reservation_user_list_logic): 1));
+}
+
+
+function bigbluebuttonbn_get_cfg_authorized_reservation_users_list() {
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_authorized_reservation_users_list)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_authorized_reservation_users_list): (isset($CFG->bigbluebuttonbn_authorized_reservation_users_list)? trim($CFG->bigbluebuttonbn_authorized_reservation_users_list): null));
+}
 
 /*---- end of Openstack integration ---- */

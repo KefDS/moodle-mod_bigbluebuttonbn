@@ -14,36 +14,46 @@ defined('MOODLE_INTERNAL') || die();
 
 //OpenStack integration settings
 $string['openstack_integration']="OpenStack Integration";
-$string['openstack_integration_settings']="OpenStack Integration Setings";
-$string['os_logs_explanation']='Select an action to do with Openstack integration logs. You can filter them by date or select "Select all" to select all logs data. ';
-$string['select_all']='Select all';
-$string['openstack_servers_on_demand']= 'Use BBB servers on demand. To fully manage OpenStack Settings go to ';
-$string['openstack_integration_help'] = 'BBB servers on demand creates a unique BBB server for each conference created. The lifecycle of a conference is fully automated and managed by OpenStack.';
 
 //OpenStack openstack_integration_forms.php
-$string['os_logs_choose']='Choose one';
-$string['os_logs_download']='Download';
-$string['os_logs_delete']='Delete';
-$string['os_logs_go']='Go';
-$string['os_logs_selected_logs']='Action:';
+$string['os_records_begin_date']='Begin date';
+$string['os_records_choose']='Choose one';
+$string['os_records_delete']='Delete';
+$string['os_records_download']='Download';
+$string['os_records_end_date']='End date';
+$string['os_records_go']='Go';
+$string['os_records_selected']='Action:';
+$string['os_records_select_all']='Select all';
+//----OS logs
 $string['os_logs_management']='Logs management';
-$string['os_logs_begin_date']='Begin date';
-$string['os_logs_end_date']='End date';
+$string['os_logs_explanation']='Select an action to do with Openstack integration logs. You can filter them by date or select "Select all" to select all logs data. ';
+//----Reservations
+$string['reservations_records_management']='Reservations management';
+$string['reservations_records_explanation']='Select an action to do with Openstack integration logs. You can filter them by date or select "Select all" to select all logs data. ';
+
+//OpenStack openstack_download_records.php
+$string['os_download_records']='Download records';
+
+//OpenStack openstack_records_delete.php
+$string['os_delete_records']='Delete records';
+$string['os_delete_records_success'] = '{$a} Records were successfully deleted';
+//----OS logs
+$string['os_delete_os_logs_confirmation']='This action will permanently delete {$a} records from the database table mdl_bigbluebuttonbn_os_logs related with the logs of the OpenStack Integration feature.';
+//----Reservations
+$string['os_delete_reservations_records_confirmation']='This action will permanently delete {$a} records from the database table mdl_bigbluebuttonbn_reservations, related with the reservations of the OpenStack Integration feature.';
+//------TO DO ORDENAR:
 
 
-//OpenStack openstack_logs_download.php
-$string['os_logs_download_logs']='Download logs';
-
-//OpenStack openstack_logs_delete.php
-$string['os_logs_delete_logs']='Delete logs';
-$string['os_logs_delete_confirmation_message']='This action will permanently delete {$a} records from the database table mdl_bigbluebuttonbn_os_logs, related with the logs of the OpenStack Integration feature.';
-$string['os_logs_delete_success'] = '{$a} Records were successfully deleted';
+$string['openstack_integration_help'] = 'BBB servers on demand creates a unique BBB server for each conference created. The lifecycle of a conference is fully automated and managed by OpenStack.';
+$string['openstack_integration_settings']="OpenStack Integration Setings";
+$string['openstack_servers_on_demand']= 'Use BBB servers on demand. To fully manage OpenStack settings go to ';
 
 
 //Plugin admin settings
 $string['config_cloud'] = 'General settings for BBB servers on demand';
 $string['config_cloud_description']='These settings are <b>always used</b> when creating  BBB servers on demand.';
 $string['config_heat_region']='Heat Region';
+$string['config_heat_region_description']='Region setting in Openstack orchestration service.';
 $string['config_heat_url']='OpenStack Server URL';
 $string['config_heat_url_description']='The URL of your OpenStack server (with Heat) used for the creation of the BBB servers.';
 $string['config_yaml_stack_template_url']='Heat Template';
@@ -55,6 +65,8 @@ $string['config_min_openingtime_description']='Minimum limit of time to schedule
 $string['config_max_openingtime']='Maximum opening time';
 $string['config_max_openingtime_description']='Maximum anticipation to schedule a meeting. It should be in a days-hours-minutes format. Eg: "60d-10h-0m" indicates sixty days, ten hours zero minutes.';
 $string['config_openstack_credentials']='OpenStack Credentials';
+$string['config_max_simultaneous_instances']='Max number of BBB servers';
+$string['config_max_simultaneous_instances_description']='Maximun number of BBB servers that can be running at the same time';
 $string['config_openstack_credentials_description']='Credentials to access OpenStack services.';
 $string['config_openstack_username']='Username';
 $string['config_openstack_username_description']='OpenStack username to access services.';
@@ -66,6 +78,11 @@ $string['config_meeting_durations']='Meeting Durations';
 $string['config_meeting_durations_description']='Array of meeting durations in minutes. They must be in the following format: [30,60,90].';
 $string['config_openstack_integration']='BBB servers on demand';
 $string['config_openstack_integration_description']='Enables OpenStack integration for managing BBB servers on demand.';
+$string['bigbluebuttonbn_reservation_user_list_logic']='User whitelist/blacklist for reservations';
+$string['bigbluebuttonbn_reservation_user_list_logic_description']='Mark to use as a blocking list (blacklist), leave it blank to use as an authorization list(whitelist) for users that want to make a conference reservation.';
+$string['bigbluebuttonbn_authorized_reservation_users_list']='Authorized/blocked user list';
+$string['bigbluebuttonbn_authorized_reservation_users_list_description']='Comma separated list of usernames that are authorize/blocked according to the user whitelist/blacklist setting.The format should be "username1,username2,username3"';
+
 
 //Meeting form
 $string['mod_form_field_meeting_duration']='Duration';
@@ -73,6 +90,10 @@ $string['mod_form_field_meeting_duration_help']='Meeting duration (in minutes)';
 $string['bbbconferencetoosoon']='This opeining time is too soon. For further information please contact the Administrator.';
 $string['bbbconferencetoolate']='You can\'t schedule a conference with that amount of anticipation.. For further information please contact the Administrator.';
 $string['bbbconferenceopeningsoon']='The conference already started or will do it soon. You can no longer change this setting.';
+$string['reservation_system_busy']='Reservation system was busy, please try again';
+$string['unsuficient_availability']='There is not enough room for this conference. Please retry with a different openingtime.';
+
+
 
 //Tasks for OpenStack communication
 $string['task_openstack_async_communication']= 'Creating BBB meeting servers with OpenStack';

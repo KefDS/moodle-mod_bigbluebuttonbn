@@ -86,9 +86,11 @@
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="start_time" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Timestamp to start usign OpenStack resources."/>
         <FIELD NAME="finish_time" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Timestamp to free OpenStack resources."/>
-        <FIELD NAME="reservation_date" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Reservation details in a human redable format"/>
-        <FIELD NAME="user" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Name of the user who ask for reservation."/>
-        <FIELD NAME="course" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Name of the course related to reservation."/>
+        <FIELD NAME="begin_date" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Begin date in a human redable format"/>
+        <FIELD NAME="end_date" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="End date in a human redable format"/>
+        <FIELD NAME="user_info" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Name of the user who ask for reservation."/>
+        <FIELD NAME="course_info" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Name of the course related to reservation."/>
+        <FIELD NAME="meetingid" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Id of the conference reserved."/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

@@ -371,7 +371,7 @@ function xmldb_bigbluebuttonbn_upgrade($oldversion=0) {
     }
 
 
-    if($oldversion < 2017071000) {
+    if($oldversion < 2017071701) {
         //Define table bigbluebuttonbn_openstack to be created
         $table = new xmldb_table('bigbluebuttonbn_reservations');
 
@@ -379,9 +379,11 @@ function xmldb_bigbluebuttonbn_upgrade($oldversion=0) {
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null, null);
         $table->add_field('start_time', XMLDB_TYPE_INTEGER, '10', null, null, null, null, null);
         $table->add_field('finish_time', XMLDB_TYPE_INTEGER, '10', null, null, null, null, null);
-        $table->add_field('reservation_date', XMLDB_TYPE_TEXT, null, null, null, null, null, null);
-        $table->add_field('user', XMLDB_TYPE_CHAR, '256', null, null, null, null, null);
-        $table->add_field('course', XMLDB_TYPE_CHAR, '256', null, null, null, null, null);
+        $table->add_field('begin_date', XMLDB_TYPE_CHAR, '256', null, null, null, null, null);
+        $table->add_field('end_date', XMLDB_TYPE_CHAR, '256', null, null, null, null, null);
+        $table->add_field('user_info', XMLDB_TYPE_CHAR, '256', null, null, null, null, null);
+        $table->add_field('course_info', XMLDB_TYPE_CHAR, '256', null, null, null, null, null);
+        $table->add_field('meetingid', XMLDB_TYPE_CHAR, '256', null, null, null, null, null);
 
         // Adding keys to table bigbluebuttonbn_log
         $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
@@ -392,7 +394,7 @@ function xmldb_bigbluebuttonbn_upgrade($oldversion=0) {
         }
 
         // Bigbluebuttonbn savepoint reached.
-        upgrade_mod_savepoint(true, 2017071000, 'bigbluebuttonbn');
+        upgrade_mod_savepoint(true, 2017071701, 'bigbluebuttonbn');
     }
 
     /*---- end of OpenStack integration ----*/

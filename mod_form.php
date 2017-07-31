@@ -299,6 +299,7 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
             $durations = array_combine($durations, $durations);
             $mform->addElement('select', 'bbb_meeting_duration', get_string('mod_form_field_meeting_duration', 'bigbluebuttonbn'), $durations);
             $mform->addHelpButton('bbb_meeting_duration', 'mod_form_field_meeting_duration', 'bigbluebuttonbn');
+            $mform->addElement('hidden','reservation_id',null);
         }
         /*---- end of OpenStack integration ----*/
 
@@ -331,6 +332,7 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
     }
 
     function validation($data, $files) {
+        global $USER;
         $errors = parent::validation($data, $files);
 
         if ( isset($data['openingtime']) && isset($data['closingtime']) ) {
@@ -371,6 +373,52 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
 
                 }
             }
+
+            //----Reservations
+            if( !bigbluebuttonbn_allow_user_reservation($USER->username, bigbluebuttonbn_get_cfg_reservation_users_list_logic()) ){
+                $errors['openingtime'] = "Usted no posee permisos para crear conferencias BigBlueButton. Para más información contacte al administrador.";
+            }
+
+            if( empty($errors) ){
+                // Get an instance of the currently configured lock_factory. The argument is the locktype.
+                $lockfactory = \core\lock\lock_config::get_lock_factory('mod_bigbluebuttonbn_add_or_update_reservations');
+                // Lock request timeout
+                $timeout=10;
+
+                //Calculates start time and total duration
+                $start_time = $data['openingtime'];
+                $total_duration_in_minutes = bigbluebuttonbn_get_meeting_total_duration($data['bbb_meeting_duration']);
+                $finish_time = $start_time + $total_duration_in_minutes * 60;
+
+                // Get a new lock for the resource, wait for it if needed. Arguments are resource name and timeout.
+                if ( $lock = $lockfactory->get_lock('reservations_table', $timeout) ){
+
+                    $update = $data['update']!=0;
+                    //Check for availability
+                    if(bigbluebuttonbn_bbb_servers_availability($start_time, $finish_time, $update) ){
+                        //Reserve conference
+                        $reservation_data = (object)[
+                            'begin_date'=> date('d/m/Y h:i:s a', $start_time),
+                            'end_date'=> date('d/m/Y h:i:s a', $finish_time),
+                            'start_time'=>$start_time,
+                            'finish_time'=> $finish_time,
+                            'user_info'=> 'UserID: '.$USER->id.' UserEmail:'.$USER->email,
+                            'course_info'=> 'CourseID:'.$this->_course->id.' CourseName:'.$this->_course->fullname,
+                            'meetingid'=> $this->current->meetingid
+                        ];
+                        $this->_form->_submitValues['reservation_id'] = bigbluebuttonbn_create_or_update_bbb_servers_reservation($reservation_data);
+                    }else{ // Show error
+                        $errors['openingtime'] = get_string("unsuficient_availability", 'bigbluebuttonbn');
+                    }
+                    // Release the lock once finished.
+                    $lock->release();
+
+                } else {
+                    // We did not get access to the resource in time, give up.
+                    $errors['openingtime']=get_string('reservation_system_busy', 'bigbluebuttonbn');
+                }
+            }
+
         }
         /*---- end of OpenStack integration ----*/
 

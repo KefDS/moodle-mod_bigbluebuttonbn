@@ -25,6 +25,8 @@ $default_text_regex= '/^[a-zA-Z0-9-_.[:space:]]{0,40}$/';
 $url_regex='/^https?\:\/\/([a-zA-Z0-9\-\.\_]+\.[a-zA-Z0-9]{2,3})(\/[a-zA-Z0-9\-\.\_]+)*$/';
 $durations_array_regex='/^\[\d{1,3}(,\d{1,3}){0,10}\]$/';
 $days_hours_minutes_regex = '/^\d{1,3}[Dd]-\d{1,2}[Hh]-\d{1,2}[mM]$/';
+$max_simultaneous_instances_regex = '/^\d{0,5}$/';
+$csv_regex = '/^$|[0-9a-z\.\-\@\_]+(,[0-9a-z\.\-\@\_]+)*/';
 
 //Create OpenStackIntegration link
 $openStacklink= "{$CFG->wwwroot}/mod/bigbluebuttonbn/openstack_interface/openstack_integration_settings.php";
@@ -71,7 +73,6 @@ if ($ADMIN->fulltree) {
                 0));
         }
 
-
     }
     ////Configurations for stacks and OpenStack API
     if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_url) ||
@@ -80,7 +81,10 @@ if ($ADMIN->fulltree) {
         !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_meeting_durations) ||
         !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_min_openingtime) ||
         !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_openingtime) ||
-        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_yaml_stack_template) ) {
+        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_simultaneous_instances)||
+        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_yaml_stack_template) ||
+        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_reservation_user_list_logic) ||
+        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_authorized_reservation_users_list) ) {
         $settings->add( new admin_setting_heading('bigbluebuttonbn_config_cloud',
             get_string('config_cloud', 'bigbluebuttonbn'),
             get_string('config_cloud_description', 'bigbluebuttonbn'),
@@ -130,10 +134,33 @@ if ($ADMIN->fulltree) {
         }
         if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_openingtime)){
             //Describes how anticipated a meeting can be scheduled
-            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_max_openingtime',
+            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_max_simultaneous_instances',
                 get_string('config_max_openingtime', 'bigbluebuttonbn'),
                 get_string('config_max_openingtime_description','bigbluebuttonbn'),
                 null, $days_hours_minutes_regex));
+        }
+        if (!isset ($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_simultaneous_instances)){
+            //Describes the number of simultaneous BBB servers on demand at a time
+            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_max_simultaneous_instances',
+                get_string('config_max_simultaneous_instances', 'bigbluebuttonbn'),
+                get_string('config_max_simultaneous_instances_description','bigbluebuttonbn'),
+                null, $max_simultaneous_instances_regex));
+        }
+
+        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_reservation_user_list_logic) ){
+            //Enable OpenStack integration
+            $settings->add( new admin_setting_configcheckbox( 'bigbluebuttonbn_reservation_user_list_logic',
+                get_string('bigbluebuttonbn_reservation_user_list_logic', 'bigbluebuttonbn'),
+                get_string('bigbluebuttonbn_reservation_user_list_logic_description','bigbluebuttonbn'),
+                0));
+        }
+
+        if (!isset ($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_authorized_reservation_users_list)){
+            //Describes the users that can make a reservation
+            $settings->add( new admin_setting_configtextarea( 'bigbluebuttonbn_authorized_reservation_users_list',
+                get_string('bigbluebuttonbn_authorized_reservation_users_list', 'bigbluebuttonbn'),
+                get_string('bigbluebuttonbn_authorized_reservation_users_list_description','bigbluebuttonbn'),
+                null, $csv_regex));
         }
     }
 

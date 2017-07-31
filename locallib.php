@@ -1671,6 +1671,48 @@ function bigbluebuttonbn_html2text($html, $len) {
 
 /*---- OpenStack integration ---- */
 
+
+//---- Reservations module
+
+// Get meeting total duration in minutes
+function bigbluebuttonbn_get_meeting_total_duration($duration){
+    return $duration + 15 + 15; //duration + extra time + destruction time
+}
+
+//Check for conference availability
+function bigbluebuttonbn_bbb_servers_availability($opening_time, $finish_time, $update){
+    global $DB;
+    $select = 'start_time <'.$finish_time.' AND '.'finish_time > '.$opening_time;
+    $simultaneuos_conferences = $DB->count_records_select('bigbluebuttonbn_reservations', $select);
+    if($update){
+        $simultaneuos_conferences = $simultaneuos_conferences - 1;
+    }
+    return ($simultaneuos_conferences < bigbluebuttonbn_get_cfg_max_simultaneous_instances());
+}
+
+//Check for username in authorized reservation users list
+function bigbluebuttonbn_allow_user_reservation($username, $logic_type){
+    //Get user list
+    $authorized_users = explode(',', trim(bigbluebuttonbn_get_cfg_authorized_reservation_users_list()) );
+
+    if (empty($authorized_users)){//List is empty
+        return true;
+    }elseif ($logic_type == false){ //Whitelist logic
+        return ( array_search($username, $authorized_users)!== false) ;
+    }else{ //Blacklist logic
+        return ( !(array_search($username, $authorized_users)!== false) ) ;
+    }
+}
+
+
+
+
+
+
+
+
+
+
 //Get BBB server URL. Used when creation on demand is enabled.
 function bigbluebuttonbn_get_meeting_server_url($meetingid){
     global $DB;
@@ -1692,25 +1734,45 @@ function bigbluebuttonbn_get_previous_setting($course_module_id, $conference_set
     return $DB->get_field('bigbluebuttonbn', $conference_setting, array('id' => $cm->instance), 'MUST_EXIST');
 }
 
-function bigbluebuttonbn_delete_os_logs_by_date($table, $delete_all, $begin_datetime=null, $end_datetime=null){
+
+
+function bigbluebuttonbn_delete_os_logs_by_date($delete_all, $begin_datetime=null, $end_datetime=null){
     global $DB;
     if($delete_all){
-        return $DB->delete_records_select($table);
+        return $DB->delete_records_select('bigbluebuttonbn_os_logs');
     }else{
         $select = 'event_time > '.$begin_datetime.' AND '.'event_time < '.$end_datetime;
-        return $DB->delete_records_select($table, $select);
+        return $DB->delete_records_select('bigbluebuttonbn_os_logs', $select);
     }
 }
 
+function bigbluebuttonbn_delete_reservations_records_by_date($delete_all, $begin_datetime=null, $end_datetime=null){
+    global $DB;
+    if($delete_all){
+        return $DB->delete_records_select('bigbluebuttonbn_reservations');
+    }else{
+        $select = 'start_time > '.$begin_datetime.' AND '.'start_time < '.$end_datetime;
+        return $DB->delete_records_select('bigbluebuttonbn_reservations', $select);
+    }
+}
 
-function bigbluebuttonbn_count_records($table, $count_all, $begin_datetime=null, $end_datetime=null){
+function bigbluebuttonbn_count_os_logs_records($count_all, $begin_datetime=null, $end_datetime=null){
     global $DB;
     if($count_all){
-        $DB->count_records($table);
+        return $DB->count_records('bigbluebuttonbn_os_logs');
     }else{
         $select = 'event_time > '.$begin_datetime.' AND '.'event_time < '.$end_datetime;
-        return $DB->count_records_select($table, $select);
+        return $DB->count_records_select('bigbluebuttonbn_os_logs', $select);
     }
 }
 
+function bigbluebuttonbn_count_reservations_records($count_all, $begin_datetime=null, $end_datetime=null){
+    global $DB;
+    if($count_all){
+        return $DB->count_records('bigbluebuttonbn_reservations');
+    }else{
+        $select = 'start_time > '.$begin_datetime.' AND '.'end_time < '.$end_datetime;
+        return $DB->count_records_select('bigbluebuttonbn_reservations', $select);
+    }
+}
 /*---- end of OpenStack integration ----*/
