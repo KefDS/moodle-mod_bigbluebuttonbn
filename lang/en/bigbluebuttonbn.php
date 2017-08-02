@@ -15,6 +15,7 @@ defined('MOODLE_INTERNAL') || die();
 //OpenStack integration settings
 $string['openstack_integration']="OpenStack Integration";
 
+//----Openstack Interface
 //OpenStack openstack_integration_forms.php
 $string['os_records_begin_date']='Begin date';
 $string['os_records_choose']='Choose one';
@@ -30,10 +31,8 @@ $string['os_logs_explanation']='Select an action to do with Openstack integratio
 //----Reservations
 $string['reservations_records_management']='Reservations management';
 $string['reservations_records_explanation']='Select an action to do with Openstack integration logs. You can filter them by date or select "Select all" to select all logs data. ';
-
 //OpenStack openstack_download_records.php
 $string['os_download_records']='Download records';
-
 //OpenStack openstack_records_delete.php
 $string['os_delete_records']='Delete records';
 $string['os_delete_records_success'] = '{$a} Records were successfully deleted';
@@ -41,17 +40,13 @@ $string['os_delete_records_success'] = '{$a} Records were successfully deleted';
 $string['os_delete_os_logs_confirmation']='This action will permanently delete {$a} records from the database table mdl_bigbluebuttonbn_os_logs related with the logs of the OpenStack Integration feature.';
 //----Reservations
 $string['os_delete_reservations_records_confirmation']='This action will permanently delete {$a} records from the database table mdl_bigbluebuttonbn_reservations, related with the reservations of the OpenStack Integration feature.';
-//------TO DO ORDENAR:
 
-
+//---OpenStack admin settings
+//Heading
 $string['openstack_integration_help'] = 'BBB servers on demand creates a unique BBB server for each conference created. The lifecycle of a conference is fully automated and managed by OpenStack.';
-$string['openstack_integration_settings']="OpenStack Integration Setings";
-$string['openstack_servers_on_demand']= 'Use BBB servers on demand. To fully manage OpenStack settings go to ';
-
-
-//Plugin admin settings
-$string['config_cloud'] = 'General settings for BBB servers on demand';
-$string['config_cloud_description']='These settings are <b>always used</b> when creating  BBB servers on demand.';
+$string['openstack_servers_on_demand']= 'Use BBB servers on demand through OpenStack integration. To manage logs a reservations got to ';
+$string['openstack_integration_modules']= 'OpenStack Integration Modules ';
+$string['config_cloud_description']='<b>General settings for BBB</b> servers on demand. These settings are always used when creating  BBB servers on demand.';
 $string['config_heat_region']='Heat Region';
 $string['config_heat_region_description']='Region setting in Openstack orchestration service.';
 $string['config_heat_url']='OpenStack Server URL';
@@ -64,10 +59,9 @@ $string['config_min_openingtime']='Minimum opening time';
 $string['config_min_openingtime_description']='Minimum limit of time to schedule a meeting. It should be in a days-hours-minutes format. Eg: "0d-4h-30m" indicates zero days, four hours and thirty minutes.';
 $string['config_max_openingtime']='Maximum opening time';
 $string['config_max_openingtime_description']='Maximum anticipation to schedule a meeting. It should be in a days-hours-minutes format. Eg: "60d-10h-0m" indicates sixty days, ten hours zero minutes.';
-$string['config_openstack_credentials']='OpenStack Credentials';
+$string['config_openstack_credentials_description']='<b>OpenStack Credentials</b>. Credentials to access OpenStack services.';
 $string['config_max_simultaneous_instances']='Max number of BBB servers';
 $string['config_max_simultaneous_instances_description']='Maximun number of BBB servers that can be running at the same time';
-$string['config_openstack_credentials_description']='Credentials to access OpenStack services.';
 $string['config_openstack_username']='Username';
 $string['config_openstack_username_description']='OpenStack username to access services.';
 $string['config_openstack_password']='Password';
@@ -76,15 +70,20 @@ $string['config_openstack_tenant_id']='Tenant ID';
 $string['config_openstack_tenant_id_description']='OpenStack tenant(project) identifier to access services.';
 $string['config_meeting_durations']='Meeting Durations';
 $string['config_meeting_durations_description']='Array of meeting durations in minutes. They must be in the following format: [30,60,90].';
+$string['config_conference_extra_time']='Conference extra time';
+$string['config_conference_extra_time_description']='Extra time in minutes for conference before destroying the BBB server.';
 $string['config_openstack_integration']='BBB servers on demand';
 $string['config_openstack_integration_description']='Enables OpenStack integration for managing BBB servers on demand.';
-$string['bigbluebuttonbn_reservation_user_list_logic']='User whitelist/blacklist for reservations';
-$string['bigbluebuttonbn_reservation_user_list_logic_description']='Mark to use as a blocking list (blacklist), leave it blank to use as an authorization list(whitelist) for users that want to make a conference reservation.';
-$string['bigbluebuttonbn_authorized_reservation_users_list']='Authorized/blocked user list';
-$string['bigbluebuttonbn_authorized_reservation_users_list_description']='Comma separated list of usernames that are authorize/blocked according to the user whitelist/blacklist setting.The format should be "username1,username2,username3"';
+$string['config_reservation_user_list_logic']='User whitelist/blacklist for reservations';
+$string['config_reservation_user_list_logic_description']='Mark to use as a blocking list (blacklist), leave it blank to use as an authorization list(whitelist) for users that want to make a conference reservation.';
+$string['config_authorized_reservation_users_list']='Authorized/blocked user list';
+$string['config_authorized_reservation_users_list_description']='Comma separated list of usernames that are authorize/blocked according to the user whitelist/blacklist setting.The format should be "username1,username2,username3"';
+$string['config_reservation_module_enabled']='Enable reservations module';
+$string['config_reservation_module_enabled_description']='Enable or disable reservations module to limit conferences according to resources.';
+$string['openstack_time_description']='<b>Note:</b> the total time of resource reservation is the sum of the "Minimun opening time" + "Conference extra time" + {$a} minutes. To change the last parameter it\'s necessary to change the plugin\'s code.';
+$string['openstack_reservation_settings']= '<b>Reservations Module</b>. General settings for Reservations Module.';
 
-
-//Meeting form
+//----Meeting form
 $string['mod_form_field_meeting_duration']='Duration';
 $string['mod_form_field_meeting_duration_help']='Meeting duration (in minutes)';
 $string['bbbconferencetoosoon']='This opeining time is too soon. For further information please contact the Administrator.';
@@ -93,15 +92,10 @@ $string['bbbconferenceopeningsoon']='The conference already started or will do i
 $string['reservation_system_busy']='Reservation system was busy, please try again';
 $string['unsuficient_availability']='There is not enough room for this conference. Please retry with a different openingtime.';
 
-
-
 //Tasks for OpenStack communication
 $string['task_openstack_async_communication']= 'Creating BBB meeting servers with OpenStack';
 
-
-
 /*---- end of OpenStack integration ----*/
-
 
 $string['activityoverview'] = 'You have upcoming bigbluebuttonbn sessions';
 $string['bbbduetimeoverstartingtime'] = 'The due time for this activity must be greater than the starting time';
@@ -267,7 +261,6 @@ $string['mod_form_field_notification_msg_created'] = 'created';
 $string['mod_form_field_notification_msg_modified'] = 'modified';
 $string['mod_form_field_notification_msg_at'] = 'at';
 
-
 $string['modulename'] = 'BigBlueButtonBN';
 $string['modulenameplural'] = 'BigBlueButtonBN';
 $string['modulename_help'] = 'BigBlueButtonBN lets you create from within Moodle links to real-time on-line classrooms using BigBlueButton, an open source web conferencing system for distance education.
@@ -345,7 +338,6 @@ $string['view_message_session_no_users'] = 'There are no users in this session';
 $string['view_message_session_has_user'] = 'There is';
 $string['view_message_session_has_users'] = 'There are';
 
-
 $string['view_message_room_closed'] = 'This room is closed.';
 $string['view_message_room_ready'] = 'This room is ready.';
 $string['view_message_room_open'] = 'This room is open.';
@@ -356,13 +348,11 @@ $string['view_message_conference_in_progress'] = 'This conference is in progress
 $string['view_message_conference_has_ended'] = 'This conference has ended.';
 $string['view_message_tab_close'] = 'This tab/window must be closed manually';
 
-
 $string['view_groups_selection_warning'] = 'There is a conference room for each group. If you have access to more than one be sure to select the correct one.';
 //$string['view_groups_selection_message'] = 'Select the group you want to participate.';
 //$string['view_groups_selection_button'] = 'Select';
 $string['view_conference_action_join'] = 'Join session';
 $string['view_conference_action_end'] = 'End session';
-
 
 $string['view_recording'] = 'recording';
 $string['view_recording_link'] = 'imported link';
@@ -408,7 +398,6 @@ $string['predefined_profile_classroom'] = 'Classroom';
 $string['predefined_profile_conferenceroom'] = 'Conference room';
 $string['predefined_profile_collaborationroom'] = 'Collaboration room';
 $string['predefined_profile_scheduledsession'] = 'Scheduled session';
-
 
 $string['email_title_notification_has_been'] = 'has been';
 $string['email_body_notification_meeting_has_been'] = 'has been';
