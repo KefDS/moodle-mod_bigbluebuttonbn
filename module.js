@@ -24,7 +24,7 @@ M.mod_bigbluebuttonbn.datasource_init = function(Y) {
 };
 
 M.mod_bigbluebuttonbn.view_init = function(Y) {
-	// Init general datasource
+    // Init general datasource
 	M.mod_bigbluebuttonbn.datasource_init(Y);
     if (bigbluebuttonbn.activity === 'open') {
 	    // Create the main modal form.
@@ -83,7 +83,7 @@ M.mod_bigbluebuttonbn.view_init = function(Y) {
             ));
         } else {
             Y.DOM.addHTML(Y.one('#status_bar'), M.mod_bigbluebuttonbn.view_init_status_bar(
-              [bigbluebuttonbn.locales.conference_ended, bigbluebuttonbn.opening, bigbluebuttonbn.closing]
+              [bigbluebuttonbn.locales.conference_not_started, bigbluebuttonbn.opening, bigbluebuttonbn.closing]
             ));
         }
     }

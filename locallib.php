@@ -1671,12 +1671,32 @@ function bigbluebuttonbn_html2text($html, $len) {
 
 /*---- OpenStack integration ---- */
 
+//Get BBB server URL. Used when creation on demand is enabled.
+function bigbluebuttonbn_get_meeting_server_url($meetingid){
+    global $DB;
+    $url = $DB->get_field('bigbluebuttonbn_openstack','bbb_server_url',array('meetingid'=>$meetingid), 'MUST_EXIST');
+    return trim($url);
+}
+
+//Get BBB server shared secret. Used when creation on demand is enabled.
+function bigbluebuttonbn_get_meeting_shared_secret($meetingid){
+    global $DB;
+    $shared_secret = $DB->get_field('bigbluebuttonbn_openstack','bbb_server_shared_secret',array('meetingid'=>$meetingid), 'MUST_EXIST');
+    return trim($shared_secret);
+}
+
+//Get previous setting
+function bigbluebuttonbn_get_previous_setting($course_module_id, $conference_setting){
+    global $DB;
+    $cm = get_coursemodule_from_id('bigbluebuttonbn', $course_module_id, 0, false, MUST_EXIST);
+    return $DB->get_field('bigbluebuttonbn', $conference_setting, array('id' => $cm->instance), 'MUST_EXIST');
+}
 
 //---- Reservations module
 
 // Get meeting total duration in minutes
 function bigbluebuttonbn_get_meeting_total_duration($duration){
-    return $duration + 15 + 15; //duration + extra time + destruction time
+    return $duration + bigbluebuttonbn_get_cfg_conference_extra_time() + 15; //duration + extra time + destruction time
 }
 
 //Check for conference availability
@@ -1704,38 +1724,7 @@ function bigbluebuttonbn_allow_user_reservation($username, $logic_type){
     }
 }
 
-
-
-
-
-
-
-
-
-
-//Get BBB server URL. Used when creation on demand is enabled.
-function bigbluebuttonbn_get_meeting_server_url($meetingid){
-    global $DB;
-    $url = $DB->get_field('bigbluebuttonbn_openstack','bbb_server_url',array('meetingid'=>$meetingid), 'MUST_EXIST');
-    return trim($url);
-}
-
-//Get BBB server shared secret. Used when creation on demand is enabled.
-function bigbluebuttonbn_get_meeting_shared_secret($meetingid){
-    global $DB;
-    $shared_secret = $DB->get_field('bigbluebuttonbn_openstack','bbb_server_shared_secret',array('meetingid'=>$meetingid), 'MUST_EXIST');
-    return trim($shared_secret);
-}
-
-//Get previous setting
-function bigbluebuttonbn_get_previous_setting($course_module_id, $conference_setting){
-    global $DB;
-    $cm = get_coursemodule_from_id('bigbluebuttonbn', $course_module_id, 0, false, MUST_EXIST);
-    return $DB->get_field('bigbluebuttonbn', $conference_setting, array('id' => $cm->instance), 'MUST_EXIST');
-}
-
-
-
+//----Admin interface records management
 function bigbluebuttonbn_delete_os_logs_by_date($delete_all, $begin_datetime=null, $end_datetime=null){
     global $DB;
     if($delete_all){

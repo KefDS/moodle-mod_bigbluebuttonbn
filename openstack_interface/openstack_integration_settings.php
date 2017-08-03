@@ -26,9 +26,9 @@ require_login();
 admin_externalpage_setup('managemodules');
 
 
-$PAGE->set_title("$SITE->shortname: " .get_string('openstack_integration','bigbluebuttonbn'));
+$PAGE->set_title("$SITE->shortname: " .get_string('openstack_integration_modules','bigbluebuttonbn'));
 $PAGE->navbar->add(get_string('bigbluebuttonbn', 'bigbluebuttonbn'), $CFG->wwwroot.'/'.$CFG->admin.'/settings.php?section=modsettingbigbluebuttonbn');
-$PAGE->navbar->add( get_string('openstack_integration','bigbluebuttonbn'), $CFG->wwwroot.'/mod/bigbluebuttonbn/openstack_interface/openstack_integration_settings.php');
+$PAGE->navbar->add( get_string('openstack_integration_modules','bigbluebuttonbn'), $CFG->wwwroot.'/mod/bigbluebuttonbn/openstack_interface/openstack_integration_settings.php');
 
 
 //Create OpenStack logs form
@@ -99,7 +99,7 @@ if ($data = $reservations_form->get_data()) {
 
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading(get_string('openstack_integration','bigbluebuttonbn'));
+echo $OUTPUT->heading(get_string('openstack_integration_modules','bigbluebuttonbn'));
 
 
 

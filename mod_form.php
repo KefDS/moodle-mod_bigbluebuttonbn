@@ -375,11 +375,14 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
             }
 
             //----Reservations
-            if( !bigbluebuttonbn_allow_user_reservation($USER->username, bigbluebuttonbn_get_cfg_reservation_users_list_logic()) ){
+
+            $reservations_module_on = bigbluebuttonbn_get_cfg_reservation_module_enabled();
+
+            if( $reservations_module_on and !bigbluebuttonbn_allow_user_reservation($USER->username, bigbluebuttonbn_get_cfg_reservation_users_list_logic()) ){
                 $errors['openingtime'] = "Usted no posee permisos para crear conferencias BigBlueButton. Para más información contacte al administrador.";
             }
 
-            if( empty($errors) ){
+            if( $reservations_module_on and empty($errors) ){
                 // Get an instance of the currently configured lock_factory. The argument is the locktype.
                 $lockfactory = \core\lock\lock_config::get_lock_factory('mod_bigbluebuttonbn_add_or_update_reservations');
                 // Lock request timeout

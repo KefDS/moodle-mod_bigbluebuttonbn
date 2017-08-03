@@ -41,7 +41,7 @@ if($_REQUEST['delete'] == 1 ){
             break;
         case 'reservations':
             bigbluebuttonbn_delete_reservations_records_by_date($SESSION->date_interval['select_all'], $SESSION->date_interval['begin'], $SESSION->date_interval['end']);
-            redirect($redirect, get_string("os_delete_records_success","bigbluebuttonbn", $SESSION->records_number, 'mdl_bigbluebuttonbn_reservations'), null, \core\output\notification::NOTIFY_SUCCESS);
+            redirect($redirect, get_string("os_delete_records_success","bigbluebuttonbn", $SESSION->records_number), null, \core\output\notification::NOTIFY_SUCCESS);
             break;
     }
 }
