@@ -177,7 +177,7 @@ if ($ADMIN->fulltree) {
         }
         if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_openingtime)){
             //Describes how anticipated a meeting can be scheduled
-            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_max_simultaneous_instances',
+            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_max_openingtime',
                 get_string('config_max_openingtime', 'bigbluebuttonbn'),
                 get_string('config_max_openingtime_description','bigbluebuttonbn'),
                 null, $days_hours_minutes_regex));

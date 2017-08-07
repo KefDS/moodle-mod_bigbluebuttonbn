@@ -1760,7 +1760,7 @@ function bigbluebuttonbn_count_reservations_records($count_all, $begin_datetime=
     if($count_all){
         return $DB->count_records('bigbluebuttonbn_reservations');
     }else{
-        $select = 'start_time > '.$begin_datetime.' AND '.'end_time < '.$end_datetime;
+        $select = 'start_time > '.$begin_datetime.' AND '.'finish_time < '.$end_datetime;
         return $DB->count_records_select('bigbluebuttonbn_reservations', $select);
     }
 }

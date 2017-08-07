@@ -990,12 +990,12 @@ function bigbluebuttonbn_get_cfg_openstack_destruction_time() {
 
 function bigbluebuttonbn_get_cfg_min_openingtime() {
     global $BIGBLUEBUTTONBN_CFG, $CFG;
-    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_min_openingtime)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_min_openingtime): (isset($CFG->bigbluebuttonbn_min_openingtime)? trim($CFG->bigbluebuttonbn_min_openingtime): '00:30'));
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_min_openingtime)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_min_openingtime): (isset($CFG->bigbluebuttonbn_min_openingtime)? trim($CFG->bigbluebuttonbn_min_openingtime): '0d-0h-1m'));
 }
 
 function bigbluebuttonbn_get_cfg_max_openingtime(){
     global $BIGBLUEBUTTONBN_CFG, $CFG;
-    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_openingtime)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_openingtime): (isset($CFG->bigbluebuttonbn_max_openingtime)? trim($CFG->bigbluebuttonbn_max_openingtime): '30:00'));
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_openingtime)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_openingtime): (isset($CFG->bigbluebuttonbn_max_openingtime)? trim($CFG->bigbluebuttonbn_max_openingtime): '30d-0h-0m'));
 }
 
 function bigbluebuttonbn_get_cfg_openstack_username() {
