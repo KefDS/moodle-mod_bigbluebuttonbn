@@ -1,7 +1,7 @@
 <?php
 /**
  * Library calls for Moodle and BigBlueButton.
- * 
+ *
  * @package   mod_bigbluebuttonbn
  * @author    Fred Dixon  (ffdixon [at] blindsidenetworks [dt] com)
  * @author    Jesus Federico  (jesus [at] blindsidenetworks [dt] com)
@@ -42,6 +42,9 @@ $BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_scheduled_duration_enabled = 0;
 /*
  * Remove this block when restored
  */
+
+const BIGBLUEBUTTONBN_DEFAULT_SERVER_URL = "http://test-install.blindsidenetworks.com/bigbluebutton/";
+const BIGBLUEBUTTONBN_DEFAULT_SHARED_SECRET = "8cd8ef52e8e101574e400365b55e11a6";
 
 const BIGBLUEBUTTONBN_LOG_EVENT_CREATE = "Create";
 const BIGBLUEBUTTONBN_LOG_EVENT_JOIN = "Join";
@@ -187,6 +190,33 @@ function bigbluebuttonbn_delete_instance($id) {
         $result = false;
     }
 
+    /*---- OpenStack integration ----*/
+
+    if(bigbluebuttonbn_openstack_managed_conference($bigbluebuttonbn) &&  ($bigbluebuttonbn->openingtime > bigbluebuttonbn_get_min_openingtime())){
+
+        $event_record = (object)[
+            'event_time' => time(),
+            'meetingid'=>$bigbluebuttonbn->meetingid,
+            'stack_name'=>bigbluebuttonbn_get_os_stack_name($bigbluebuttonbn->meetingid),
+            'log_level'=>'INFO',
+            'component'=>'BBB_PLUGIN',
+            'event'=>'USER_DELETED_CONFERENCE',
+            'event_details' => date('m/d/Y h:i:s a', time()).' User deleted conference before it started.',
+        ];
+
+        //Log the event
+        bigbluebuttonbn_add_openstack_event($event_record);
+        //Delete the associated record
+        bigbluebuttonbn_delete_os_conference($bigbluebuttonbn->meetingid);
+        if(bigbluebuttonbn_get_cfg_reservation_module_enabled()){
+            //Delete form reservation record
+            bigbluebuttonbn_delete_reservation($bigbluebuttonbn->meetingid);
+        }
+
+    }
+    //Conference is deleted before its openingtime
+
+    /*---- end of OpenStack integration ----*/
     return $result;
 }
 
@@ -337,6 +367,48 @@ function bigbluebuttonbn_get_post_actions() {
     return array('update', 'add', 'create', 'join', 'end', 'left', 'publish', 'unpublish', 'delete');
 }
 
+
+/**
+ * @global object
+ * @global object
+ * @param array $courses
+ * @param array $htmlarray Passed by reference
+ */
+function bigbluebuttonbn_print_overview($courses, &$htmlarray) {
+    global $USER, $CFG;
+
+    if (empty($courses) || !is_array($courses) || count($courses) == 0) {
+        return array();
+    }
+
+    if (!$bigbluebuttonbns = get_all_instances_in_courses('bigbluebuttonbn', $courses)) {
+        return;
+    }
+
+    foreach ($bigbluebuttonbns as $bigbluebuttonbn) {
+        $now = time();
+        if ( $bigbluebuttonbn->openingtime and (!$bigbluebuttonbn->closingtime or $bigbluebuttonbn->closingtime > $now)) { // A bigbluebuttonbn is scheduled.
+            $str = '<div class="bigbluebuttonbn overview"><div class="name">'.
+                get_string('modulename', 'bigbluebuttonbn').': <a '.($bigbluebuttonbn->visible ? '' : ' class="dimmed"').
+                ' href="'.$CFG->wwwroot.'/mod/bigbluebuttonbn/view.php?id='.$bigbluebuttonbn->coursemodule.'">'.
+                $bigbluebuttonbn->name.'</a></div>';
+            if ( $bigbluebuttonbn->openingtime > $now ) {
+                $str .= '<div class="info">'.get_string('starts_at', 'bigbluebuttonbn').': '.userdate($bigbluebuttonbn->openingtime).'</div>';
+            } else {
+                $str .= '<div class="info">'.get_string('started_at', 'bigbluebuttonbn').': '.userdate($bigbluebuttonbn->openingtime).'</div>';
+            }
+            $str .= '<div class="info">'.get_string('ends_at', 'bigbluebuttonbn').': '.userdate($bigbluebuttonbn->closingtime).'</div></div>';
+
+            if (empty($htmlarray[$bigbluebuttonbn->course]['bigbluebuttonbn'])) {
+                $htmlarray[$bigbluebuttonbn->course]['bigbluebuttonbn'] = $str;
+            } else {
+                $htmlarray[$bigbluebuttonbn->course]['bigbluebuttonbn'] .= $str;
+            }
+        }
+    }
+}
+
+
 /**
  * Given a course_module object, this function returns any
  * "extra" information that may be needed when printing
@@ -350,7 +422,7 @@ function bigbluebuttonbn_get_post_actions() {
 function bigbluebuttonbn_get_coursemodule_info($coursemodule) {
     global $CFG, $DB;
 
-    if ( !$bigbluebuttonbn = $DB->get_record('bigbluebuttonbn', array('id'=>$coursemodule->instance), 'id, name, intro, introformat, newwindow')) {
+    if ( !$bigbluebuttonbn = $DB->get_record('bigbluebuttonbn', array('id'=>$coursemodule->instance), 'id, name, intro, introformat')) {
         return NULL;
     }
 
@@ -388,8 +460,6 @@ function bigbluebuttonbn_process_pre_save(&$bigbluebuttonbn) {
         $bigbluebuttonbn->timemodified = time();
     }
 
-    if (! isset($bigbluebuttonbn->newwindow))
-        $bigbluebuttonbn->newwindow = 0;
     if (! isset($bigbluebuttonbn->wait))
         $bigbluebuttonbn->wait = 0;
     if (! isset($bigbluebuttonbn->record))
@@ -411,14 +481,82 @@ function bigbluebuttonbn_process_pre_save(&$bigbluebuttonbn) {
 function bigbluebuttonbn_process_post_save(&$bigbluebuttonbn) {
     global $DB, $CFG, $USER;
 
-    // Now that an id was assigned, generate and set the meetingid property based on 
+    // Now that an id was assigned, generate and set the meetingid property based on
     // [Moodle Instance + Activity ID + BBB Secret] (but only for new activities)
     if( isset($bigbluebuttonbn->add) && !empty($bigbluebuttonbn->add) ) {
         $bigbluebuttonbn_meetingid = sha1($CFG->wwwroot.$bigbluebuttonbn->id.bigbluebuttonbn_get_cfg_shared_secret());
         $DB->set_field('bigbluebuttonbn', 'meetingid', $bigbluebuttonbn_meetingid, array('id' => $bigbluebuttonbn->id));
+
+        /*---- OpenStack integration ----*/
+
+        if (bigbluebuttonbn_get_cfg_openstack_integration() ){
+            //Construct record object
+            $bbb_os_record = (object)[
+                'meetingid'=>$bigbluebuttonbn_meetingid,
+                'courseid'=>$bigbluebuttonbn->course,
+                'meeting_duration'=>$bigbluebuttonbn->bbb_meeting_duration,
+                'openingtime'=> $bigbluebuttonbn->openingtime,
+            ];
+            bigbluebuttonbn_create_or_update_os_conference($bbb_os_record);
+
+            $event_record = (object)[
+                'event_time' => time(),
+                'meetingid'=>$bigbluebuttonbn_meetingid,
+                'stack_name'=> bigbluebuttonbn_get_os_stack_name($bigbluebuttonbn_meetingid),
+                'log_level'=>'INFO',
+                'component'=>'BBB_PLUGIN',
+                'event' => 'ADD_BBB_CONFERENCE',
+                'event_details' => date('m/d/Y h:i:s a', time()).' User added a new BBB conference managed by OpenStack',
+            ];
+            //Log OpenStack event
+            bigbluebuttonbn_add_openstack_event($event_record);
+            //Reservations
+            if(bigbluebuttonbn_get_cfg_reservation_module_enabled()){
+                //Add metting id to reservation
+                $reservation_data = (object)[
+                    'meetingid'=>$bigbluebuttonbn_meetingid,
+                    'id'=>$bigbluebuttonbn->reservation_id
+                ];
+                bigbluebuttonbn_add_meetingid_to_reservation($reservation_data);
+            }
+        }
+
+        /*---- end of OpenStack integration*/
+
         $action = get_string('mod_form_field_notification_msg_created', 'bigbluebuttonbn');
     } else {
         $action = get_string('mod_form_field_notification_msg_modified', 'bigbluebuttonbn');
+
+        /*---- OpenStack integration ----*/
+
+        if (bigbluebuttonbn_openstack_managed_conference($bigbluebuttonbn)){
+
+            //Get conference meetingid
+            $bbb_openstack_meetingid = bigbluebuttonbn_get_openstack_meetingid_by_id($bigbluebuttonbn->id);
+            //Construct record object
+            $bbb_os_record = (object)[
+                'courseid'=>$bigbluebuttonbn->course,
+                'meeting_duration'=>$bigbluebuttonbn->bbb_meeting_duration,
+                'openingtime'=> $bigbluebuttonbn->openingtime,
+                'meetingid'=> $bbb_openstack_meetingid
+            ];
+            bigbluebuttonbn_create_or_update_os_conference($bbb_os_record);
+
+            $event_record = (object)[
+                'event_time' => time(),
+                'stack_name'=> bigbluebuttonbn_get_os_stack_name($bbb_openstack_meetingid),
+                'meetingid'=>$bbb_openstack_meetingid,
+                'log_level'=>'INFO',
+                'component'=>'BBB_PLUGIN',
+                'event'=>'UPDATE_BBB_CONFERENCE',
+                'event_details' => date('m/d/Y h:i:s a', time()).' User updated a BBB conference managed by OpenStack',
+            ];
+            //Log OpenStack event
+            bigbluebuttonbn_add_openstack_event($event_record);
+        }
+
+        /*---- end of OpenStack integration ----*/
+
     }
     $at = get_string('mod_form_field_notification_msg_at', 'bigbluebuttonbn');
 
@@ -473,7 +611,7 @@ function bigbluebuttonbn_process_post_save(&$bigbluebuttonbn) {
         if ($bigbluebuttonbn->closingtime ) {
             $msg->activity_closingtime = calendar_day_representation($bigbluebuttonbn->closingtime).' '.$at.' '.calendar_time_representation($bigbluebuttonbn->closingtime);
         }
-        $msg->activity_owner = $USER->firstname.' '.$USER->lastname;
+        $msg->activity_owner = fullname($USER);
 
         $message_text .= '<p><b>'.$msg->activity_title.'</b> '.get_string('email_body_notification_meeting_details', 'bigbluebuttonbn').':';
         $message_text .= '<table border="0" style="margin: 5px 0 0 20px"><tbody>';
@@ -664,21 +802,20 @@ function bigbluebuttonbn_send_notification($sender, $bigbluebuttonbn, $message="
 
     //Complete message
     $msg = new stdClass();
-    $msg->user_name = $sender->firstname.' '.$sender->lastname;
+    $msg->user_name = fullname($sender);
     $msg->user_email = $sender->email;
     $msg->course_name = "$course->fullname";
     $message .= '<p><hr/><br/>'.get_string('email_footer_sent_by', 'bigbluebuttonbn').' '.$msg->user_name.'('.$msg->user_email.') ';
     $message .= get_string('email_footer_sent_from', 'bigbluebuttonbn').' '.$msg->course_name.'.</p>';
-    
+
     $users = bigbluebuttonbn_get_users($context);
     foreach( $users as $user ) {
         if( $user->id != $sender->id ){
-            error_log("Sending msg to ".$user->firstname." ".$user->lastname.".");
             $messageid = message_post_message($sender, $user, $message, FORMAT_HTML);
             if (!empty($messageid)) {
-                error_log("Msg sent to ".$user->firstname." ".$user->lastname.".");
+                error_log("Msg to ".$msg->user_name." was sent.");
             } else {
-                error_log("Msg was NOT sent.");
+                error_log("Msg to ".$msg->user_name." was NOT sent.");
             }
         }
     }
@@ -724,3 +861,177 @@ function bigbluebuttonbn_get_cfg_shared_secret() {
     return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_shared_secret)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_shared_secret): (isset($CFG->bigbluebuttonbn_shared_secret)? trim($CFG->bigbluebuttonbn_shared_secret): '8cd8ef52e8e101574e400365b55e11a6'));
 }
 
+
+/*---- OpenStack integration ----*/
+
+//Get minimun time to schedule a meeting.
+function bigbluebuttonbn_get_min_openingtime(){
+    $time_dd_hh_mm = bigbluebuttonbn_get_cfg_min_openingtime();
+    $time = explode('-', $time_dd_hh_mm);
+    $time = preg_replace('/\D+/', "", $time);
+    return ( $time[0] * 24 * 3600 + $time[1] * 3600 + $time[2] * 60 + time() );
+}
+
+//Get maximun anticipation time to schedule a meeting.
+function bigbluebuttonbn_get_max_openingtime(){
+    $time_dd_hh_mm = bigbluebuttonbn_get_cfg_max_openingtime();
+    $time = explode('-', $time_dd_hh_mm);
+    $time = preg_replace('/\D+/', "", $time);
+    return ( $time[0] * 24 * 3600 + $time[1] * 3600 + $time[2] * 60 + time() );
+}
+
+function bigbluebuttonbn_create_or_update_os_conference($data){
+    global $DB;
+    $data->id = $DB->get_field('bigbluebuttonbn_openstack','id',array('meetingid'=>$data->meetingid));
+    if ($data->id){//Update record
+        $data->meetingid = $DB->get_field('bigbluebuttonbn_openstack','meetingid',array('id'=>$data->id));
+        return $DB->update_record('bigbluebuttonbn_openstack', $data);
+    }else{//Insert new record
+        return $DB->insert_record('bigbluebuttonbn_openstack', $data);
+    }
+}
+
+//----Reservations
+//Add or edit new reservation
+function bigbluebuttonbn_create_or_update_bbb_servers_reservation($data){
+    global $DB;
+    if ($data->meetingid){//Update record
+        $data->id = $DB->get_field('bigbluebuttonbn_reservations','id',array('meetingid'=>$data->meetingid));
+        return $DB->update_record('bigbluebuttonbn_reservations', $data);
+    }else{//Insert new record
+        return $DB->insert_record('bigbluebuttonbn_reservations', $data);
+    }
+}
+
+//Insert meeting id in reservation table
+function bigbluebuttonbn_add_meetingid_to_reservation($data){
+    global $DB;
+    return $DB->update_record('bigbluebuttonbn_reservations',$data);
+}
+
+//Delete reservation
+function bigbluebuttonbn_delete_reservation($meetingid){
+    global $DB;
+    return $DB->delete_records('bigbluebuttonbn_reservations',array('meetingid'=>$meetingid));
+}
+
+function bigbluebuttonbn_delete_os_conference($meetingid){
+    global $DB;
+    return $DB->delete_records('bigbluebuttonbn_openstack',array('meetingid'=>$meetingid));
+}
+
+function bigbluebuttonbn_add_openstack_event($event_record){
+    global $DB;
+    return $DB->insert_record('bigbluebuttonbn_os_logs', $event_record);
+}
+
+function bigbluebuttonbn_get_os_stack_name($meetingid){
+    global $DB;
+    $stack_name = $DB->get_field('bigbluebuttonbn_openstack','stack_name',array('meetingid'=>$meetingid));
+    return $stack_name ? $stack_name : 'UNSET' ;
+}
+
+function bigbluebuttonbn_get_openstack_meetingid_by_id($bbb_id){
+    global $DB;
+    return $DB->get_field('bigbluebuttonbn', 'meetingid', array('id'=>$bbb_id));
+}
+
+function bigbluebuttonbn_openstack_managed_conference($bigbluebuttonbn)
+{
+    global $DB;
+    if (!$bigbluebuttonbn->meetingid) {
+        $bigbluebuttonbn->meetingid = bigbluebuttonbn_get_openstack_meetingid_by_id($bigbluebuttonbn->id);
+    }
+    return $DB->record_exists('bigbluebuttonbn_openstack', array('meetingid' => $bigbluebuttonbn->meetingid));
+}
+
+
+//----Admin Settings
+
+function bigbluebuttonbn_get_cfg_openstack_integration() {
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_integration)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_integration): (isset($CFG->bigbluebuttonbn_openstack_integration)? trim($CFG->bigbluebuttonbn_openstack_integration): 0));
+}
+
+function bigbluebuttonbn_get_cfg_heat_url() {
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_url)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_url): (isset($CFG->bigbluebuttonbn_heat_url)? trim($CFG->bigbluebuttonbn_heat_url): null));
+}
+
+function bigbluebuttonbn_get_cfg_heat_region() {
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_region)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_region): (isset($CFG->bigbluebuttonbn_heat_region)? trim($CFG->bigbluebuttonbn_heat_region): null));
+}
+
+function bigbluebuttonbn_get_cfg_yaml_template_url(){
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_yaml_stack_template_url)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_yaml_stack_template_url): (isset($CFG->bigbluebuttonbn_yaml_stack_template_url)? trim($CFG->bigbluebuttonbn_yaml_stack_template_url): null));
+}
+
+function bigbluebuttonbn_get_cfg_json_stack_parameters_url() {
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters_url)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters_url): (isset($CFG->bigbluebuttonbn_json_stack_parameters_url)? trim($CFG->bigbluebuttonbn_json_stack_parameters_url): null));
+}
+
+function bigbluebuttonbn_get_cfg_json_meeting_durations() {
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_meeting_durations)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_meeting_durations): (isset($CFG->bigbluebuttonbn_json_meeting_durations)? trim($CFG->bigbluebuttonbn_json_meeting_durations): '[30,60,120]'));
+}
+
+function bigbluebuttonbn_get_cfg_conference_extra_time() {
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_conference_extra_time)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_conference_extra_time): (isset($CFG->bigbluebuttonbn_conference_extra_time)? trim($CFG->bigbluebuttonbn_conference_extra_time): 0));
+}
+
+function bigbluebuttonbn_get_cfg_openstack_destruction_time() {
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_destruction_time)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_destruction_time): (isset($CFG->bigbluebuttonbn_openstack_destruction_time)? trim($CFG->bigbluebuttonbn_openstack_destruction_time): 15));
+}
+
+function bigbluebuttonbn_get_cfg_min_openingtime() {
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_min_openingtime)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_min_openingtime): (isset($CFG->bigbluebuttonbn_min_openingtime)? trim($CFG->bigbluebuttonbn_min_openingtime): '0d-0h-1m'));
+}
+
+function bigbluebuttonbn_get_cfg_max_openingtime(){
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_openingtime)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_openingtime): (isset($CFG->bigbluebuttonbn_max_openingtime)? trim($CFG->bigbluebuttonbn_max_openingtime): '30d-0h-0m'));
+}
+
+function bigbluebuttonbn_get_cfg_openstack_username() {
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_username)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_username): (isset($CFG->bigbluebuttonbn_openstack_username)? trim($CFG->bigbluebuttonbn_openstack_username): null));
+}
+
+function bigbluebuttonbn_get_cfg_openstack_password() {
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_password)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_password): (isset($CFG->bigbluebuttonbn_openstack_password)? trim($CFG->bigbluebuttonbn_openstack_password): null));
+}
+
+function bigbluebuttonbn_get_cfg_openstack_tenant_id() {
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_tenant_id)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_tenant_id): (isset($CFG->bigbluebuttonbn_openstack_tenant_id)? trim($CFG->bigbluebuttonbn_openstack_tenant_id): null));
+}
+
+function bigbluebuttonbn_get_cfg_max_simultaneous_instances() {
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_simultaneous_instances)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_simultaneous_instances): (isset($CFG->bigbluebuttonbn_max_simultaneous_instances)? trim($CFG->bigbluebuttonbn_max_simultaneous_instances): null));
+}
+
+//----Reservations
+function bigbluebuttonbn_get_cfg_reservation_module_enabled(){
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_reservation_module_enabled)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_reservation_module_enabled): (isset($CFG->bigbluebuttonbn_reservation_module_enabled)? trim($CFG->bigbluebuttonbn_reservation_module_enabled): 0));
+}
+
+function bigbluebuttonbn_get_cfg_reservation_users_list_logic(){
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_reservation_user_list_logic)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_reservation_user_list_logic): (isset($CFG->bigbluebuttonbn_reservation_user_list_logic)? trim($CFG->bigbluebuttonbn_reservation_user_list_logic): 1));
+}
+
+function bigbluebuttonbn_get_cfg_authorized_reservation_users_list() {
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_authorized_reservation_users_list)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_authorized_reservation_users_list): (isset($CFG->bigbluebuttonbn_authorized_reservation_users_list)? trim($CFG->bigbluebuttonbn_authorized_reservation_users_list): null));
+}
+
+/*---- end of Openstack integration ---- */
