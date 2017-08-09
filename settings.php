@@ -207,7 +207,7 @@ if ($ADMIN->fulltree) {
             $settings->add( new admin_setting_configcheckbox( 'bigbluebuttonbn_reservation_user_list_logic',
                 get_string('config_reservation_user_list_logic', 'bigbluebuttonbn'),
                 get_string('config_reservation_user_list_logic_description','bigbluebuttonbn'),
-                0));
+                1));
         }
 
         if (!isset ($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_authorized_reservation_users_list)){
