@@ -332,7 +332,7 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
     }
 
     function validation($data, $files) {
-        global $USER;
+
         $errors = parent::validation($data, $files);
 
         if ( isset($data['openingtime']) && isset($data['closingtime']) ) {
@@ -349,33 +349,44 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
 
         /*---- OpenStack integration ----*/
         if(bigbluebuttonbn_get_cfg_openstack_integration()){
+            global $USER;
 
             $course_module_id = optional_param('update', 0, PARAM_INT); //Checks if course is being updated
+            $conference_duplicated = bigbluebuttonbn_meeting_is_duplicated($this->current->meetingid);
 
             //Prevents creation of meetings to soon or to anticipated
-            if ( $data['openingtime'] < bigbluebuttonbn_get_min_openingtime() && $course_module_id == 0) {
-                $errors['openingtime'] = get_string('bbbconferencetoosoon', 'bigbluebuttonbn');
-            }
-            if ( $data['openingtime'] > bigbluebuttonbn_get_max_openingtime() ) {
-                $errors['openingtime'] = get_string('bbbconferencetoolate', 'bigbluebuttonbn');
-            }
-
-            //Prevents editing conferences specific settings near creation of machines
-            if($course_module_id){
-                if(bigbluebuttonbn_get_previous_setting($course_module_id, 'openingtime') < bigbluebuttonbn_get_min_openingtime()){
-
-                    if(bigbluebuttonbn_get_previous_setting($course_module_id, 'openingtime') != $data['openingtime']){
-                        $errors['openingtime'] = get_string('bbbconferenceopeningsoon', 'bigbluebuttonbn');
-                    }
-                    if(bigbluebuttonbn_get_previous_setting($course_module_id, 'bbb_meeting_duration') != $data['bbb_meeting_duration']){
-                        $errors['bbb_meeting_duration'] = get_string('bbbconferenceopeningsoon', 'bigbluebuttonbn');
-                    }
-
+            if ($course_module_id == 0 or $conference_duplicated){
+                if ( $data['openingtime'] < bigbluebuttonbn_get_min_openingtime()) {
+                    $errors['openingtime'] = get_string('bbbconferencetoosoon', 'bigbluebuttonbn');
                 }
             }
 
-            //----Reservations
+            if ( $data['openingtime'] > bigbluebuttonbn_get_max_openingtime() ) { // Too anticipated
+                $errors['openingtime'] = get_string('bbbconferencetoolate', 'bigbluebuttonbn');
+            }
 
+            if($course_module_id and !$conference_duplicated){//Prevents editing conferences specific settings near creation of machines
+                if(bigbluebuttonbn_get_previous_setting($this->current->id, 'openingtime') < bigbluebuttonbn_get_min_openingtime()){
+
+                    if(bigbluebuttonbn_get_previous_setting($this->current->id, 'openingtime') != $data['openingtime']){
+                        $errors['openingtime'] = get_string('bbbconferenceopeningsoon', 'bigbluebuttonbn');
+                    }
+                    if(bigbluebuttonbn_get_previous_setting($this->current->id, 'bbb_meeting_duration') != $data['bbb_meeting_duration']){
+                        $errors['bbb_meeting_duration'] = get_string('bbbconferenceopeningsoon', 'bigbluebuttonbn');
+                    }
+                }else{
+                    if ( $data['openingtime'] < bigbluebuttonbn_get_min_openingtime()) {
+                        $errors['openingtime'] = get_string('bbbconferencetoosoon', 'bigbluebuttonbn');
+                    }
+                }
+            }
+
+            //---Duplicated meeting
+            if (empty($errors) and $conference_duplicated){
+                bigbluebuttonbn_change_duplication($this->current);
+            }
+
+            //----Reservations
             $reservations_module_on = bigbluebuttonbn_get_cfg_reservation_module_enabled();
 
             if( $reservations_module_on and !bigbluebuttonbn_allow_user_reservation($USER->username, bigbluebuttonbn_get_cfg_reservation_users_list_logic()) ){
