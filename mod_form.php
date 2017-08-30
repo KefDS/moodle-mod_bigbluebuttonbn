@@ -390,7 +390,7 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
             $reservations_module_on = bigbluebuttonbn_get_cfg_reservation_module_enabled();
 
             if( $reservations_module_on and !bigbluebuttonbn_allow_user_reservation($USER->username, bigbluebuttonbn_get_cfg_reservation_users_list_logic()) ){
-                $errors['openingtime'] = "Usted no posee permisos para crear conferencias BigBlueButton. Para más información contacte al administrador.";
+                $errors['openingtime'] = get_string('bbb_reservation_disable', 'bigbluebuttonbn');
             }
 
             if( $reservations_module_on and empty($errors) ){

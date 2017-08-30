@@ -87,8 +87,9 @@ $string['openstack_reservation_settings']= '<b>Reservations Module</b>. General 
 $string['mod_form_field_meeting_duration']='Duration';
 $string['mod_form_field_meeting_duration_help']='Meeting duration (in minutes)';
 $string['bbbconferencetoosoon']='This opeining time is too soon. For further information please contact the Administrator.';
-$string['bbbconferencetoolate']='You can\'t schedule a conference with that amount of anticipation.. For further information please contact the Administrator.';
+$string['bbbconferencetoolate']='You can\'t schedule a conference with that amount of anticipation.. For further information please contact the administrator.';
 $string['bbbconferenceopeningsoon']='The conference already started or will do it soon. You can no longer change this setting.';
+$string['bbb_reservation_disable']='You need to have authorization from the site administrator to create a BigBlueButton conference. For further information please contact the administrator.';
 $string['reservation_system_busy']='Reservation system was busy, please try again';
 $string['unsuficient_availability']='There is not enough room for this conference. Please retry with a different openingtime.';
 
