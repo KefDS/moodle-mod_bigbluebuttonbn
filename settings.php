@@ -152,9 +152,9 @@ if ($ADMIN->fulltree) {
                 get_string( 'config_json_stack_parameters_url_description', 'bigbluebuttonbn' ),
                 null,$url_regex));
         }
-        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_meeting_durations)){
+        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_meeting_durations)){
             //Meeting durations
-            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_meeting_durations',
+            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_json_meeting_durations',
                 get_string('config_meeting_durations', 'bigbluebuttonbn'),
                 get_string('config_meeting_durations_description','bigbluebuttonbn'),
                 null, $durations_array_regex));

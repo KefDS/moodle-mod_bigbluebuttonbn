@@ -529,7 +529,7 @@ function bigbluebuttonbn_process_post_save(&$bigbluebuttonbn) {
 
         /*---- OpenStack integration ----*/
 
-        if (bigbluebuttonbn_openstack_managed_conference($bigbluebuttonbn)){
+        if (bigbluebuttonbn_openstack_managed_conference($bigbluebuttonbn) or bigbluebuttonbn_get_cfg_openstack_integration()){ //Edition of conference already managed by OpenStack
 
             //Get conference meetingid
             $bbb_openstack_meetingid = bigbluebuttonbn_get_openstack_meetingid_by_id($bigbluebuttonbn->id);
@@ -540,7 +540,14 @@ function bigbluebuttonbn_process_post_save(&$bigbluebuttonbn) {
                 'openingtime'=> $bigbluebuttonbn->openingtime,
                 'meetingid'=> $bbb_openstack_meetingid
             ];
-            bigbluebuttonbn_create_or_update_os_conference($bbb_os_record);
+
+            $os_log_update_message = 'User updated a BBB conference managed by OpenStack';
+            $os_log_event = 'UPDATE_BBB_CONFERENCE';
+
+            if (!bigbluebuttonbn_openstack_managed_conference($bigbluebuttonbn)){
+                $os_log_update_message = 'User added a new BBB conference managed by OpenStack';
+                $os_log_event = 'ADD_BBB_CONFERENCE';
+            }
 
             $event_record = (object)[
                 'event_time' => time(),
@@ -548,9 +555,12 @@ function bigbluebuttonbn_process_post_save(&$bigbluebuttonbn) {
                 'meetingid'=>$bbb_openstack_meetingid,
                 'log_level'=>'INFO',
                 'component'=>'BBB_PLUGIN',
-                'event'=>'UPDATE_BBB_CONFERENCE',
-                'event_details' => date('m/d/Y h:i:s a', time()).' User updated a BBB conference managed by OpenStack',
+                'event'=>$os_log_event,
+                'event_details' => date('m/d/Y h:i:s a', time()).$os_log_update_message,
             ];
+
+            //Add conference to OpenStack
+            bigbluebuttonbn_create_or_update_os_conference($bbb_os_record);
             //Log OpenStack event
             bigbluebuttonbn_add_openstack_event($event_record);
         }
@@ -863,6 +873,26 @@ function bigbluebuttonbn_get_cfg_shared_secret() {
 
 
 /*---- OpenStack integration ----*/
+
+// Check if conference is duplicated
+function bigbluebuttonbn_meeting_is_duplicated($meetingid){
+    global  $DB;
+    $meetingid = "'".$meetingid."'";
+    $select = 'meetingid = '.$meetingid;
+    return ( $DB->count_records_select('bigbluebuttonbn', $select) > 1 );
+}
+
+function bigbluebuttonbn_change_duplication($bbb_meeting){
+    global $CFG, $DB;
+    //Create new mettingid
+    $bigbluebuttonbn_meetingid = sha1($CFG->wwwroot.$bbb_meeting->id.bigbluebuttonbn_get_cfg_shared_secret());
+    //Update meetingid in original record
+    $DB->set_field('bigbluebuttonbn', 'meetingid', $bigbluebuttonbn_meetingid, array('id' => $bbb_meeting->id));
+    $moderatorpass = bigbluebuttonbn_random_password(12);
+    $DB->set_field('bigbluebuttonbn', 'moderatorpass', $moderatorpass, array('id' =>$bbb_meeting->id));
+    $viewerpass = bigbluebuttonbn_random_password(12);
+    $DB->set_field('bigbluebuttonbn', 'viewerpass', $viewerpass, array('id' => $bbb_meeting->id));
+}
 
 //Get minimun time to schedule a meeting.
 function bigbluebuttonbn_get_min_openingtime(){
