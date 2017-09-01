@@ -336,7 +336,7 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
         $errors = parent::validation($data, $files);
 
         if ( isset($data['openingtime']) && isset($data['closingtime']) ) {
-            if ( $data['openingtime'] != 0 && $data['closingtime'] != 0 && $data['closingtime'] < $data['openingtime']) {
+            if ( $data['openingtime'] != 0 && $data['closingtime'] != 0 && $data['closingtime'] <= $data['openingtime']) {
                 $errors['closingtime'] = get_string('bbbduetimeoverstartingtime', 'bigbluebuttonbn');
             }
         }
