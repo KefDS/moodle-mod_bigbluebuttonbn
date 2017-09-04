@@ -19,7 +19,7 @@ require_once(dirname(__FILE__).'/locallib.php');
 /*---- OpenStack integration ----*/
 //Regex values used for validation
 $bbb_server_regex= '/^https?\:\/\/([a-zA-Z0-9\-\.]+\.[a-zA-Z0-9]{2,3})(\/[a-zA-Z0-9\-\.]+)*(\/bigbluebutton\/)$/'; //Validates BBB server instance
-$heat_url_regex='/^https?\:\/\/([a-zA-Z0-9\-\.]+\.[a-zA-Z0-9]{2,3})(\/[a-zA-Z0-9\-\.]+)*(:5000\/v2.0)$/'; //Validates API version
+$heat_url_regex='/^https?\:\/\/([a-zA-Z0-9\-\.]+\.[a-zA-Z0-9]{2,3})(\/[a-zA-Z0-9\-\.]+)*(:[0-9]{1,6}\/v2.0)$/'; //Validates API version
 $hash_regex='/^[[:xdigit:]]{0,40}$/';
 $default_text_regex= '/^[a-zA-Z0-9-_.[:space:]]{0,40}$/';
 $url_regex='/^https?\:\/\/([a-zA-Z0-9\-\.\_]+\.[a-zA-Z0-9]{2,3})(\/[a-zA-Z0-9\-\.\_]+)*$/';
