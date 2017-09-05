@@ -1,4 +1,4 @@
-log/
+/log
 composer.lock
 composer.phar
 .buildpath
