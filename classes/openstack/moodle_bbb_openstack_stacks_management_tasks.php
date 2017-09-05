@@ -11,7 +11,8 @@ namespace mod_bigbluebuttonbn\openstack;
 
 require_once dirname(dirname(dirname(__FILE__))) . '/vendor/autoload.php';
 require_once dirname(__FILE__) . '/interfaces/exception_handler.php';
-require_once dirname(__FILE__) . '/interfaces/error_communicator.php';
+# Message API
+# require_once dirname(__FILE__) . '/interfaces/error_communicator.php';
 require_once dirname(__FILE__) . '/helpers.php';
 
 use OpenCloud\OpenStack;
@@ -21,12 +22,16 @@ class moodle_bbb_openstack_stacks_management_tasks {
     const UPCOMING_MEETINGS_MINUTES = 60;
 
     private $admin_exception_handler;
-    private $user_error_communicator;
+    # Message API
+    #private $user_error_communicator;
     private $orchestration_service;
 
-    function __construct(exception_handler $admin_exception_handler, error_communicator $user_error_communicator) {
+    # Message API
+    #function __construct(exception_handler $admin_exception_handler, error_communicator $user_error_communicator) {
+    function __construct(exception_handler $admin_exception_handler) {
         $this->admin_exception_handler = $admin_exception_handler;
-        $this->user_error_communicator = $user_error_communicator;
+        # Message API
+        # $this->user_error_communicator = $user_error_communicator;
     }
 
     public function do_tasks() {
@@ -68,8 +73,8 @@ class moodle_bbb_openstack_stacks_management_tasks {
         $involved_meetings = array_merge($upcomming_meetings, $waiting_host_meetings);
 
         foreach ($involved_meetings as $meeting) {
-            $this->user_error_communicator->communicate_error($meeting);
-
+            # Message API
+            #$this->user_error_communicator->communicate_error($meeting);
             $meeting->bbb_server_status = "Failed";
             $DB->update_record('bigbluebuttonbn', $meeting);
         }
@@ -92,7 +97,8 @@ class moodle_bbb_openstack_stacks_management_tasks {
         }
         catch (\Exception $exception) {
             $this->admin_exception_handler->handle_exception($exception);
-            $this->user_error_communicator->communicate_error($meeting);
+            # Message API
+            # $this->user_error_communicator->communicate_error($meeting);
             //Log event
             $event_record =(object)(['meetingid'=>$meeting->meetingid, 'stack_name'=>$meeting->stack_name, 'log_level'=>'ERROR', 'component'=>'OPENSTACK', 'event'=>'CREATION_REQUEST_FAILED', 'event_details'=>$exception->getMessage()]);
             helpers::bigbluebuttonbn_add_openstack_event($event_record);
@@ -120,7 +126,8 @@ class moodle_bbb_openstack_stacks_management_tasks {
             $event_record =(object)(['meetingid'=>$meeting->meetingid, 'stack_name'=>$meeting->stack_name, 'log_level'=>'ERROR', 'component'=>'OPENSTACK', 'event'=>'CREATION_FAILED', 'event_details'=>$exception->getMessage()]);
             helpers::bigbluebuttonbn_add_openstack_event($event_record);
             $this->admin_exception_handler->handle_exception($exception);
-            $this->user_error_communicator->communicate_error($meeting);
+            # Message API
+            #$this->user_error_communicator->communicate_error($meeting);
         }
     }
 
