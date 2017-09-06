@@ -277,7 +277,16 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
 
 
         /*---- OpenStack integration ----*/
-        $time_scheduling_options = ( bigbluebuttonbn_get_cfg_openstack_integration() )? array('enable'=>true) : array('optional'=>true) ;
+        $time_scheduling_options = array('optional'=>false);
+        $openingtime_default = 0;
+        $closingtime_default = 0;
+        if (bigbluebuttonbn_get_cfg_openstack_integration()){
+            $time_scheduling_options = array('optional'=>true);
+            $openingtime_default = date('U', bigbluebuttonbn_get_min_openingtime());
+            $closingtime_default = $openingtime_default + ( json_decode(bigbluebuttonbn_get_cfg_json_meeting_durations())[0])*60;
+        }
+
+
         /*---- end of OpenStack integration ----*/
 
         $mform->addElement('header', 'schedule', get_string('mod_form_block_schedule', 'bigbluebuttonbn'));
@@ -285,10 +294,10 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
             $mform->setExpanded('schedule');
 
         $mform->addElement('date_time_selector', 'openingtime', get_string('mod_form_field_openingtime', 'bigbluebuttonbn'), $time_scheduling_options);
-        $mform->setDefault('openingtime', 0);
+        $mform->setDefault('openingtime', $openingtime_default );
         $mform->addHelpButton('openingtime', 'mod_form_field_openingtime', 'bigbluebuttonbn');
         $mform->addElement('date_time_selector', 'closingtime', get_string('mod_form_field_closingtime', 'bigbluebuttonbn'), $time_scheduling_options);
-        $mform->setDefault('closingtime', 0);
+        $mform->setDefault('closingtime', $closingtime_default );
         $mform->addHelpButton('closingtime', 'mod_form_field_closingtime', 'bigbluebuttonbn');
 
         /*---- OpenStack integration ----*/
@@ -357,7 +366,7 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
             //Prevents creation of meetings to soon or to anticipated
             if ($course_module_id == 0 or $conference_duplicated){
                 if ( $data['openingtime'] < bigbluebuttonbn_get_min_openingtime()) {
-                    $errors['openingtime'] = get_string('bbbconferencetoosoon', 'bigbluebuttonbn');
+                    $errors['openingtime'] = get_string('bbbconferencetoosoon', 'bigbluebuttonbn', (date('m/d/Y H:i:s', bigbluebuttonbn_get_min_openingtime())));
                 }
             }
 
