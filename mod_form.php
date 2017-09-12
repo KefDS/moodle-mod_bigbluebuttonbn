@@ -374,6 +374,11 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
                 $errors['openingtime'] = get_string('bbbconferencetoolate', 'bigbluebuttonbn');
             }
 
+
+            if( $data['closingtime'] > ($data['openingtime'] + ($data['bbb_meeting_duration'] * 60) ) ){
+                $errors['closingtime'] = get_string('bbb_closingtime_too_big', 'bigbluebuttonbn');
+            }
+
             if($course_module_id and !$conference_duplicated){//Prevents editing conferences specific settings near creation of machines
                 if(bigbluebuttonbn_get_previous_setting($this->current->id, 'openingtime') < bigbluebuttonbn_get_min_openingtime()){
 

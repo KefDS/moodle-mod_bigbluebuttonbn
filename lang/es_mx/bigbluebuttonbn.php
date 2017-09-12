@@ -89,6 +89,7 @@ $string['mod_form_field_meeting_duration_help']='Duración de la conferencia (en
 $string['bbbconferencetoosoon']='Esta conferencia no puede iniciar tan pronto. Por favor escoja un tiempo de inicio posterior a {$a}.';
 $string['bbbconferencetoolate']='No se puede reservar una conferencia con tanto tiempo de anticipación. Por favor intente un horario anterior.';
 $string['bbbconferenceopeningsoon']='Esta conferencia ya comenzó o lo hará pronto, por lo que no es posible cambiar esta configuración.';
+$string['bbb_closingtime_too_big']='El tiempo de cierre de entrada a la videoconferencia no puede ser mayor que la duración total';
 $string['bbb_reservation_disable']='Es necesario tener una autorización del administrador del sitio para poder crear videoconferencias BigBlueButton. Para más información contacte al administrador.';
 $string['reservation_system_busy']='Sistema de reservaciones ocupado, por favor vuelva intentarlo.';
 $string['unsuficient_availability']='No hay cupo suficiente para el horario solicitado. Por favor escoja otra hora de inicio.';
