@@ -19,7 +19,7 @@ use OpenCloud\OpenStack;
 
 class moodle_bbb_openstack_stacks_management_tasks {
     // CONSTANTS
-    const UPCOMING_MEETINGS_MINUTES = 60;
+    const UPCOMING_MEETINGS_MINUTES = 30;
 
     private $admin_exception_handler;
     # Message API
