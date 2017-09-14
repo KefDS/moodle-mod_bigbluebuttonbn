@@ -282,7 +282,7 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
         $closingtime_default = 0;
         if (bigbluebuttonbn_get_cfg_openstack_integration()){
             $time_scheduling_options = array('optional'=>true);
-            $openingtime_default = date('U', bigbluebuttonbn_get_min_openingtime());
+            $openingtime_default = date('U', (bigbluebuttonbn_get_min_openingtime()+5*60));
             $closingtime_default = $openingtime_default + ( json_decode(bigbluebuttonbn_get_cfg_json_meeting_durations())[0])*60;
         }
 
