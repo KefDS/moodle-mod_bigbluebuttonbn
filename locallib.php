@@ -1763,4 +1763,11 @@ function bigbluebuttonbn_count_reservations_records($count_all, $begin_datetime=
         return $DB->count_records_select('bigbluebuttonbn_reservations', $select);
     }
 }
+
+function bigbluebuttonbn_get_closing_times($openingtime, $durations ){
+    $closingtime_options = array();
+    foreach ($durations as $value){
+        $closingtime_options[($value)] = date('H:i:s',($openingtime + ($value*60)));
+    }
+    return $closingtime_options;}
 /*---- end of OpenStack integration ----*/

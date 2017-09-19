@@ -7,7 +7,6 @@
 
 bigbluebuttonbn_participant_selection_set = function() {
     bigbluebuttonbn_select_clear('bigbluebuttonbn_participant_selection');
-
     var type = document.getElementById('bigbluebuttonbn_participant_selection_type');
     for( var i = 0; i < type.options.length; i++ ){
         if( type.options[i].selected ) {
@@ -24,6 +23,7 @@ bigbluebuttonbn_participant_selection_set = function() {
         }
     }
 }
+
 
 bigbluebuttonbn_participant_list_update = function() {
     var participant_list = document.getElementsByName('participants')[0];
@@ -129,3 +129,20 @@ bigbluebuttonbn_select_add_option = function(id, text, value) {
     option.value = value;
     select.add(option , 0);
 }
+
+/*----OpenStack integration ----*/
+bigbluebuttonbn_update_finish_times = function (id, durations) {
+    var select = document.getElementById(id);
+    bigbluebuttonbn_select_clear(select.id);
+    var date = new Date(document.getElementById('id_openingtime_year').value,
+                        document.getElementById('id_openingtime_month').value-1,
+                        document.getElementById('id_openingtime_day').value,
+                        document.getElementById('id_openingtime_hour').value,
+                        document.getElementById('id_openingtime_minute').value);
+    for (var i = 0, len = durations.length; i < len; i++) {
+        var option = date;
+        option.setMinutes(date.getMinutes()+durations[i]);
+        select.add(new Option( option.toLocaleTimeString("en-US", {hour12:false}), durations[i]));
+    }
+}
+/*---- end of OpenStack integration ---*/

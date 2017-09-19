@@ -468,6 +468,14 @@ function bigbluebuttonbn_process_pre_save(&$bigbluebuttonbn) {
         $bigbluebuttonbn->tagging = 0;
 
     $bigbluebuttonbn->participants = htmlspecialchars_decode($bigbluebuttonbn->participants);
+
+
+    /*---- OpenStack integration ----*/
+    if(bigbluebuttonbn_get_cfg_openstack_integration()){
+        //Set closing time correct value
+        $bigbluebuttonbn->closingtime =  $bigbluebuttonbn->openingtime + $bigbluebuttonbn->closingtime;
+    }
+    /*---- end of OpenStack integration ----*/
 }
 
 /**

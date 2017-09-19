@@ -93,6 +93,15 @@ $string['bbb_closingtime_too_big']='The closing time of the conference cannot be
 $string['bbb_reservation_disable']='You need to have authorization from the site administrator to create a BigBlueButton conference. For further information please contact the administrator.';
 $string['reservation_system_busy']='Reservation system was busy, please try again';
 $string['unsuficient_availability']='There is not enough room for this conference. Please retry with a different openingtime.';
+$string['mod_form_field_custom_openingtime'] = 'Opening time';
+$string['mod_form_field_custom_openingtime_help'] = 'Opening time of the BigBlueButton conference room.';
+$string['mod_form_field_custom_closingtime']= 'Entrance time';
+$string['mod_form_field_custom_closingtime_help']= "Available time to enter the conference room. It is not possible to enter the room when this time had pass.";
+$string['mod_form_field_finishtime']='Finish time';
+$string['mod_form_field_finishtime_help']= 'Time to finish the BigBlueButton conference in an automated fashion. Moderators can also end the conference before if they want.';
+
+//----Conference view
+$string['moodle_server_time'] = 'Server time';
 
 //Tasks for OpenStack communication
 $string['task_openstack_async_communication']= 'Creating BBB meeting servers with OpenStack';

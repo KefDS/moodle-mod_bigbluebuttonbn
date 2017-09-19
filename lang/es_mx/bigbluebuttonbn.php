@@ -93,6 +93,16 @@ $string['bbb_closingtime_too_big']='El tiempo de cierre de entrada a la videocon
 $string['bbb_reservation_disable']='Es necesario tener una autorización del administrador del sitio para poder crear videoconferencias BigBlueButton. Para más información contacte al administrador.';
 $string['reservation_system_busy']='Sistema de reservaciones ocupado, por favor vuelva intentarlo.';
 $string['unsuficient_availability']='No hay cupo suficiente para el horario solicitado. Por favor escoja otra hora de inicio.';
+$string['mod_form_field_custom_openingtime'] = "Hora de inicio";
+$string['mod_form_field_custom_openingtime_help'] = "Hora en la cual se puede ingresar a la videoconferencia BigBlueButton.";
+$string['mod_form_field_custom_closingtime']= "Tiempo para ingresar";
+$string['mod_form_field_custom_closingtime_help']= "Tiempo disponible para ingresar a la videoconferencia. No se puede ingresar a la conferencia una vez ha pasado este tiempo.";
+$string['mod_form_field_finishtime']="Hora de finalización";
+$string['mod_form_field_finishtime_help']="Hora en la cual se finalizará automáticamente la videoconferencia BigBlueButton. Es posible terminar la videoconferencia antes si así lo desean los moderadores.";
+
+
+//----Conference view
+$string['moodle_server_time'] = 'Hora del servidor';
 
 //Tasks for OpenStack communication
 $string['task_openstack_async_communication']= 'Creación de servidores de conferencias BBB con OpenStack';

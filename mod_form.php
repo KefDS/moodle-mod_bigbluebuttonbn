@@ -273,42 +273,50 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
         // Fourth block starts here
         //-------------------------------------------------------------------------------
 
-        //Add explanation of openingtime and closingtime
-
-
-        /*---- OpenStack integration ----*/
-        $time_scheduling_options = array('optional'=>false);
-        $openingtime_default = 0;
-        $closingtime_default = 0;
-        if (bigbluebuttonbn_get_cfg_openstack_integration()){
-            $time_scheduling_options = array('optional'=>true);
-            $openingtime_default = date('U', (bigbluebuttonbn_get_min_openingtime()+5*60));
-            $closingtime_default = $openingtime_default + ( json_decode(bigbluebuttonbn_get_cfg_json_meeting_durations())[0])*60;
-        }
-
-
-        /*---- end of OpenStack integration ----*/
-
         $mform->addElement('header', 'schedule', get_string('mod_form_block_schedule', 'bigbluebuttonbn'));
         if( isset($current_activity->openingtime) && $current_activity->openingtime != 0 || isset($current_activity->closingtime) && $current_activity->closingtime != 0 )
             $mform->setExpanded('schedule');
 
-        $mform->addElement('date_time_selector', 'openingtime', get_string('mod_form_field_openingtime', 'bigbluebuttonbn'), $time_scheduling_options);
-        $mform->setDefault('openingtime', $openingtime_default );
-        $mform->addHelpButton('openingtime', 'mod_form_field_openingtime', 'bigbluebuttonbn');
-        $mform->addElement('date_time_selector', 'closingtime', get_string('mod_form_field_closingtime', 'bigbluebuttonbn'), $time_scheduling_options);
-        $mform->setDefault('closingtime', $closingtime_default );
-        $mform->addHelpButton('closingtime', 'mod_form_field_closingtime', 'bigbluebuttonbn');
-
         /*---- OpenStack integration ----*/
         if(bigbluebuttonbn_get_cfg_openstack_integration()){
-            $mform->addRule('openingtime', null, 'required', null, 'client');
-            $mform->addRule('closingtime', null, 'required', null, 'client');
+            //Set up JS function
+            $openingtime_js = array('onchange' => "javascript:bigbluebuttonbn_update_finish_times(\"id_bbb_meeting_duration\",".bigbluebuttonbn_get_cfg_json_meeting_durations().");return 0;");
+
+            ///Set variables
             $durations = json_decode(bigbluebuttonbn_get_cfg_json_meeting_durations());
-            $durations = array_combine($durations, $durations);
-            $mform->addElement('select', 'bbb_meeting_duration', get_string('mod_form_field_meeting_duration', 'bigbluebuttonbn'), $durations);
-            $mform->addHelpButton('bbb_meeting_duration', 'mod_form_field_meeting_duration', 'bigbluebuttonbn');
+            $openingtime_default = date('U', ceil(bigbluebuttonbn_get_min_openingtime()/300)*300);
+            $closingtime_options = bigbluebuttonbn_get_closing_times($openingtime_default, $durations);
+
+            //Openingtime selector
+            $mform->addElement('date_time_selector', 'openingtime', get_string('mod_form_field_custom_openingtime', 'bigbluebuttonbn'), array('optional'=>true), $openingtime_js);
+            $mform->setDefault('openingtime', $openingtime_default );
+            $mform->addHelpButton('openingtime', 'mod_form_field_custom_openingtime', 'bigbluebuttonbn');
+
+            //Finishtime selector (duration value of conference)
+            $mform->addElement('select', 'bbb_meeting_duration', get_string('mod_form_field_finishtime', 'bigbluebuttonbn'), $closingtime_options);
+            $mform->addHelpButton('bbb_meeting_duration', 'mod_form_field_finishtime', 'bigbluebuttonbn');
+
+            //Closing entrance selector (closingtime)
+            $mform->addElement('duration', 'closingtime', get_string('mod_form_field_custom_closingtime', 'bigbluebuttonbn'), array('optional'=>false));//Check libdir/form/duration.php"
+            $mform->setDefault('closingtime', $durations[0]*60);// The default value should be expressed in seconds
+            $mform->addHelpButton('closingtime', 'mod_form_field_custom_closingtime', 'bigbluebuttonbn');
+
+            //Required and initial validation
+            $mform->addRule('openingtime', null, 'required', null, 'client');
+            $mform->addRule('bbb_meeting_duration', null, 'required', null, 'client');
+            $mform->addRule('closingtime', null, 'required', null, 'client');
+            $mform->setType('closingtime', PARAM_INT); //Set type of element
+
+            //Hidden value for reservation module
             $mform->addElement('hidden','reservation_id',null);
+
+        }else{ // Without OpenStack integration
+
+            $mform->addElement('date_time_selector', 'openingtime', get_string('mod_form_field_openingtime', 'bigbluebuttonbn'));
+            $mform->addHelpButton('openingtime', 'mod_form_field_openingtime', 'bigbluebuttonbn');
+
+            $mform->addElement('date_time_selector', 'closingtime', get_string('mod_form_field_closingtime', 'bigbluebuttonbn'));
+            $mform->addHelpButton('closingtime', 'mod_form_field_closingtime', 'bigbluebuttonbn');
         }
         /*---- end of OpenStack integration ----*/
 
@@ -343,6 +351,15 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
     function validation($data, $files) {
 
         $errors = parent::validation($data, $files);
+
+        /*---- OpenStack integration ----*/
+        if(bigbluebuttonbn_get_cfg_openstack_integration()){
+            //Related to closingtime
+            $data['closingtime'] = $data['openingtime'] + $data['closingtime'];
+            $this->_form->_submitValues['closingtime'] = $data['closingtime'];
+        }
+        /*---- end of OpenStack integration ----*/
+
 
         if ( isset($data['openingtime']) && isset($data['closingtime']) ) {
             if ( $data['openingtime'] != 0 && $data['closingtime'] != 0 && $data['closingtime'] <= $data['openingtime']) {
