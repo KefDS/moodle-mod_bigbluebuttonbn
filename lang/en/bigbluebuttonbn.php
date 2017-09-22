@@ -85,8 +85,11 @@ $string['openstack_time_description']='<b>Note:</b> the total time of resource r
 $string['openstack_reservation_settings']= '<b>Reservations Module</b>. General settings for Reservations Module.';
 
 //----Meeting form
-$string['mod_form_field_meeting_duration']='Duration';
+$string['mod_form_field_meeting_duration']='Duration (in minutes)';
 $string['mod_form_field_meeting_duration_help']='Meeting duration (in minutes)';
+$string['mod_form_field_custom_closingtime']='Access close (in minutes)';
+$string['mod_form_field_custom_closingtime_help']='End time for participants to join the conference.';
+$string['mod_form_field_finish_time']='<b>Finish time: </b>';
 $string['bbbconferencetoosoon']='This opening time is too soon. Please choose a time after {$a}.';
 $string['bbbconferencetoolate']='You can\'t schedule a conference with that amount of anticipation. For further information please contact the administrator.';
 $string['bbbconferenceopeningsoon']='The conference already started or will do it soon. You can no longer change this setting.';

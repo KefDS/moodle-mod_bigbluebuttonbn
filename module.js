@@ -535,3 +535,6 @@ M.mod_bigbluebuttonbn.recordingsbn_init = function(Y) {
         source : M.cfg.wwwroot + "/mod/bigbluebuttonbn/bbb_broker.php?"
     });
 };
+
+
+

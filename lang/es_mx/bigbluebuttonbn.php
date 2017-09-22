@@ -29,7 +29,7 @@ $string['os_records_select_all']='Seleccionar todo';
 $string['os_logs_management']='Manejo de bitácoras';
 $string['os_logs_explanation']='Seleccione qué hacer con las bitácoras de integración de OpenStack. Puede filtralas por fecha o seleccionar «Seleccionar todo» para seleccionar toda la información. ';
 //----Reservations
-$string['reservations_records_management']='Manejo de reservaciones';
+$string['reservations_records_managememod_form_field_meeting_durationnt']='Manejo de reservaciones';
 $string['reservations_records_explanation']='Seleccione qué hacer con los registros de reservaciones. Puede filtralos por fecha o seleccionar «Seleccionar todo» para seleccionar toda la información. ';
 //OpenStack openstack_download_records.php
 $string['os_download_records']='Descargar registros';
@@ -85,8 +85,11 @@ $string['openstack_time_description']='<b>Nota:</b> el tiempo total de reservaci
 $string['openstack_reservation_settings']= '<b>Módulo de Reservaciones</b>. Configuraciones generales del Módulo de Reservaciones.';
 
 //----Meeting form
-$string['mod_form_field_meeting_duration']='Duración';
+$string['mod_form_field_meeting_duration']='Duración(en minutos)';
 $string['mod_form_field_meeting_duration_help']='Duración de la conferencia (en minutos).';
+$string['mod_form_field_custom_closingtime']='Cierre de ingreso(en minutos)';
+$string['mod_form_field_custom_closingtime_help']='Tiempo máximo para que los participantes entren a la conferencia.';
+$string['mod_form_field_finish_time']='<b>Hora de finalización: </b>';
 $string['bbbconferencetoosoon']='Esta conferencia no puede iniciar tan pronto. Por favor escoja un tiempo de inicio posterior a {$a}.';
 $string['bbbconferencetoolate']='No se puede reservar una conferencia con tanto tiempo de anticipación. Por favor intente un horario anterior.';
 $string['bbbconferenceopeningsoon']='Esta conferencia ya comenzó o lo hará pronto, por lo que no es posible cambiar esta configuración.';
@@ -218,7 +221,7 @@ $string['mod_form_block_presentation'] = 'Contenido de la presentación';
 $string['mod_form_block_participants'] = 'Participantes';
 $string['mod_form_block_schedule'] = 'Calendario para la sesión';
 $string['mod_form_block_record'] = 'Configuración de grabación';
-$string['mod_form_field_openingtime'] = 'Apertura de ingreso';
+$string['mod_form_field_openingtime'] = 'Hora de inicio';
 $string['mod_form_field_closingtime'] = 'Cierre de ingreso';
 $string['mod_form_field_openingtime_help'] = 'Hora de inicio para que los participantes entren a la conferencia.';
 $string['mod_form_field_closingtime_help'] = 'Hora de cierre para que los participantes entren a la conferencia.';
