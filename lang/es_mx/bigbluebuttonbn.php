@@ -46,6 +46,7 @@ $string['os_delete_reservations_records_confirmation']='La acción que desea rea
 $string['openstack_integration_help'] = 'Al usar la opcion de servidores BBB en demanda, se crea un único servidor de BBB para cada actividad de conferencia creada. El ciclo de vida de la confrencia se automatiza por completo y es manejado por OpenStack.';
 $string['openstack_servers_on_demand']= 'Usar servidores BBB en demanda mediante la Integración con OpenStack. Para administrar reservaciones y bitácoras diríjase a';
 $string['openstack_integration_modules']= 'Modulos de Integración de OpenStack.';
+$string['openstack_settings_note']= '<b>Nota:</b>Si desea administrar las opciones relacionadas con la integración de OpenStack, asegúrese de marcar la opción "Servidores BBB en demanda". Posteriormente presione el botón de guardar cambios al final de la página.';
 $string['config_cloud_description']='<b>Configuración General</b> para servidores BBB en demanda. Esta configuración se usa siempre que se crean servidores de BBB en demanda.';
 $string['config_heat_region']='Región de Heat';
 $string['config_heat_region_description']='Región donde opera el sistema de orquestación de OpenStack.';

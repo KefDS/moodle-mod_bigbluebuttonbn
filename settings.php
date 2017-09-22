@@ -33,8 +33,9 @@ $csv_regex = '/^$|[0-9a-z\.\-\@\_]+(,[0-9a-z\.\-\@\_]+)*/';
 $openStacklink= "{$CFG->wwwroot}/mod/bigbluebuttonbn/openstack_interface/openstack_integration_settings.php";
 $openStack_integration_description = get_string('openstack_servers_on_demand', 'bigbluebuttonbn');
 $openstack_integration = get_string('openstack_integration_modules', 'bigbluebuttonbn');
+$openstack_settings_note = get_string('openstack_settings_note', 'bigbluebuttonbn');
 $openStacklink_html = <<< EOD
-{$openStack_integration_description}<a style="margin-top:.25em" href="{$openStacklink}"> {$openstack_integration}</a> 
+{$openStack_integration_description}<a style="margin-top:.25em" href="{$openStacklink}"> {$openstack_integration}</a><br/>{$openstack_settings_note} 
 EOD;
 
 
@@ -76,150 +77,153 @@ if ($ADMIN->fulltree) {
 
     }
 
-    ////Configurations for OpenStack authentication
-    if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_username)||
-        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_password)||
-        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_tenant_id)){
-        $settings->add( new admin_setting_heading( 'bigbluebuttonbn_openstack_credentials',
-            '',
-            get_string( 'config_openstack_credentials_description', 'bigbluebuttonbn' ),
-            null));
+    if(bigbluebuttonbn_get_cfg_openstack_integration()){
+        ////Configurations for OpenStack authentication
+        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_username)||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_password)||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_tenant_id)){
+            $settings->add( new admin_setting_heading( 'bigbluebuttonbn_openstack_credentials',
+                '',
+                get_string( 'config_openstack_credentials_description', 'bigbluebuttonbn' ),
+                null));
 
-        if(!isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_username)){
-            //OpenStack username
-            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_openstack_username',
-                get_string( 'config_openstack_username', 'bigbluebuttonbn' ),
-                get_string( 'config_openstack_username_description', 'bigbluebuttonbn' ),
-                null, $default_text_regex));
+            if(!isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_username)){
+                //OpenStack username
+                $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_openstack_username',
+                    get_string( 'config_openstack_username', 'bigbluebuttonbn' ),
+                    get_string( 'config_openstack_username_description', 'bigbluebuttonbn' ),
+                    null, $default_text_regex));
+            }
+            if(!isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_password)){
+                $settings->add( new admin_setting_configpasswordunmask('bigbluebuttonbn_openstack_password',
+                    get_string( 'config_openstack_password', 'bigbluebuttonbn' ),
+                    get_string( 'config_openstack_password_description', 'bigbluebuttonbn' ),
+                    null, $default_text_regex));
+            }
+            if(!isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_tenant_id)){
+                $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_openstack_tenant_id',
+                    get_string( 'config_openstack_tenant_id', 'bigbluebuttonbn' ),
+                    get_string( 'config_openstack_tenant_id_description', 'bigbluebuttonbn' ),
+                    null, $hash_regex));
+            }
         }
-        if(!isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_password)){
-            $settings->add( new admin_setting_configpasswordunmask('bigbluebuttonbn_openstack_password',
-                get_string( 'config_openstack_password', 'bigbluebuttonbn' ),
-                get_string( 'config_openstack_password_description', 'bigbluebuttonbn' ),
-                null, $default_text_regex));
-        }
-        if(!isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_tenant_id)){
-            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_openstack_tenant_id',
-                get_string( 'config_openstack_tenant_id', 'bigbluebuttonbn' ),
-                get_string( 'config_openstack_tenant_id_description', 'bigbluebuttonbn' ),
-                null, $hash_regex));
+
+        //Configurations for stacks and OpenStack API
+        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_url) ||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_region) ||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters_url) ||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_meeting_durations) ||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_conference_extra_time) ||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_min_openingtime) ||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_openingtime) ||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_yaml_stack_template) ||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_reservation_module_enabled) ||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_simultaneous_instances)||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_reservation_user_list_logic) ||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_authorized_reservation_users_list)) {
+            $settings->add( new admin_setting_heading('bigbluebuttonbn_config_cloud',
+                '',
+                get_string('config_cloud_description', 'bigbluebuttonbn'),
+                null));
+
+            if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_url) ){
+                //URL of server with Heat endpoint
+                $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_heat_url',
+                    get_string( 'config_heat_url', 'bigbluebuttonbn' ),
+                    get_string( 'config_heat_url_description', 'bigbluebuttonbn' ),
+                    null, $heat_url_regex));
+            }
+            if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_region) ){
+                //Region of Heat service
+                $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_heat_region',
+                    get_string( 'config_heat_region', 'bigbluebuttonbn' ),
+                    get_string( 'config_heat_region_description', 'bigbluebuttonbn' ),
+                    null, $default_text_regex));
+            }
+            if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_yaml_stack_template_url)){
+                //YAML file with stack template
+                $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_yaml_stack_template_url',
+                    get_string( 'config_yaml_stack_template_url', 'bigbluebuttonbn' ),
+                    get_string( 'config_yaml_stack_template_url_description', 'bigbluebuttonbn' ),
+                    null,$url_regex));
+            }
+            if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters_url)){
+                //Parameters for stack creation in JSON representation
+                $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_json_stack_parameters_url',
+                    get_string( 'config_json_stack_parameters_url', 'bigbluebuttonbn' ),
+                    get_string( 'config_json_stack_parameters_url_description', 'bigbluebuttonbn' ),
+                    null,$url_regex));
+            }
+            if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_meeting_durations)){
+                //Meeting durations
+                $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_json_meeting_durations',
+                    get_string('config_meeting_durations', 'bigbluebuttonbn'),
+                    get_string('config_meeting_durations_description','bigbluebuttonbn'),
+                    null, $durations_array_regex));
+            }
+
+            if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_conference_extra_time)){
+                //Extra time for conference
+                $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_conference_extra_time',
+                    get_string('config_conference_extra_time', 'bigbluebuttonbn'),
+                    get_string('config_conference_extra_time_description','bigbluebuttonbn'),
+                    null, $minutes_regex));
+            }
+
+            if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_min_openingtime)){
+                //Describes how soon a meeting can be scheduled
+                $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_min_openingtime',
+                    get_string('config_min_openingtime', 'bigbluebuttonbn'),
+                    get_string('config_min_openingtime_description','bigbluebuttonbn'),
+                    null, $days_hours_minutes_regex));
+            }
+            if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_openingtime)){
+                //Describes how anticipated a meeting can be scheduled
+                $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_max_openingtime',
+                    get_string('config_max_openingtime', 'bigbluebuttonbn'),
+                    get_string('config_max_openingtime_description','bigbluebuttonbn'),
+                    null, $days_hours_minutes_regex));
+            }
+
+            $settings->add( new admin_setting_heading('bigbluebuttonbn_reservation_heading', '', get_string('openstack_reservation_settings', 'bigbluebuttonbn'), null));
+
+
+            if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_reservation_module_enabled) ){
+                //Enable OpenStack reservations module
+                $settings->add( new admin_setting_configcheckbox( 'bigbluebuttonbn_reservation_module_enabled',
+                    get_string('config_reservation_module_enabled', 'bigbluebuttonbn'),
+                    get_string('config_reservation_module_enabled_description','bigbluebuttonbn'),
+                    0));
+            }
+
+            if (!isset ($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_simultaneous_instances)){
+                //Describes the number of simultaneous BBB servers on demand at a time
+                $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_max_simultaneous_instances',
+                    get_string('config_max_simultaneous_instances', 'bigbluebuttonbn'),
+                    get_string('config_max_simultaneous_instances_description','bigbluebuttonbn'),
+                    null, $max_simultaneous_instances_regex));
+            }
+
+            if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_reservation_user_list_logic) ){
+                //Defines the logic in reservation user list
+                $settings->add( new admin_setting_configcheckbox( 'bigbluebuttonbn_reservation_user_list_logic',
+                    get_string('config_reservation_user_list_logic', 'bigbluebuttonbn'),
+                    get_string('config_reservation_user_list_logic_description','bigbluebuttonbn'),
+                    1));
+            }
+
+            if (!isset ($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_authorized_reservation_users_list)){
+                //List the users that can make a reservation
+                $settings->add( new admin_setting_configtextarea( 'bigbluebuttonbn_authorized_reservation_users_list',
+                    get_string('config_authorized_reservation_users_list', 'bigbluebuttonbn'),
+                    get_string('config_authorized_reservation_users_list_description','bigbluebuttonbn'),
+                    null, $csv_regex));
+            }
+
+            $settings->add( new admin_setting_heading('bigbluebuttonbn_time_clarification', '', get_string('openstack_time_description', 'bigbluebuttonbn', bigbluebuttonbn_get_cfg_openstack_destruction_time()), null));
         }
     }
 
-    //Configurations for stacks and OpenStack API
-    if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_url) ||
-        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_region) ||
-        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters_url) ||
-        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_meeting_durations) ||
-        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_conference_extra_time) ||
-        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_min_openingtime) ||
-        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_openingtime) ||
-        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_yaml_stack_template) ||
-        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_reservation_module_enabled) ||
-        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_simultaneous_instances)||
-        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_reservation_user_list_logic) ||
-        !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_authorized_reservation_users_list)) {
-        $settings->add( new admin_setting_heading('bigbluebuttonbn_config_cloud',
-            '',
-            get_string('config_cloud_description', 'bigbluebuttonbn'),
-            null));
-
-        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_url) ){
-            //URL of server with Heat endpoint
-            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_heat_url',
-                get_string( 'config_heat_url', 'bigbluebuttonbn' ),
-                get_string( 'config_heat_url_description', 'bigbluebuttonbn' ),
-                null, $heat_url_regex));
-        }
-        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_region) ){
-            //Region of Heat service
-            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_heat_region',
-                get_string( 'config_heat_region', 'bigbluebuttonbn' ),
-                get_string( 'config_heat_region_description', 'bigbluebuttonbn' ),
-                null, $default_text_regex));
-        }
-        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_yaml_stack_template_url)){
-            //YAML file with stack template
-            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_yaml_stack_template_url',
-                get_string( 'config_yaml_stack_template_url', 'bigbluebuttonbn' ),
-                get_string( 'config_yaml_stack_template_url_description', 'bigbluebuttonbn' ),
-                null,$url_regex));
-        }
-        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters_url)){
-            //Parameters for stack creation in JSON representation
-            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_json_stack_parameters_url',
-                get_string( 'config_json_stack_parameters_url', 'bigbluebuttonbn' ),
-                get_string( 'config_json_stack_parameters_url_description', 'bigbluebuttonbn' ),
-                null,$url_regex));
-        }
-        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_meeting_durations)){
-            //Meeting durations
-            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_json_meeting_durations',
-                get_string('config_meeting_durations', 'bigbluebuttonbn'),
-                get_string('config_meeting_durations_description','bigbluebuttonbn'),
-                null, $durations_array_regex));
-        }
-
-        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_conference_extra_time)){
-            //Extra time for conference
-            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_conference_extra_time',
-                get_string('config_conference_extra_time', 'bigbluebuttonbn'),
-                get_string('config_conference_extra_time_description','bigbluebuttonbn'),
-                null, $minutes_regex));
-        }
-
-        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_min_openingtime)){
-            //Describes how soon a meeting can be scheduled
-            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_min_openingtime',
-                get_string('config_min_openingtime', 'bigbluebuttonbn'),
-                get_string('config_min_openingtime_description','bigbluebuttonbn'),
-                null, $days_hours_minutes_regex));
-        }
-        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_openingtime)){
-            //Describes how anticipated a meeting can be scheduled
-            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_max_openingtime',
-                get_string('config_max_openingtime', 'bigbluebuttonbn'),
-                get_string('config_max_openingtime_description','bigbluebuttonbn'),
-                null, $days_hours_minutes_regex));
-        }
-
-        $settings->add( new admin_setting_heading('bigbluebuttonbn_reservation_heading', '', get_string('openstack_reservation_settings', 'bigbluebuttonbn'), null));
-
-
-        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_reservation_module_enabled) ){
-            //Enable OpenStack reservations module
-            $settings->add( new admin_setting_configcheckbox( 'bigbluebuttonbn_reservation_module_enabled',
-                get_string('config_reservation_module_enabled', 'bigbluebuttonbn'),
-                get_string('config_reservation_module_enabled_description','bigbluebuttonbn'),
-                0));
-        }
-
-        if (!isset ($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_simultaneous_instances)){
-            //Describes the number of simultaneous BBB servers on demand at a time
-            $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_max_simultaneous_instances',
-                get_string('config_max_simultaneous_instances', 'bigbluebuttonbn'),
-                get_string('config_max_simultaneous_instances_description','bigbluebuttonbn'),
-                null, $max_simultaneous_instances_regex));
-        }
-
-        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_reservation_user_list_logic) ){
-            //Defines the logic in reservation user list
-            $settings->add( new admin_setting_configcheckbox( 'bigbluebuttonbn_reservation_user_list_logic',
-                get_string('config_reservation_user_list_logic', 'bigbluebuttonbn'),
-                get_string('config_reservation_user_list_logic_description','bigbluebuttonbn'),
-                1));
-        }
-
-        if (!isset ($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_authorized_reservation_users_list)){
-            //List the users that can make a reservation
-            $settings->add( new admin_setting_configtextarea( 'bigbluebuttonbn_authorized_reservation_users_list',
-                get_string('config_authorized_reservation_users_list', 'bigbluebuttonbn'),
-                get_string('config_authorized_reservation_users_list_description','bigbluebuttonbn'),
-                null, $csv_regex));
-        }
-
-        $settings->add( new admin_setting_heading('bigbluebuttonbn_time_clarification', '', get_string('openstack_time_description', 'bigbluebuttonbn', bigbluebuttonbn_get_cfg_openstack_destruction_time()), null));
-    }
 
     /*---- end of OpenStack integration ----*/
 
