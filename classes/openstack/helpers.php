@@ -22,7 +22,7 @@ class helpers {
 
     public static function get_finished_meetings(){
         global $DB;
-        return $DB->get_records_sql('SELECT * FROM  {bigbluebuttonbn_openstack} WHERE ( openingtime + ( meeting_duration*60 ) ) < ? AND (bbb_server_status <> ? OR bbb_server_status <> ?)' , [time(), "Deletion started", "Deletion started failed"]);
+        return $DB->get_records_sql('SELECT * FROM  {bigbluebuttonbn_openstack} WHERE ( openingtime + ( meeting_duration*60 ) ) < ? AND (bbb_server_status <> ?) AND (bbb_server_status <> ?)' , [time(), "Deletion started", "Deletion started failed"]);
     }
 
     public static function get_bbb_openstack_field_by_meetingid($meetingid,$field){
