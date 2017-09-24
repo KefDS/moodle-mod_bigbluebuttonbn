@@ -253,7 +253,7 @@ $jsVars = array(
     'opening' => ($bbbsession['openingtime']) ? get_string('mod_form_field_openingtime', 'bigbluebuttonbn') . ': ' . userdate($bbbsession['openingtime']) : '',
     'closing' => ($bbbsession['closingtime']) ? get_string('mod_form_field_closingtime', 'bigbluebuttonbn') . ': ' . userdate($bbbsession['closingtime']) : '',
     /*--- OpenStack integration ---*/
-    'servertime' => get_string('moodle_server_time', 'bigbluebuttonbn') . ': ' . userdate(time())
+    'servertime' => get_string('serverlocaltime', 'moodle') . ': ' . userdate(time())
     /*---- end of OpenStack integration ----*/
 );
 
