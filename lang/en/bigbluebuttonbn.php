@@ -94,7 +94,7 @@ $string['bbbconferencetoosoon']='This opening time is too soon. Please choose a 
 $string['bbbconferencetoolate']='You can\'t schedule a conference with that amount of anticipation. For further information please contact the administrator.';
 $string['bbbconferenceopeningsoon']='The conference already started or will do it soon. You can no longer change this setting.';
 $string['bbb_closingtime_too_big']='The closing time of the conference cannot be greater thant the overall duration of the conference.';
-$string['bbb_reservation_disable']='You need to have authorization from the site administrator to create a BigBlueButton conference. For further information please contact the administrator.';
+$string['bbb_reservation_disable']='You need to have authorization from the site administrator to create a VideoCommunication. For further information please contact the administrator.';
 $string['reservation_system_busy']='Reservation system was busy, please try again';
 $string['unsuficient_availability']='There is not enough room for this conference. Please retry with a different openingtime.';
 
@@ -103,7 +103,7 @@ $string['task_openstack_async_communication']= 'Creating BBB meeting servers wit
 
 /*---- end of OpenStack integration ----*/
 
-$string['activityoverview'] = 'You have upcoming bigbluebuttonbn sessions';
+$string['activityoverview'] = 'You have upcoming VideoCommunications';
 $string['bbbduetimeoverstartingtime'] = 'The due time for this activity must be greater than the starting time';
 $string['bbbdurationwarning'] = 'The maximum duration for this session is %duration% minutes.';
 $string['bbbrecordwarning'] = 'This session may be recorded.';
@@ -111,7 +111,7 @@ $string['bigbluebuttonbn:join'] = 'Join a meeting';
 $string['bigbluebuttonbn:moderate'] = 'Moderate a meeting';
 $string['bigbluebuttonbn:managerecordings'] = 'Manage recordings';
 $string['bigbluebuttonbn:addinstance'] = 'Add a new meeting';
-$string['bigbluebuttonbn'] = 'BigBlueButton';
+$string['bigbluebuttonbn'] = 'VideoCommunication';
 
 $string['config_general'] = 'General configuration';
 $string['config_general_description'] = 'These settings are <b>always</b> used';
@@ -244,7 +244,7 @@ $string['mod_form_field_wait'] = 'Wait for moderator';
 $string['mod_form_field_wait_help'] = 'Viewers must wait until a moderator enters the session before they can do so';
 $string['mod_form_field_welcome'] = 'Welcome message';
 $string['mod_form_field_welcome_help'] = 'Replaces the default message setted up for the BigBlueButton server. The message can includes keywords  (%%CONFNAME%%, %%DIALNUM%%, %%CONFNUM%%) which will be substituted automatically, and also html tags like <b>...</b> or <i></i> ';
-$string['mod_form_field_welcome_default'] = '<br>Welcome to <b>%%CONFNAME%%</b>!<br><br>To understand how BigBlueButton works see our <a href="event:http://www.bigbluebutton.org/content/videos"><u>tutorial videos</u></a>.<br><br>To join the audio bridge click the headset icon (upper-left hand corner). <b>Please use a headset to avoid causing noise for others.</b>';
+$string['mod_form_field_welcome_default'] = '<br>Welcome to <b>%%CONFNAME%%</b>!<br><br>To understand how VideoCommunication works check out <a href="event:https://portafoliovirtual.ucr.ac.cr/index.php/nueva-mediacion-virtual/37-portafolio/mediacionvirtual/acordionmediacionvirtual/235-manuales-de-nuevas-herramientas"><u> this info</u></a>.<br><br>To join using audio, click the headset icon (upper-left hand corner). <b>Please use a headset to avoid causing noise for others.</b>';
 $string['mod_form_field_participant_add'] = 'Add participant';
 $string['mod_form_field_participant_list'] = 'Participant list';
 $string['mod_form_field_participant_list_type_all'] = 'All users enrolled';
@@ -267,19 +267,17 @@ $string['mod_form_field_notification_msg_created'] = 'created';
 $string['mod_form_field_notification_msg_modified'] = 'modified';
 $string['mod_form_field_notification_msg_at'] = 'at';
 
-$string['modulename'] = 'BigBlueButtonBN';
-$string['modulenameplural'] = 'BigBlueButtonBN';
-$string['modulename_help'] = 'BigBlueButtonBN lets you create from within Moodle links to real-time on-line classrooms using BigBlueButton, an open source web conferencing system for distance education.
+$string['modulename'] = 'VideoCommunication';
+$string['modulenameplural'] = 'VideoCommunication';
+$string['modulename_help'] = 'VideoCommunication tool lets you create from within Mediación Virtuals links to real-time on-line classrooms using BigBlueButton, an open source web conferencing system for distance education.
 
-Using BigBlueButtonBN you can specify for the title, description, calendar entry (which gives a date range for joining the session), groups, and details about the recording of the on-line session.
-
-To view later recordings, add a RecordingsBN resource to this course.';
-$string['modulename_link'] = 'BigBlueButtonBN/view';
+Using VideoCommunication you can specify for the title, description, calendar entry (which gives a date range for joining the session), groups, and details about the on-line session.';
+$string['modulename_link'] = 'https://portafoliovirtual.ucr.ac.cr/index.php/nueva-mediacion-virtual/37-portafolio/mediacionvirtual/acordionmediacionvirtual/235-manuales-de-nuevas-herramientas';
 $string['starts_at'] = 'Starts';
 $string['started_at'] = 'Started';
 $string['ends_at'] = 'Ends';
 $string['pluginadministration'] = 'BigBlueButton administration';
-$string['pluginname'] = 'BigBlueButtonBN';
+$string['pluginname'] = 'VideoCommunication';
 $string['serverhost'] = 'Server Name';
 $string['view_error_no_group_student'] = 'You have not been enrolled in a group. Please contact your Teacher or the Administrator.';
 $string['view_error_no_group_teacher'] = 'There are no groups configured yet. Please set up groups or contact the Administrator.';
@@ -298,7 +296,7 @@ $string['view_groups_selection_join'] = 'Join';
 $string['view_groups_selection'] = 'Select the group you want to join and confirm the action';
 $string['view_login_moderator'] = 'Logging in as moderator ...';
 $string['view_login_viewer'] = 'Logging in as viewer ...';
-$string['view_noguests'] = 'The BigBlueButtonBN is not open to guests';
+$string['view_noguests'] = 'The VideoCommunication is not open to guests';
 $string['view_nojoin'] = 'You are not in a role allowed to join this session.';
 $string['view_recording_list_actionbar_delete'] = 'Delete';
 $string['view_recording_list_actionbar_deleting'] = 'Deleting';
@@ -385,15 +383,15 @@ $string['view_recording_tags'] = 'Tags';
 $string['view_recording_modal_button'] = 'Apply';
 $string['view_recording_modal_title'] = 'Set values for recording';
 
-$string['event_activity_created'] = 'BigBlueButtonBN activity created';
-$string['event_activity_deleted'] = 'BigBlueButtonBN activity deleted';
-$string['event_activity_modified'] = 'BigBlueButtonBN activity modified';
-$string['event_activity_viewed'] = 'BigBlueButtonBN activity viewed';
-$string['event_activity_viewed_all'] = 'BigBlueButtonBN activity management viewed';
-$string['event_meeting_created'] = 'BigBlueButtonBN meeting created';
-$string['event_meeting_ended'] = 'BigBlueButtonBN meeting forcibly ended';
-$string['event_meeting_joined'] = 'BigBlueButtonBN meeting joined';
-$string['event_meeting_left'] = 'BigBlueButtonBN meeting left';
+$string['event_activity_created'] = 'VideoCommunication activity created';
+$string['event_activity_deleted'] = 'VideoCommunication activity deleted';
+$string['event_activity_modified'] = 'VideoCommunication activity modified';
+$string['event_activity_viewed'] = 'VideoCommunication activity viewed';
+$string['event_activity_viewed_all'] = 'VideoCommunication activity management viewed';
+$string['event_meeting_created'] = 'VideoCommunication meeting created';
+$string['event_meeting_ended'] = 'VideoCommunication meeting forcibly ended';
+$string['event_meeting_joined'] = 'VideoCommunication meeting joined';
+$string['event_meeting_left'] = 'VideoCommunication meeting left';
 $string['event_recording_deleted'] = 'Recording deleted';
 $string['event_recording_imported'] = 'Recording imported';
 $string['event_recording_published'] = 'Recording published';
