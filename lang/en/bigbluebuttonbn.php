@@ -101,6 +101,9 @@ $string['unsuficient_availability']='There is not enough room for this conferenc
 //Tasks for OpenStack communication
 $string['task_openstack_async_communication']= 'Creating BBB meeting servers with OpenStack';
 
+//Messages related with OpenStack
+$string['messageprovider:openstack_conection_error'] = 'BigBlueButton: Error notification abot OpenStack connection' ;
+
 /*---- end of OpenStack integration ----*/
 
 $string['activityoverview'] = 'You have upcoming VideoCommunications';

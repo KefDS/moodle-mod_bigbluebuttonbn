@@ -101,6 +101,9 @@ $string['unsuficient_availability']='No hay cupo suficiente para el horario soli
 //Tasks for OpenStack communication
 $string['task_openstack_async_communication']= 'Creación de servidores de conferencias BBB con OpenStack';
 
+//Messages related with OpenStack
+$string['messageprovider:openstack_conection_error'] = 'BigBlueButton: Notificacion de error de conexión con OpenStack' ;
+
 /*---- end of OpenStack integration ----*/
 
 $string['activityoverview'] = 'Tiene sesiones de Videocomunicación por comenzar';
