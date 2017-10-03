@@ -29,7 +29,7 @@ $string['os_records_select_all']='Seleccionar todo';
 $string['os_logs_management']='Manejo de bitácoras';
 $string['os_logs_explanation']='Seleccione qué hacer con las bitácoras de integración de OpenStack. Puede filtralas por fecha o seleccionar «Seleccionar todo» para seleccionar toda la información. ';
 //----Reservations
-$string['reservations_records_management']='Manejo de reservaciones';
+$string['reservations_records_managememod_form_field_meeting_durationnt']='Manejo de reservaciones';
 $string['reservations_records_explanation']='Seleccione qué hacer con los registros de reservaciones. Puede filtralos por fecha o seleccionar «Seleccionar todo» para seleccionar toda la información. ';
 //OpenStack openstack_download_records.php
 $string['os_download_records']='Descargar registros';
@@ -46,6 +46,7 @@ $string['os_delete_reservations_records_confirmation']='La acción que desea rea
 $string['openstack_integration_help'] = 'Al usar la opcion de servidores BBB en demanda, se crea un único servidor de BBB para cada actividad de conferencia creada. El ciclo de vida de la confrencia se automatiza por completo y es manejado por OpenStack.';
 $string['openstack_servers_on_demand']= 'Usar servidores BBB en demanda mediante la Integración con OpenStack. Para administrar reservaciones y bitácoras diríjase a';
 $string['openstack_integration_modules']= 'Modulos de Integración de OpenStack.';
+$string['openstack_settings_note']= '<b>Nota:</b>Si desea administrar las opciones relacionadas con la integración de OpenStack, asegúrese de marcar la opción "Servidores BBB en demanda". Posteriormente presione el botón de guardar cambios al final de la página.';
 $string['config_cloud_description']='<b>Configuración General</b> para servidores BBB en demanda. Esta configuración se usa siempre que se crean servidores de BBB en demanda.';
 $string['config_heat_region']='Región de Heat';
 $string['config_heat_region_description']='Región donde opera el sistema de orquestación de OpenStack.';
@@ -56,9 +57,9 @@ $string['config_yaml_stack_template_url_description']='URL del archivo con la pl
 $string['config_json_stack_parameters_url']='Parámetros del Stack';
 $string['config_json_stack_parameters_url_description']='URL del archivo, en formato JSON, con los parámetros para la plantilla de Heat, usada en la creación del stack.';
 $string['config_min_openingtime']='Tiempo mínimo para reservar';
-$string['config_min_openingtime_description']='Límite mínimo de tiempo para programar una videoconferencia. Debe estar en un formato días-horas-minutos. Por ejemplo: "0d-4h-30m" indica cero días, cuatro horas y treinta minutos.';
+$string['config_min_openingtime_description']='Límite mínimo de tiempo para programar una videocomunicación. Debe estar en un formato días-horas-minutos. Por ejemplo: "0d-4h-30m" indica cero días, cuatro horas y treinta minutos.';
 $string['config_max_openingtime']='Tiempo máximo para reservar';
-$string['config_max_openingtime_description']='Límite máximo de tiempo para programar una videoconferencia. Debe estar en un formato días-horas-minutos. Por ejemplo: "60d-10h-0m" indica sesenta días, diez horas y cero minutos.';
+$string['config_max_openingtime_description']='Límite máximo de tiempo para programar una videocomunicación. Debe estar en un formato días-horas-minutos. Por ejemplo: "60d-10h-0m" indica sesenta días, diez horas y cero minutos.';
 $string['config_max_simultaneous_instances']='Número máximo de servidores BBB';
 $string['config_max_simultaneous_instances_description']='Capacidad máxima de servidores de BBB corriendo al mismo tiempo';
 $string['config_openstack_credentials_description']='<b>Credenciales de OpenStack</b>. Credenciales necesarias para conectarse a los servicios de OpenStack.';
@@ -70,26 +71,30 @@ $string['config_openstack_tenant_id']='Tenant ID';
 $string['config_openstack_tenant_id_description']='Identificador del projecto (<i>tenant</i>) para conectarse a los servicios de OpenStack. ';
 $string['config_meeting_durations']='Duraciones de las conferencias';
 $string['config_meeting_durations_description']='Arreglo con las duraciones de conferencia en minutos. Deben estar en el siguiente formato: [30,60,90].';
-$string['config_conference_extra_time']='Tiempo extra para videoconferencias';
-$string['config_conference_extra_time_description']='Tiempo extra (en minutos) agregado a videoconferencias antes de destruir los servidores BBB.';
+$string['config_conference_extra_time']='Tiempo extra para videocomunicaciones';
+$string['config_conference_extra_time_description']='Tiempo extra (en minutos) agregado a videocomunicaciones antes de destruir los servidores BBB.';
 $string['config_openstack_integration']='Servidores BBB en demanda.';
 $string['config_openstack_integration_description']='Habilita la integración con OpenStack para manejar los servidores en demanda.';
 $string['config_reservation_user_list_logic']='Lista blanca/negra de usuarios para reservaciones';
-$string['config_reservation_user_list_logic_description']='Marque para usar como una lista de usuarios bloqueados(lista negra), dejela en blanco para usar como lista de usuarios autorizados(lista blanca) a reservar videoconferencias.';
+$string['config_reservation_user_list_logic_description']='Marque para usar como una lista de usuarios bloqueados(lista negra), dejela en blanco para usar como lista de usuarios autorizados(lista blanca) a reservar videocomunicaciones.';
 $string['config_authorized_reservation_users_list']="Lista de usuarios autorizados/bloqueados";
 $string['config_authorized_reservation_users_list_description']='Lista separada por comas de los nombres de usuario (username) autorizados o bloqueados según la configuración lista blanca/lista negra. El formato debe ser «username1,username2,username3».';
 $string['config_reservation_module_enabled']='Activar modulo de reservaciones';
 $string['config_reservation_module_enabled_description']='Activar o desactivar el código de reservaciones para limitar la cantidad de reservaciones de acuerdo a los recursos.';
-$string['openstack_time_description']='<b>Nota:</b> el tiempo total de reservación de un recurso es igual a la suma del «Tiempo mínimo para reservar» + «Tiempo extra para videoconferencia» + {$a} minutos. Para cambiar el último parámetro debe hacerlo directamente en el código fuente del plugin.';
+$string['openstack_time_description']='<b>Nota:</b> el tiempo total de reservación de un recurso es igual a la suma del «Tiempo mínimo para reservar» + «Tiempo extra para videocomunicación» + {$a} minutos. Para cambiar el último parámetro debe hacerlo directamente en el código fuente del plugin.';
 $string['openstack_reservation_settings']= '<b>Módulo de Reservaciones</b>. Configuraciones generales del Módulo de Reservaciones.';
 
 //----Meeting form
-$string['mod_form_field_meeting_duration']='Duración';
+$string['mod_form_field_meeting_duration']='Duración(en minutos)';
 $string['mod_form_field_meeting_duration_help']='Duración de la conferencia (en minutos).';
-$string['bbbconferencetoosoon']='Esta conferencia no puede iniciar tan pronto. Por favor intente con un horario posterior.';
+$string['mod_form_field_custom_closingtime']='Cierre de ingreso(en minutos)';
+$string['mod_form_field_custom_closingtime_help']='Tiempo máximo para que los participantes entren a la conferencia.';
+$string['mod_form_field_finish_time']='<b>Hora de finalización: </b>';
+$string['bbbconferencetoosoon']='Esta conferencia no puede iniciar tan pronto. Por favor escoja un tiempo de inicio posterior a {$a}.';
 $string['bbbconferencetoolate']='No se puede reservar una conferencia con tanto tiempo de anticipación. Por favor intente un horario anterior.';
 $string['bbbconferenceopeningsoon']='Esta conferencia ya comenzó o lo hará pronto, por lo que no es posible cambiar esta configuración.';
-$string['bbb_reservation_disable']='Es necesario tener una autorización del administrador del sitio para poder crear videoconferencias BigBlueButton. Para más información contacte al administrador."'
+$string['bbb_closingtime_too_big']='El tiempo de cierre de entrada a la videocomunicación no puede ser mayor que la duración total';
+$string['bbb_reservation_disable']='Es necesario tener una autorización del administrador del sitio para poder crear videocomunicaciones. Para más información contacte al administrador.';
 $string['reservation_system_busy']='Sistema de reservaciones ocupado, por favor vuelva intentarlo.';
 $string['unsuficient_availability']='No hay cupo suficiente para el horario solicitado. Por favor escoja otra hora de inicio.';
 
@@ -98,15 +103,15 @@ $string['task_openstack_async_communication']= 'Creación de servidores de confe
 
 /*---- end of OpenStack integration ----*/
 
-$string['activityoverview'] = 'Tiene sesiones de bigbluebuttonbn por comenzar';
+$string['activityoverview'] = 'Tiene sesiones de Videocomunicación por comenzar';
 $string['bbbduetimeoverstartingtime'] = 'El tiempo de cierre de esta viedoconferncia debe ser mayor al tiempo de incio';
 $string['bbbdurationwarning'] = 'La duración máxima de esta videoconfrencia es de %duration% minutos.';
 $string['bbbrecordwarning'] = 'Esta sesión puede estar siendo grabada';
-$string['bigbluebuttonbn:join'] = 'Unirse a una vidoconferencia';
-$string['bigbluebuttonbn:moderate'] = 'Moderar una videoconferencia';
+$string['bigbluebuttonbn:join'] = 'Unirse a una videocomunicación';
+$string['bigbluebuttonbn:moderate'] = 'Moderar una videocomunicación';
 $string['bigbluebuttonbn:managerecordings'] = 'Administrar grabaciones';
-$string['bigbluebuttonbn:addinstance'] = 'Agregar una videoconferencia';
-$string['bigbluebuttonbn'] = 'BigBlueButton';
+$string['bigbluebuttonbn:addinstance'] = 'Agregar una videocomunicación';
+$string['bigbluebuttonbn'] = 'Videocomunicación';
 
 $string['config_general'] = 'Configuraciones generales';
 $string['config_general_description'] = 'Estas configuraciones <b>siempre</b> se usan.';
@@ -127,7 +132,7 @@ $string['config_feature_recording_icons_enabled_description'] = 'Cuando está ha
 $string['config_feature_recordingtagging'] = 'Configuraciones para "Marcado de etiquetas"';
 $string['config_feature_recordingtagging_description'] = 'Estas configuraciones son específicas de esta funcionalidad';
 $string['config_feature_recordingtagging_default'] = 'Marcado de grabación habilitado por defecto';
-$string['config_feature_recordingtagging_default_description'] = 'La función de marcado de grabación está habilitada de forma predeterminada cuando se agrega una nueva sala o conferencia. <br> Cuando esta función está habilitada, se muestra una página intermedia que permite introducir una descripción y etiquetas para la sesión BigBlueButton Al primer moderador que se une. La descripción y las etiquetas se utilizan posteriormente para identificar la grabación en la lista.';
+$string['config_feature_recordingtagging_default_description'] = 'La función de marcado de grabación está habilitada de forma predeterminada cuando se agrega una nueva sala o conferencia. <br> Cuando esta función está habilitada, se muestra una página intermedia que permite introducir una descripción y etiquetas para la sesión de la videocomunicación. Al primer moderador que se une. La descripción y las etiquetas se utilizan posteriormente para identificar la grabación en la lista.';
 $string['config_feature_recordingtagging_editable'] = 'Habilitar edición de Marcado de etiquetas';
 $string['config_feature_recordingtagging_editable_description'] = 'El valor de etiquetado de grabación se puede editar por defecto cuando se agrega o actualiza la sala o la conferencia.';
 
@@ -210,13 +215,13 @@ $string['index_heading_name'] = 'Habitación';
 $string['index_heading_recording'] = 'Grabación';
 $string['index_heading_users'] = 'Usuarios';
 $string['index_heading_viewer'] = 'Espectadores';
-$string['index_heading'] = 'Habitaciones BigBlueButton';
+$string['index_heading'] = 'Habitaciones Videocomunicación';
 $string['mod_form_block_general'] = 'Ajustes generales';
 $string['mod_form_block_presentation'] = 'Contenido de la presentación';
 $string['mod_form_block_participants'] = 'Participantes';
 $string['mod_form_block_schedule'] = 'Calendario para la sesión';
 $string['mod_form_block_record'] = 'Configuración de grabación';
-$string['mod_form_field_openingtime'] = 'Apertura de ingreso';
+$string['mod_form_field_openingtime'] = 'Hora de inicio';
 $string['mod_form_field_closingtime'] = 'Cierre de ingreso';
 $string['mod_form_field_openingtime_help'] = 'Hora de inicio para que los participantes entren a la conferencia.';
 $string['mod_form_field_closingtime_help'] = 'Hora de cierre para que los participantes entren a la conferencia.';
@@ -239,7 +244,7 @@ $string['mod_form_field_wait'] = 'Esperar moderador';
 $string['mod_form_field_wait_help'] = 'Los espectadores deben esperar hasta que un moderador entre en la sesión antes de que puedan hacerlo';
 $string['mod_form_field_welcome'] = 'Mensaje de bienvenida';
 $string['mod_form_field_welcome_help'] = 'Reemplaza el mensaje predeterminado configurado para el servidor BigBlueButton. El mensaje puede incluir palabras clave (%% CONFNAME %%, %% DIALNUM %%, %% CONFNUM %%) que se sustituirán automáticamente y también etiquetas html como <b>...</b> or <i></i>';
-$string['mod_form_field_welcome_default'] = '<br> Bienvenido a <b>%%CONFNAME%%</b>!<br><br>Para entender cómo funciona BigBlueButton, vea nuestro <a href = "evento: http: /www.bigbluebutton.org/content/videos"><u>tutoriales de videos </u></a>.<br><br>Para unirse al puente de audio, haga clic en el icono del auricular (esquina superior izquierda).<b> Utilice un auricular para evitar causar ruido a otros. </b>';
+$string['mod_form_field_welcome_default'] = '<br> Bienvenido a <b>%%CONFNAME%%</b>!<br><br>Para entender cómo funciona la herramienta de videocomunicación, consulte <a href = "evento: https://portafoliovirtual.ucr.ac.cr/index.php/nueva-mediacion-virtual/37-portafolio/mediacionvirtual/acordionmediacionvirtual/235-manuales-de-nuevas-herramientas"><u>los materiales</u></a>.<br><br>Para unirse con audio, haga clic en el icono del auricular (esquina superior izquierda).<b> Utilice un auricular para evitar causar ruido a otros. </b>';
 $string['mod_form_field_participant_add'] = 'Añadir participante';
 $string['mod_form_field_participant_list'] = 'Lista de participantes';
 $string['mod_form_field_participant_list_type_all'] = 'Todos los usuarios se inscribieron';
@@ -262,19 +267,17 @@ $string['mod_form_field_notification_msg_created'] = 'creado';
 $string['mod_form_field_notification_msg_modified'] = 'modificado';
 $string['mod_form_field_notification_msg_at'] = 'en';
 
-$string['modulename'] = 'BigBlueButtonBN';
-$string['modulenameplural'] = 'BigBlueButtonBN';
-$string['modulename_help'] = 'BigBlueButtonBN le permite crear desde dentro de los enlaces de Moodle a las aulas en línea en tiempo real usando BigBlueButton, un sistema de conferencia web de código abierto para la educación a distancia.
+$string['modulename'] = 'Videocomunicación';
+$string['modulenameplural'] = 'Videocomunicación';
+$string['modulename_help'] = 'La herramienta de Videocomunicación le permite reservar desde la plataforma de aulas virtuales una sesión de comunicación sincrónica para posteriormente participar en tiempo real usando BigBlueButton, un sistema de conferencia web de código abierto para la educación a distancia.
 
-Utilizando BigBlueButtonBN puede especificar para el título, la descripción, la entrada de calendario (que proporciona un intervalo de fechas para unirse a la sesión), los grupos y los detalles sobre la grabación de la sesión en línea.
-
-Para ver grabaciones posteriores, añada un recurso RecordingsBN a este curso. ';
-$string['modulename_link'] = 'BigBlueButtonBN / view';
+Utilizando la herramienta de Videocomunicación puede especificar el título, la descripción, la fecha de acceso (que proporciona un intervalo de fechas para unirse a la sesión), los grupos y los detalles de la sesión en línea.';
+$string['modulename_link'] = 'https://portafoliovirtual.ucr.ac.cr/index.php/nueva-mediacion-virtual/37-portafolio/mediacionvirtual/acordionmediacionvirtual/235-manuales-de-nuevas-herramientas';
 $string['starts_at'] = 'Inicios';
 $string['started_at'] = 'Iniciado';
 $string['ends_at'] = 'Finaliza';
 $string['pluginadministration'] = 'Administración de BigBlueButton';
-$string['pluginname'] = 'BigBlueButtonBN';
+$string['pluginname'] = 'Videocomunicación';
 $string['serverhost'] = 'Nombre del servidor';
 $string['view_error_no_group_student'] = 'No se ha inscrito en un grupo. Comuníquese con su Maestro o con el Administrador. ';
 $string['view_error_no_group_teacher'] = 'No hay grupos configurados todavía. Por favor, configure grupos o póngase en contacto con el Administrador. ';
@@ -293,7 +296,7 @@ $string['view_groups_selection_join'] = 'Unirse';
 $string['view_groups_selection'] = 'Seleccione el grupo al que desea unirse y confirme la acción';
 $string['view_login_moderator'] = 'Iniciar sesión como moderador ...';
 $string['view_login_viewer'] = 'Iniciar sesión como visor ...';
-$string['view_noguests'] = 'El BigBlueButtonBN no está abierto a invitados';
+$string['view_noguests'] = 'El Videocomunicación no está abierto a invitados';
 $string['view_nojoin'] = 'No puedes participar en esta sesión.';
 $string['view_recording_list_actionbar_delete'] = 'Eliminar';
 $string['view_recording_list_actionbar_deleting'] = 'Eliminar';
@@ -380,15 +383,15 @@ $string['view_recording_tags'] = 'Etiquetas';
 $string['view_recording_modal_button'] = 'Aplicar';
 $string['view_recording_modal_title'] = 'Establecer valores para la grabación';
 
-$string['event_activity_created'] = 'Actividad de BigBlueButtonBN creada';
-$string['event_activity_deleted'] = 'Actividad de BigBlueButtonBN eliminada';
-$string['event_activity_modified'] = 'Actividad BigBlueButtonBN modificada';
-$string['event_activity_viewed'] = 'Actividad de BigBlueButtonBN vista';
-$string['event_activity_viewed_all'] = 'Administración de actividades de BigBlueButtonBN vista';
-$string['event_meeting_created'] = 'Creación de la reunión de BigBlueButtonBN';
-$string['event_meeting_ended'] = 'Reunión de BigBlueButtonBN terminada por la fuerza';
-$string['event_meeting_joined'] = 'Reunión BigBlueButtonBN unida';
-$string['event_meeting_left'] = 'BigBlueButtonBN se encuentra a la izquierda';
+$string['event_activity_created'] = 'Actividad de Videocomunicación creada';
+$string['event_activity_deleted'] = 'Actividad de Videocomunicación eliminada';
+$string['event_activity_modified'] = 'Actividad Videocomunicación modificada';
+$string['event_activity_viewed'] = 'Actividad de Videocomunicación vista';
+$string['event_activity_viewed_all'] = 'Administración de actividades de Videocomunicación vista';
+$string['event_meeting_created'] = 'Creación de la reunión de Videocomunicación';
+$string['event_meeting_ended'] = 'Reunión de Videocomunicación terminada por la fuerza';
+$string['event_meeting_joined'] = 'Reunión Videocomunicación unida';
+$string['event_meeting_left'] = 'Videocomunicación se encuentra a la izquierda';
 $string['event_recording_deleted'] = 'Grabación borrada';
 $string['event_recording_imported'] = 'Grabación importada';
 $string['event_recording_published'] = 'Grabación publicada';
@@ -406,7 +409,7 @@ $string['email_body_notification_meeting_details'] = 'Detalles';
 $string['email_body_notification_meeting_title'] = 'Título';
 $string['email_body_notification_meeting_description'] = 'Descripción';
 $string['email_body_notification_meeting_start_date'] = 'Fecha de inicio';
-$string['email_body_notification_meeting_end_date'] = 'Fecha de finalización';
+$string['email_body_notification_meeting_end_date'] = 'Hora de cierre de ingreso';
 $string['email_body_notification_meeting_by'] = 'por';
 $string['email_body_recording_ready_for'] = 'Grabación para';
 $string['email_body_recording_ready_is_ready'] = 'está listo';

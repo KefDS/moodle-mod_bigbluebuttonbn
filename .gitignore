@@ -1,10 +1,9 @@
-log/
+/log
 composer.lock
 composer.phar
 .buildpath
 .project
 .settings*
 deploy*
-vendor/
 
 \.idea/

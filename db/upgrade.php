@@ -327,7 +327,7 @@ function xmldb_bigbluebuttonbn_upgrade($oldversion=0) {
         $table->add_field('bbb_server_shared_secret', XMLDB_TYPE_CHAR, '256', null, null, null, null, null);
         $table->add_field('meeting_duration', XMLDB_TYPE_INTEGER, '10', null, null, null, null, null);
         $table->add_field('openingtime', XMLDB_TYPE_INTEGER, '10', null, null, null, '0', null);
-        $table->add_field('creationgtime', XMLDB_TYPE_INTEGER, '10', null, null, null, '0', null);
+        $table->add_field('creationtime', XMLDB_TYPE_INTEGER, '10', null, null, null, '0', null);
         $table->add_field('deletiontime', XMLDB_TYPE_INTEGER, '10', null, null, null, null, null);
 
         // Adding keys to table bigbluebuttonbn_log

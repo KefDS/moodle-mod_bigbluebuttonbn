@@ -129,3 +129,20 @@ bigbluebuttonbn_select_add_option = function(id, text, value) {
     option.value = value;
     select.add(option , 0);
 }
+
+/*----OpenStack integration ----*/
+bigbluebuttonbn_update_finish_time = function (opening, duration) {
+    var finish_time = document.querySelector('#fitem_id_finishtime > .fstatic');
+    var duration = document.getElementById(duration);
+    var duration_value = duration.options[duration.selectedIndex].value;
+
+    var date = new Date(document.getElementById(opening+'_year').value,
+        document.getElementById(opening+'_month').value-1,
+        document.getElementById(opening+'_day').value,
+        document.getElementById(opening+'_hour').value,
+        document.getElementById(opening+'_minute').value);
+
+    var new_date = new Date(date.getTime() + duration_value*60*1000); //Add openingtime + duration
+    finish_time.innerHTML = new_date.toLocaleString("en-GB", {hour12:false});
+}
+/*---- end of OpenStack integration ---*/

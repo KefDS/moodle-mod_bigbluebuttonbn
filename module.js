@@ -83,7 +83,7 @@ M.mod_bigbluebuttonbn.view_init = function(Y) {
             ));
         } else {
             Y.DOM.addHTML(Y.one('#status_bar'), M.mod_bigbluebuttonbn.view_init_status_bar(
-              [bigbluebuttonbn.locales.conference_not_started, bigbluebuttonbn.opening, bigbluebuttonbn.closing]
+              [bigbluebuttonbn.locales.conference_not_started, bigbluebuttonbn.opening, bigbluebuttonbn.closing, bigbluebuttonbn.servertime]
             ));
         }
     }
@@ -535,3 +535,6 @@ M.mod_bigbluebuttonbn.recordingsbn_init = function(Y) {
         source : M.cfg.wwwroot + "/mod/bigbluebuttonbn/bbb_broker.php?"
     });
 };
+
+
+
