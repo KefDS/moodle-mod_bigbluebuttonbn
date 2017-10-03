@@ -422,3 +422,9 @@
 
 [2017-06-24 12:03:02] Error in BBB server creation. Stack status: CREATE_FAILED
 
+[2017-09-05 17:42:27] Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.
+Client error response
+[status code] 401
+[reason phrase] Unauthorized
+[url] https://172.16.128.10:13000/v2.0/tokens
+

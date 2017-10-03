@@ -40,12 +40,12 @@ if ($dataformat){
             $fields = array(
                 'id'=>"ID",
                 'event_time'=>"EVENT_TIME",
+                'meetingid'=>"MEETINGID",
                 'stack_name'=>"STACK_NAME",
                 'log_level'=>"LOG_LEVEL",
                 'component'=>"COMPONENT",
                 'event'=>"EVENT",
-                'event_details'=>"EVENT_DETAILS",
-                'meetingid'=>"MEETINGID"
+                'event_details'=>"EVENT_DETAILS"
             );
 
             //Get records to be download

@@ -1686,10 +1686,9 @@ function bigbluebuttonbn_get_meeting_shared_secret($meetingid){
 }
 
 //Get previous setting
-function bigbluebuttonbn_get_previous_setting($course_module_id, $conference_setting){
+function bigbluebuttonbn_get_previous_setting($id, $conference_setting){
     global $DB;
-    $cm = get_coursemodule_from_id('bigbluebuttonbn', $course_module_id, 0, false, MUST_EXIST);
-    return $DB->get_field('bigbluebuttonbn', $conference_setting, array('id' => $cm->instance), 'MUST_EXIST');
+    return $DB->get_field('bigbluebuttonbn', $conference_setting, array('id' => $id), 'MUST_EXIST');
 }
 
 //---- Reservations module

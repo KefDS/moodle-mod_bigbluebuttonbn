@@ -251,7 +251,10 @@ $jsVars = array(
     'userlimit' => $bbbsession['userlimit'],
     'locales' => bigbluebuttonbn_get_locales_for_ui(),
     'opening' => ($bbbsession['openingtime']) ? get_string('mod_form_field_openingtime', 'bigbluebuttonbn') . ': ' . userdate($bbbsession['openingtime']) : '',
-    'closing' => ($bbbsession['closingtime']) ? get_string('mod_form_field_closingtime', 'bigbluebuttonbn') . ': ' . userdate($bbbsession['closingtime']) : ''
+    'closing' => ($bbbsession['closingtime']) ? get_string('mod_form_field_closingtime', 'bigbluebuttonbn') . ': ' . userdate($bbbsession['closingtime']) : '',
+    /*--- OpenStack integration ---*/
+    'servertime' => get_string('serverlocaltime', 'moodle') . ': ' . userdate(time())
+    /*---- end of OpenStack integration ----*/
 );
 
 $PAGE->requires->data_for_js('bigbluebuttonbn', $jsVars);
