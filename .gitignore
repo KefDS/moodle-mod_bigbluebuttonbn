@@ -6,4 +6,4 @@ composer.phar
 .settings*
 deploy*
 
-\.idea/
+/.idea/
