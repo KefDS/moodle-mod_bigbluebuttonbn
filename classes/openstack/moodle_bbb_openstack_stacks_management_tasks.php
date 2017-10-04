@@ -12,7 +12,7 @@ namespace mod_bigbluebuttonbn\openstack;
 require_once dirname(dirname(dirname(__FILE__))) . '/vendor/autoload.php';
 require_once dirname(__FILE__) . '/interfaces/exception_handler.php';
 # Message API
-# require_once dirname(__FILE__) . '/interfaces/error_communicator.php';
+require_once dirname(__FILE__) . '/interfaces/error_communicator.php';
 require_once dirname(__FILE__) . '/helpers.php';
 
 use OpenCloud\OpenStack;
@@ -23,15 +23,15 @@ class moodle_bbb_openstack_stacks_management_tasks {
 
     private $admin_exception_handler;
     # Message API
-    #private $user_error_communicator;
+    private $user_error_communicator;
     private $orchestration_service;
 
     # Message API
-    #function __construct(exception_handler $admin_exception_handler, error_communicator $user_error_communicator) {
-    function __construct(exception_handler $admin_exception_handler) {
+    function __construct(exception_handler $admin_exception_handler, error_communicator $user_error_communicator) {
+    #function __construct(exception_handler $admin_exception_handler) {
         $this->admin_exception_handler = $admin_exception_handler;
         # Message API
-        # $this->user_error_communicator = $user_error_communicator;
+        $this->user_error_communicator = $user_error_communicator;
     }
 
     public function do_tasks() {
@@ -40,12 +40,17 @@ class moodle_bbb_openstack_stacks_management_tasks {
             $this->orchestration_service = $this->get_openstack_orchestration_service();
         }
         catch (\Exception $exception) {
-            $openstack_services_error = "Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.\n";
-            $this->admin_exception_handler->handle_exception(new \Exception($openstack_services_error . $exception->getMessage()));
-            //$this->communicate_tasks_error_to_users();
+            $openstack_services_error = "Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.\n".$exception->getMessage();
+            $this->admin_exception_handler->handle_exception(new \Exception($openstack_services_error));
             //Log event
             $event_record =(object)(['log_level'=>'ALERT', 'component'=>'OPENSTACK_CONNECTION', 'event'=>'CANT_ACCESS_OPENSTACK', 'event_details'=>$openstack_services_error]);
-            helpers::bigbluebuttonbn_add_openstack_event($event_record);
+            $log_id = helpers::bigbluebuttonbn_add_openstack_event($event_record);
+            //Communicate error
+            $msg_data = [];
+            $msg_data['log_id'] = $log_id;
+            $msg_data['error_message'] = $openstack_services_error;
+            $message = $this->user_error_communicator->build_message($msg_data);
+            $this->user_error_communicator->communicate_error($message);
             return;
         }
 

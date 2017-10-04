@@ -103,6 +103,8 @@ $string['task_openstack_async_communication']= 'Creación de servidores de confe
 
 //Messages related with OpenStack
 $string['messageprovider:openstack_conection_error'] = 'BigBlueButton: Notificacion de error de conexión con OpenStack' ;
+$string['openstack_error_conection_subject']='ALERTA-BigBlueButton: Conexión con OpenStack caída';
+$string['openstack_error_conection_message']='<strong>ALERTA</strong> No se puede establacer una conexión con el servicio de Orquestación de OpenStack.<br />El mensaje de error es el siguiente: <br />{$a->error_message}.<br /> Se ha generado un registro en la tabla de  bitácoras de OpenStack con ID={$a->log_id}.';
 
 /*---- end of OpenStack integration ----*/
 

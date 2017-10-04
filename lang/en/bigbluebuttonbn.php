@@ -103,7 +103,8 @@ $string['task_openstack_async_communication']= 'Creating BBB meeting servers wit
 
 //Messages related with OpenStack
 $string['messageprovider:openstack_conection_error'] = 'BigBlueButton: Error notification abot OpenStack connection' ;
-
+$string['openstack_error_conection_subject']='ALERT-BigBlueButton: OpenStack Connection Down';
+$string['openstack_error_conection_message']='<strong>ALERT</strong> Failed to establish connection with the orchestration service of OpenStack.<br />This is the related error message:<br / > {$a->error_message}.<br /> A record has been inserted in OpenStack Logs Table with ID={$a->log_id}.';
 /*---- end of OpenStack integration ----*/
 
 $string['activityoverview'] = 'You have upcoming VideoCommunications';
