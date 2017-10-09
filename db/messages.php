@@ -13,5 +13,11 @@ $messageproviders = array (
 
     // Notify Moodle admin about conection errors
     'openstack_conection_error' => array (
+    ),
+
+    'openstack_creation_error' => array(
+    ),
+
+    'openstack_deletion_error' => array(
     )
 );

@@ -6,7 +6,7 @@ require_once dirname(dirname(__FILE__)) . "/openstack/moodle_bbb_openstack_stack
 // Exception handler
 require_once dirname(dirname(__FILE__)) . "/openstack/exception_handlers/archive_log_exception_handler.php";
 // Message provider
-require_once dirname(dirname(__FILE__)) . "/openstack/error_communicators/openstack_connection_error.php";
+require_once dirname(dirname(__FILE__)) . "/openstack/error_communicators/openstack_error_communicator.php";
 
 
 use mod_bigbluebuttonbn\openstack;
@@ -18,7 +18,7 @@ class openstack_async_communication extends \core\task\scheduled_task {
 
         $async_tasks = new openstack\moodle_bbb_openstack_stacks_management_tasks(
             new openstack\archive_log_exception_handler(),
-            new openstack\openstack_connection_error()
+            new openstack\openstack__errorCommunicator()
         );
         $async_tasks->do_tasks();
     }

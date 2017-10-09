@@ -20,6 +20,7 @@ use OpenCloud\OpenStack;
 class moodle_bbb_openstack_stacks_management_tasks {
     // CONSTANTS
     const UPCOMING_MEETINGS_MINUTES = 30;
+    const MAX_MEETING_CREATION_RETRIES = 2;
 
     private $admin_exception_handler;
     # Message API
@@ -28,7 +29,6 @@ class moodle_bbb_openstack_stacks_management_tasks {
 
     # Message API
     function __construct(exception_handler $admin_exception_handler, error_communicator $user_error_communicator) {
-    #function __construct(exception_handler $admin_exception_handler) {
         $this->admin_exception_handler = $admin_exception_handler;
         # Message API
         $this->user_error_communicator = $user_error_communicator;
@@ -36,27 +36,27 @@ class moodle_bbb_openstack_stacks_management_tasks {
 
     public function do_tasks() {
         // Error with network, Openstack server or openstack configuration in moodle
-        try {
-            $this->orchestration_service = $this->get_openstack_orchestration_service();
-        }
-        catch (\Exception $exception) {
-            $openstack_services_error = "Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.\n".$exception->getMessage();
-            $this->admin_exception_handler->handle_exception(new \Exception($openstack_services_error));
-            //Log event
-            $event_record =(object)(['log_level'=>'ALERT', 'component'=>'OPENSTACK_CONNECTION', 'event'=>'CANT_ACCESS_OPENSTACK', 'event_details'=>$openstack_services_error]);
-            $log_id = helpers::bigbluebuttonbn_add_openstack_event($event_record);
-            //Communicate error
-            $msg_data = [];
-            $msg_data['log_id'] = $log_id;
-            $msg_data['error_message'] = $openstack_services_error;
-            $message = $this->user_error_communicator->build_message($msg_data);
-            $this->user_error_communicator->communicate_error($message);
-            return;
-        }
+//        try {
+//            $this->orchestration_service = $this->get_openstack_orchestration_service();
+//        }
+//        catch (\Exception $exception) {
+//            $openstack_services_error = "Error: Check your network, openstack service or configuration in moodle. The upcoming meetings will be canceled.\n".$exception->getMessage();
+//            $this->admin_exception_handler->handle_exception(new \Exception($openstack_services_error));
+//            //Log event
+//            $event_record =(object)(['log_level'=>'ALERT', 'component'=>'OPENSTACK_CONNECTION', 'event'=>'CANT_ACCESS_OPENSTACK', 'event_details'=>$openstack_services_error]);
+//            $log_id = helpers::bigbluebuttonbn_add_openstack_event($event_record);
+//            //Communicate error
+//            $msg_data = [];
+//            $msg_data['log_id'] = $log_id;
+//            $msg_data['error_message'] = $openstack_services_error;
+//            $message = $this->user_error_communicator->build_message($msg_data);
+//            $this->user_error_communicator->communicate_error($message, 'connection_error');
+//            return;
+//        }
 
-        $this->get_bbb_host_info_for_upcoming_meetings();
-        $this->create_bbb_host_for_upcoming_meetings();
-        $this->delete_bbb_host_for_finished_meetings();
+       // $this->get_bbb_host_info_for_upcoming_meetings();
+        //$this->create_bbb_host_for_upcoming_meetings();
+        //$this->delete_bbb_host_for_finished_meetings();
 
     }
 
@@ -93,6 +93,8 @@ class moodle_bbb_openstack_stacks_management_tasks {
     }
     private function create_bbb_host_for_upcoming_meeting($meeting) {
         try {
+            $error = 'Always throw this error';
+            throw new \Exception($error);
             $meeting_setup = new meeting_setup($meeting, $this->orchestration_service);
             $meeting_setup->create_meeting_host();
             //Log event
@@ -101,24 +103,41 @@ class moodle_bbb_openstack_stacks_management_tasks {
 
         }
         catch (\Exception $exception) {
-            $this->admin_exception_handler->handle_exception($exception);
-            # Message API
-            # $this->user_error_communicator->communicate_error($meeting);
-            //Log event
-            $event_record =(object)(['meetingid'=>$meeting->meetingid, 'stack_name'=>$meeting->stack_name, 'log_level'=>'ERROR', 'component'=>'OPENSTACK', 'event'=>'CREATION_REQUEST_FAILED', 'event_details'=>$exception->getMessage()]);
-            helpers::bigbluebuttonbn_add_openstack_event($event_record);
+            $this -> increase_meeting_creation_retries($meeting);
+            $creation_retries = $this->get_bbb_openstack_field_by_meetingid($meeting->meetingid, 'creation_retries');
+            if($creation_retries > self::MAX_MEETING_CREATION_RETRIES){
+                //Log error
+                $event_record =(object)(['meetingid'=>$meeting->meetingid, 'stack_name'=>$meeting->stack_name, 'log_level'=>'ERROR', 'component'=>'OPENSTACK', 'event'=>'CREATION_REQUEST_FAILED', 'event_details'=>$exception->getMessage()]);
+                $log_id = helpers::bigbluebuttonbn_add_openstack_event($event_record);
+
+                //Send message with log ID
+
+                //Handle exception
+                $this->admin_exception_handler->handle_exception($exception);
+
+            }else{
+                //Log warning
+                $event_record =(object)(['meetingid'=>$meeting->meetingid, 'stack_name'=>$meeting->stack_name, 'log_level'=>'WARNING', 'component'=>'OPENSTACK', 'event'=>'CREATION_REQUEST_FAILED', 'event_details'=>$exception->getMessage()]);
+                $log_id = helpers::bigbluebuttonbn_add_openstack_event($event_record);
+
+                //Send warning email for first attempt
+                if ($creation_retries == 1) {
+                    //Send message with log ID
+                }
+
+            }
         }
     }
 
     private function get_bbb_host_info_for_upcoming_meetings() {
         $upcoming_meetings = $this->get_in_progress_meetings();
-
         foreach ($upcoming_meetings as $meeting) {
             $this->get_bbb_host_info_for_upcoming_meeting($meeting);
         }
     }
     private function get_bbb_host_info_for_upcoming_meeting($meeting) {
         try {
+            echo 'ayyy';
             $meeting_setup = new meeting_setup($meeting, $this->orchestration_service);
             $meeting_setup->get_meeting_host_info();
             if($meeting->bbb_server_status == 'Ready'){
@@ -165,8 +184,14 @@ class moodle_bbb_openstack_stacks_management_tasks {
     private function get_in_progress_meetings() {
         return helpers::get_meetings_by_state("Create In Progress");
     }
-
     private function get_finished_meetings(){
         return helpers::get_finished_meetings();
+    }
+    private function increase_meeting_creation_retries($meeting){
+        return helpers::increase_meeting_creation_retries($meeting);
+    }
+
+    private function get_bbb_openstack_field_by_meetingid($meetingid, $field){
+        return helpers::get_bbb_openstack_field_by_meetingid($meetingid, $field);
     }
 }
