@@ -11,13 +11,12 @@ defined('MOODLE_INTERNAL') || die();
 
 $messageproviders = array (
 
-    // Notify Moodle admin about conection errors
+    // Notify about conection errors
     'openstack_conection_error' => array (
     ),
 
-    'openstack_creation_error' => array(
+    // Notify about creation related errors
+    'openstack_task_error' => array(
     ),
 
-    'openstack_deletion_error' => array(
-    )
 );

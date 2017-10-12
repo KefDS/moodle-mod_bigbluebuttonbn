@@ -15,10 +15,9 @@ class openstack_async_communication extends \core\task\scheduled_task {
         return get_string('task_openstack_async_communication', 'mod_bigbluebuttonbn');
     }
     public function execute() {
-
         $async_tasks = new openstack\moodle_bbb_openstack_stacks_management_tasks(
             new openstack\archive_log_exception_handler(),
-            new openstack\openstack__errorCommunicator()
+            new openstack\openstack_error_communicator()
         );
         $async_tasks->do_tasks();
     }

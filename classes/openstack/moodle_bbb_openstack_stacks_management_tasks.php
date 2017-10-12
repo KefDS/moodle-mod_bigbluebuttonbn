@@ -54,8 +54,8 @@ class moodle_bbb_openstack_stacks_management_tasks {
 //            return;
 //        }
 
-       // $this->get_bbb_host_info_for_upcoming_meetings();
-        //$this->create_bbb_host_for_upcoming_meetings();
+        // $this->get_bbb_host_info_for_upcoming_meetings();
+        $this->create_bbb_host_for_upcoming_meetings();
         //$this->delete_bbb_host_for_finished_meetings();
 
     }
@@ -111,7 +111,13 @@ class moodle_bbb_openstack_stacks_management_tasks {
                 $log_id = helpers::bigbluebuttonbn_add_openstack_event($event_record);
 
                 //Send message with log ID
-
+                $msg_data = [];
+                $msg_data['log_id'] = $log_id;
+                $msg_data['error_message'] = $exception->getMessage();
+                $msg_data['meetingid']= $meeting->meetingid;
+                $msg_data['openingtime'] = date("Y-m-d h:i", $meeting->openingtime);
+                $message = $this->user_error_communicator->build_message($msg_data, 'creation_request_error');
+                $this->user_error_communicator->communicate_error($message, 'creation_request_error');
                 //Handle exception
                 $this->admin_exception_handler->handle_exception($exception);
 
@@ -123,8 +129,14 @@ class moodle_bbb_openstack_stacks_management_tasks {
                 //Send warning email for first attempt
                 if ($creation_retries == 1) {
                     //Send message with log ID
+                    $msg_data = [];
+                    $msg_data['log_id'] = $log_id;
+                    $msg_data['error_message'] = $exception->getMessage();
+                    $msg_data['meetingid']= $meeting->meetingid;
+                    $msg_data['openingtime'] = date("Y-m-d h:i", $meeting->openingtime);
+                    $message = $this->user_error_communicator->build_message($msg_data, 'first_creation_request_error');
+                    $this->user_error_communicator->communicate_error($message, 'first_creation_request_error');
                 }
-
             }
         }
     }
@@ -137,7 +149,6 @@ class moodle_bbb_openstack_stacks_management_tasks {
     }
     private function get_bbb_host_info_for_upcoming_meeting($meeting) {
         try {
-            echo 'ayyy';
             $meeting_setup = new meeting_setup($meeting, $this->orchestration_service);
             $meeting_setup->get_meeting_host_info();
             if($meeting->bbb_server_status == 'Ready'){

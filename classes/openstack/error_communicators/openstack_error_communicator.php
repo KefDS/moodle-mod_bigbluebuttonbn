@@ -14,11 +14,36 @@ require_once dirname(dirname(__FILE__)) . '/interfaces/error_communicator.php';
 class openstack_error_communicator implements error_communicator
 {
 
-    public function build_message($input){
-        $message = new \stdClass();
-        $message->log_id = $input['log_id'];
-        $message->error_message = $input['error_message'];
-        return get_string('openstack_error_conection_message', 'bigbluebuttonbn', $message);
+    public function build_message($input, $type){
+        $msg_data = new \stdClass();
+        $message = "";
+
+        switch ($type){
+            case 'connection_error':
+                $msg_data->log_id = $input['log_id'];
+                $msg_data->error_message = $input['error_message'];
+                $message = get_string('openstack_error_conection_message', 'bigbluebuttonbn', $msg_data);
+                break;
+
+            case 'creation_request_error':
+            case 'first_creation_request_error':
+                $msg_data->log_id = $input['log_id'];
+                $msg_data->error_message = $input['error_message'];
+                $msg_data->meetingid;
+                $msg_data->courseid;
+                $msg_data->openingtime;
+                $message = get_string('openstack_error_creation_request_message', 'bigbluebuttonbn', $msg_data);
+                break;
+
+            case 'deletion_request_error':
+                $msg_data->log_id = $input['log_id'];
+                $msg_data->error_message = $input['error_message'];
+                $msg_data->meeting_id;
+                $msg_data->stack_name;
+                $message = get_string('openstack_error_deletion_request_message', 'bigbluebuttonbn', $msg_data);
+                break;
+        }
+        return $message;
     }
 
 
@@ -34,21 +59,26 @@ class openstack_error_communicator implements error_communicator
 
         switch ($type){
             case 'connection_error':
-                $data = $this->communicate_conecction_error($data, $message);
+                $data = $this->communicate_connection_error($data, $message);
                 break;
-            case 'creation_error':
-                $data = $this->communicate_creation_error($data, $message);
+            case 'first_creation_request_error':
+                $data = $this->communicate_creation_error($data, $message, true);
                 break;
+            case 'creation_request_error':
+                $data = $this->communicate_creation_error($data, $message, false);
+                break;
+            case 'deletion_request_error':
+                $data = $this->communicate_deletion_error($data,$message);
         }
         message_send($data);
     }
 
-    private function communicate_conecction_error($data, $message){
+    private function communicate_connection_error($data, $message){
 
         $data->component         = 'mod_bigbluebuttonbn';
         $data->name              = 'openstack_conection_error'; // This is the message name from messages.php.
         $data->userfrom          = \core_user::get_noreply_user();
-        $data->userto            = 22; //Cambiar este usuario por el o los correctos.
+        $data->userto            = 22;
         $data->subject           = get_string('openstack_error_conection_subject', 'bigbluebuttonbn');
         $data->fullmessage       = $message;
         $data->fullmessageformat = FORMAT_HTML;
@@ -59,12 +89,20 @@ class openstack_error_communicator implements error_communicator
         return $data;
     }
 
-    private function communicate_creation_error($data, $message){
+    private function communicate_creation_error($data, $message, $first_attempt){
+
+        $subject = "";
+        if($first_attempt){
+            $subject = get_string('openstack_error_creation_first_request_subject', 'bigbluebuttonbn');
+        }else{
+            $subject = get_string('openstack_error_creation_request_subject', 'bigbluebuttonbn');
+        }
+
         $data->component         = 'mod_bigbluebuttonbn';
-        $data->name              = 'openstack_creation_error'; // This is the message name from messages.php.
+        $data->name              = 'openstack_task_error'; // This is the message name from messages.php.
         $data->userfrom          = \core_user::get_noreply_user();
-        $data->userto            = 22; //Cambiar este usuario por el o los correctos.
-        $data->subject           = get_string('openstack_error_conection_subject', 'bigbluebuttonbn');
+        $data->userto            = 22;
+        $data->subject           = $subject;
         $data->fullmessage       = $message;
         $data->fullmessageformat = FORMAT_HTML;
         $data->fullmessagehtml   = $message;
