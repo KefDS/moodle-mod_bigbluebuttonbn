@@ -43,7 +43,6 @@ class meeting_setup {
     function get_meeting_host_info() {
         global $DB;
         try {
-            //TO DO: preguntar primero el estado del stack antes de revisar el error
             $bbb_host_information = $this->bbb_servers_management->get_stack_outputs($this->meeting->id);
             if($bbb_host_information) {
                 $this->meeting->bbb_server_url = $bbb_host_information['bbb_url'];
@@ -74,7 +73,7 @@ class meeting_setup {
         }
     }
 
-
+    //Este método no debe de ir aquí debe ir un nivel más arriba.
     private function failed_meeting_setup($state) {
         global $DB;
         $this->meeting->bbb_server_status = $state;

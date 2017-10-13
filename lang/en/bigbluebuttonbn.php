@@ -105,13 +105,17 @@ $string['task_openstack_async_communication']= 'Creating BBB meeting servers wit
 //--Connection error
 $string['messageprovider:openstack_conection_error'] = 'BigBlueButton: Error notification about OpenStack connection';
 $string['openstack_error_conection_subject']='ALERT-BigBlueButton: OpenStack Connection Down';
-$string['openstack_error_conection_message']='Failed to establish connection with the orchestration service of OpenStack.<br />This is the related error message:<br /> {$a->error_message}.<br /> A record has been inserted in OpenStack Logs Table with ID={$a->log_id}.';
+$string['openstack_error_conection_message']='Failed to establish connection with the orchestration service of OpenStack. A record has been inserted in OpenStack Logs Table with ID={$a->log_id}.<br /><br />This is the related error message:<br /><br /> {$a->error_message}.';
 //--OpenStack Task error
 $string['messageprovider:openstack_task_error'] = 'BigBlueButton: Error notification about OpenStack tasks';
-//---Creation request error
-$string['openstack_error_creation_first_request_subject']='WARNING-BigBlueButton: Stack creation request failed(first attempt)';
+//---Creation errors
+$string['openstack_error_first_creation_request_subject']='WARNING-BigBlueButton: Stack creation request failed(first attempt)';
 $string['openstack_error_creation_request_subject']='ERROR-BigBlueButton: Stack creation request failed(no more attempts)';
-$string['openstack_error_creation_request_message']='Failed to send creation request for a stack. The meeting ID related is {$a->meetingid} with course ID {$a->courseid}. The meeting was scheculed to open at {$a->openingtime}.<br /><br />This is the related error message:<br /> {$a->error_message}.<br /> A record has been inserted in OpenStack Logs Table with ID={$a->log_id}.';
+$string['openstack_error_creation_request_message']='Failed to send creation request for a stack. The meeting ID related is {$a->meetingid} with course ID {$a->courseid}. The meeting was scheculed to open at {$a->openingtime}. A record has been inserted in OpenStack Logs Table with ID={$a->log_id}.<br /><br />This is the related error message:<br /><br />{$a->error_message}';
+//---Deletion errors
+$string['openstack_error_first_deletion_request_subject']='WARNING-BigBlueButton: Stack deletion request failed(first attempt)';
+$string['openstack_error_deletion_request_subject']='ERROR-BigBlueButton: Stack deletion request failed(no more attempts)';
+$string['openstack_error_deletion_request_message']='Failed to send deletion request for a stack. The stack name is {$a->stack_name} and the meeting ID related is {$a->meetingid}. A record has been inserted in OpenStack Logs Table with ID={$a->log_id}.<br /><br />This is the related error message:<br /><br />{$a->error_message}';
 
 /*---- end of OpenStack integration ----*/
 

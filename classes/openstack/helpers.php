@@ -17,6 +17,7 @@ class helpers {
     public static function get_upcomming_meetings_by_minutes($minutes) {
         global $DB;
         $interval = time() + ($minutes*60);
+        echo $interval;
         return $meetings = $DB->get_records_sql('SELECT * FROM {bigbluebuttonbn_openstack} WHERE openingtime < ? AND bbb_server_status = ?', [$interval, 'Wating for creation']);
     }
     public static function get_meetings_by_state($state) {
@@ -47,6 +48,13 @@ class helpers {
         global $DB;
         $meeting_record = $DB->get_record('bigbluebuttonbn_openstack', array('id'=>$meeting->id));
         $meeting_record->creation_retries += 1;
+        return $DB->update_record('bigbluebuttonbn_openstack', $meeting_record);
+    }
+
+    public static function increase_meeting_deletion_retries($meeting){
+        global $DB;
+        $meeting_record = $DB->get_record('bigbluebuttonbn_openstack', array('id'=>$meeting->id));
+        $meeting_record->deletion_retries += 1;
         return $DB->update_record('bigbluebuttonbn_openstack', $meeting_record);
     }
 }
