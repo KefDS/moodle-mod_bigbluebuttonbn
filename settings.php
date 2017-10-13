@@ -18,7 +18,7 @@ require_once(dirname(__FILE__).'/locallib.php');
 
 /*---- OpenStack integration ----*/
 //Regex values used for validation
-$bbb_server_regex= '/^https?\:\/\/([a-zA-Z0-9\-\.]+\.[a-zA-Z0-9]{2,3})(\/[a-zA-Z0-9\-\.]+)*(\/bigbluebutton\/)$/'; //Validates BBB server instance
+$bbb_server_regex= '/^(https?\:\/\/([a-zA-Z0-9\-\.]+\.[a-zA-Z0-9]{2,3})(\/[a-zA-Z0-9\-\.]+)*(\/bigbluebutton\/))$|(^$)/'; //Validates BBB server instance
 $heat_url_regex='/^https?\:\/\/([a-zA-Z0-9\-\.]+\.[a-zA-Z0-9]{2,3})(\/[a-zA-Z0-9\-\.]+)*(:[0-9]{1,6}\/v2.0)$/'; //Validates API version
 $hash_regex='/^[[:xdigit:]]{0,40}$/';
 $default_text_regex= '/^[a-zA-Z0-9-_.[:space:]]{0,40}$/';
@@ -27,6 +27,7 @@ $durations_array_regex='/^\[\d{1,3}(,\d{1,3}){0,10}\]$/';
 $days_hours_minutes_regex = '/^\d{1,3}[Dd]-\d{1,2}[Hh]-\d{1,2}[mM]$/';
 $max_simultaneous_instances_regex = '/^\d{0,5}$/';
 $minutes_regex = '/^\d{0,4}$/';
+$attempts_number_regex = '/^\d{0,3}$/';
 $csv_regex = '/^$|[0-9a-z\.\-\@\_]+(,[0-9a-z\.\-\@\_]+)*/';
 
 //Create OpenStackIntegration link
@@ -120,7 +121,15 @@ if ($ADMIN->fulltree) {
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_reservation_module_enabled) ||
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_simultaneous_instances)||
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_reservation_user_list_logic) ||
-            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_authorized_reservation_users_list)) {
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_authorized_reservation_users_list)||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_module_enabled)||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_email_users_list) ||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_deletion_attempts_number)||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_deletion_attempts_number)||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_module_enabled)||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_server_url) ||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_shared_secret)){
+
             $settings->add( new admin_setting_heading('bigbluebuttonbn_config_cloud',
                 '',
                 get_string('config_cloud_description', 'bigbluebuttonbn'),
@@ -187,7 +196,6 @@ if ($ADMIN->fulltree) {
 
             $settings->add( new admin_setting_heading('bigbluebuttonbn_reservation_heading', '', get_string('openstack_reservation_settings', 'bigbluebuttonbn'), null));
 
-
             if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_reservation_module_enabled) ){
                 //Enable OpenStack reservations module
                 $settings->add( new admin_setting_configcheckbox( 'bigbluebuttonbn_reservation_module_enabled',
@@ -221,6 +229,63 @@ if ($ADMIN->fulltree) {
             }
 
             $settings->add( new admin_setting_heading('bigbluebuttonbn_time_clarification', '', get_string('openstack_time_description', 'bigbluebuttonbn', bigbluebuttonbn_get_cfg_openstack_destruction_time()), null));
+
+            $settings->add( new admin_setting_heading('bigbluebuttonbn_resiliency_heading', '', get_string('openstack_resiliency_settings', 'bigbluebuttonbn'), null));
+
+            if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_module_enabled) ){
+                //Enable OpenStack reservations module
+                $settings->add( new admin_setting_configcheckbox( 'bigbluebuttonbn_resiliency_module_enabled',
+                    get_string('config_resiliency_module_enabled', 'bigbluebuttonbn'),
+                    get_string('config_resiliency_module_enabled_description','bigbluebuttonbn'),
+                    0));
+            }
+
+            if (!isset ($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_email_users_list)){
+                //List the users that can receive email notifications about OpenStack errors
+                $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_authorized_resiliency_email_users_list',
+                    get_string('config_authorized_resiliency_email_users_list', 'bigbluebuttonbn'),
+                    get_string('config_authorized_resiliency_email_users_list_description','bigbluebuttonbn'),
+                    null, $csv_regex));
+            }
+
+            if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_creation_attempts_number)){
+                //Number of creation attempts
+                $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_creation_attempts_number',
+                    get_string('config_creation_attempts_number', 'bigbluebuttonbn'),
+                    get_string('config_creation_attempts_number-description','bigbluebuttonbn'),
+                    0, $attempts_number_regex));
+            }
+
+            if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_deletion_attempts_number)){
+                //Extra time for conference
+                $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_deletion_attempts_number',
+                    get_string('config_deletion_attempts_number', 'bigbluebuttonbn'),
+                    get_string('config_deletion_attempts_number-description','bigbluebuttonbn'),
+                    0, $attempts_number_regex));
+            }
+
+            if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_server_enabled) ){
+                //Enable OpenStack reservations module
+                $settings->add( new admin_setting_configcheckbox( 'bigbluebuttonbn_resiliency_server_enabled',
+                    get_string('config_resiliency_server_enabled', 'bigbluebuttonbn'),
+                    get_string('config_resiliency_server_enabled_description','bigbluebuttonbn'),
+                    0));
+            }
+
+            if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_server_url) ) {
+                $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_resiliency_server_url',
+                    get_string( 'config_resiliency_server_url', 'bigbluebuttonbn' ),
+                    get_string( 'config_resiliency_server_url_description', 'bigbluebuttonbn' ),
+                    null, $bbb_server_regex));
+            }
+            if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_shared_secret) ) {
+                $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_resiliency_shared_secret',
+                    get_string( 'config_resiliency_shared_secret', 'bigbluebuttonbn' ),
+                    get_string( 'config_resiliency_shared_secret_description', 'bigbluebuttonbn' ),
+                    null, $hash_regex));
+            }
+
+
         }
     }
 
