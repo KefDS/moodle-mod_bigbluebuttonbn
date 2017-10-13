@@ -297,7 +297,10 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
             $mform->addHelpButton('openingtime', 'mod_form_field_openingtime', 'bigbluebuttonbn');
 
             //Access closed
-            $mform->addElement('text', 'closingtime', get_string('mod_form_field_custom_closingtime', 'bigbluebuttonbn'), array('style' =>"width: 181px;"));
+            if($current_activity->closingtime != null){
+                $current_activity->closingtime = ($current_activity->closingtime - $current_activity->openingtime)/60;
+            }
+            $mform->addElement('text', 'closingtime', get_string('mod_form_field_custom_closingtime', 'bigbluebuttonbn'), $closingtime_default );
             $mform->setType('closingtime', PARAM_INT);
             $mform->setDefault('closingtime', $closingtime_default);
             $mform->addHelpButton('closingtime', 'mod_form_field_custom_closingtime', 'bigbluebuttonbn');
