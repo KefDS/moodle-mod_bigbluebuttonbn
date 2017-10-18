@@ -32,8 +32,9 @@ class openstack_error_communicator implements error_communicator
                 $msg_data->log_id = $input['log_id'];
                 $msg_data->error_message = $input['error_message'];
                 $msg_data->meetingid = $input['meetingid'];
-                $msg_data->courseid = $input['courseid'];
                 $msg_data->openingtime = $input['openingtime'];
+                $msg_data->meeting_url = $input['meeting_url'];
+                $msg_data->courseid = $input['courseid'];
                 $message = get_string('openstack_error_creation_request_message', 'bigbluebuttonbn', $msg_data);
                 break;
 
@@ -43,6 +44,8 @@ class openstack_error_communicator implements error_communicator
                 $msg_data->error_message = $input['error_message'];
                 $msg_data->meetingid = $input['meetingid'];
                 $msg_data->stack_name = $input['stack_name'];
+                $msg_data->meeting_url = $input['meeting_url'];
+                $msg_data->courseid = $input['courseid'];
                 $message = get_string('openstack_error_deletion_request_message', 'bigbluebuttonbn', $msg_data);
                 break;
         }
