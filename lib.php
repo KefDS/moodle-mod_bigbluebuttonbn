@@ -496,7 +496,8 @@ function bigbluebuttonbn_process_post_save(&$bigbluebuttonbn) {
                 'courseid'=>$bigbluebuttonbn->course,
                 'meeting_duration'=>$bigbluebuttonbn->bbb_meeting_duration,
                 'openingtime'=> $bigbluebuttonbn->openingtime,
-                'bbb_server_status'=> 'Wating for creation'
+                'bbb_server_status'=> 'Wating for creation',
+                'deletiontime'=> get_meeting_deletion_time_minutes($bigbluebuttonbn->openingtime, $bigbluebuttonbn->bbb_meeting_duration)
             ];
             bigbluebuttonbn_create_or_update_os_conference($bbb_os_record);
 
@@ -540,7 +541,9 @@ function bigbluebuttonbn_process_post_save(&$bigbluebuttonbn) {
                 'meeting_duration'=>$bigbluebuttonbn->bbb_meeting_duration,
                 'openingtime'=> $bigbluebuttonbn->openingtime,
                 'meetingid'=> $bbb_openstack_meetingid,
-                'bbb_server_status'=> 'Wating for creation'
+                'bbb_server_status'=> 'Wating for creation',
+                'deletiontime'=> get_meeting_deletion_time_minutes($bigbluebuttonbn->openingtime, $bigbluebuttonbn->bbb_meeting_duration)
+
             ];
 
             $os_log_update_message = 'User updated a BBB conference managed by OpenStack';

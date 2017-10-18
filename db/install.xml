@@ -58,7 +58,6 @@
         <FIELD NAME="bbb_server_shared_secret" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Shared secret of the BigBlueButton server hosting the meeting. This field is used when creation of servers on demand is enabled."/>
         <FIELD NAME="meeting_duration" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Duration of the BBB meeting. Needed for destroying the machine when using servers on demand."/>
         <FIELD NAME="openingtime" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Start time of the conference"/>
-        <FIELD NAME="creationtime" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Timestamp when the meeting is scheduled to start."/>
         <FIELD NAME="deletiontime" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Timestamp when is scheduled to end the meeting."/>
         <FIELD NAME="creation_attempts" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
         <FIELD NAME="deletion_attempts" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>

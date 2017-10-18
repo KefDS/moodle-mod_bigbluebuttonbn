@@ -26,7 +26,7 @@ class helpers {
 
     public static function get_finished_meetings(){
         global $DB;
-        return $DB->get_records_sql('SELECT * FROM  {bigbluebuttonbn_openstack} WHERE ( openingtime + ( meeting_duration*60 ) ) < ? AND (bbb_server_status <> ?) AND (bbb_server_status <> ?)' , [time(), "Deletion started", "Deletion started failed"]);
+        return $DB->get_records_sql('SELECT * FROM  {bigbluebuttonbn_openstack} WHERE deletiontime < ? AND (bbb_server_status <> ?) AND (bbb_server_status <> ?)' , [time(), "Deletion started", "Deletion started failed"]);
     }
 
     public static function get_bbb_openstack_field_by_meetingid($meetingid,$field){
@@ -54,6 +54,12 @@ class helpers {
         $meeting_record = $DB->get_record('bigbluebuttonbn_openstack', array('id'=>$meeting->id));
         $meeting_record->deletion_attempts += 1;
         return $DB->update_record('bigbluebuttonbn_openstack', $meeting_record);
+    }
+
+    public static function set_server_status($meeting, $status){
+        global $DB;
+        $meeting->bbb_server_status = $status;
+        return $DB->update_record('bigbluebuttonbn_openstack', $meeting);
     }
 
     public static function construct_meeting_url($meeting){

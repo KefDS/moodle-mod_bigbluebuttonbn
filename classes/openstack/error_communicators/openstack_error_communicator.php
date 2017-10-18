@@ -38,6 +38,17 @@ class openstack_error_communicator implements error_communicator
                 $message = get_string('openstack_error_creation_request_message', 'bigbluebuttonbn', $msg_data);
                 break;
 
+            case 'creation_error':
+                $msg_data->log_id = $input['log_id'];
+                $msg_data->error_message = $input['error_message'];
+                $msg_data->meetingid = $input['meetingid'];
+                $msg_data->openingtime = $input['openingtime'];
+                $msg_data->meeting_url = $input['meeting_url'];
+                $msg_data->courseid = $input['courseid'];
+                $msg_data->stack_name = $input['stack_name'];
+                $message = get_string('openstack_error_creation_message', 'bigbluebuttonbn', $msg_data);
+                break;
+
             case 'deletion_request_error':
             case 'first_deletion_request_error':
                 $msg_data->log_id = $input['log_id'];
@@ -68,16 +79,19 @@ class openstack_error_communicator implements error_communicator
                 $data = $this->communicate_connection_error($data, $message);
                 break;
             case 'first_creation_request_error':
-                $data = $this->communicate_creation_error($data, $message, true);
+                $data = $this->communicate_creation_request_error($data, $message, true);
                 break;
             case 'creation_request_error':
-                $data = $this->communicate_creation_error($data, $message, false);
+                $data = $this->communicate_creation_request_error($data, $message, false);
+                break;
+            case 'creation_error':
+                $data = $this->communicate_creation_error($data, $message);
                 break;
             case 'first_deletion_request_error':
-                $data = $this->communicate_deletion_error($data,$message,true);
+                $data = $this->communicate_deletion_request_error($data,$message,true);
                 break;
             case 'deletion_request_error':
-                $data = $this->communicate_deletion_error($data,$message,false);
+                $data = $this->communicate_deletion_request_error($data,$message,false);
         }
         message_send($data);
     }
@@ -100,7 +114,7 @@ class openstack_error_communicator implements error_communicator
         return $data;
     }
 
-    private function communicate_creation_error($data, $message, $first_attempt){
+    private function communicate_creation_request_error($data, $message, $first_attempt){
 
 //        $userto = bigbluebuttonbn_get_openstack_notification_error_email();
 
@@ -126,7 +140,28 @@ class openstack_error_communicator implements error_communicator
 
     }
 
-    private function communicate_deletion_error($data, $message, $first_attempt){
+    private function communicate_creation_error($data, $message){
+
+//        $userto = bigbluebuttonbn_get_openstack_notification_error_email();
+
+        $subject = get_string('openstack_error_creation_subject', 'bigbluebuttonbn');
+
+        $data->component         = 'mod_bigbluebuttonbn';
+        $data->name              = 'openstack_task_error'; // This is the message name from messages.php
+        $data->userfrom          = \core_user::get_noreply_user();
+        $data->userto            = 22;
+        $data->subject           = $subject;
+        $data->fullmessage       = $message;
+        $data->fullmessageformat = FORMAT_HTML;
+        $data->fullmessagehtml   = $message;
+        $data->smallmessage      = '';
+        $data->notification      = 1; // This is only set to 0 for personal messages between users.
+
+        return $data;
+
+    }
+
+    private function communicate_deletion_request_error($data, $message, $first_attempt){
 
 //        $userto = bigbluebuttonbn_get_openstack_notification_error_email();
 

@@ -1691,6 +1691,10 @@ function bigbluebuttonbn_get_previous_setting($id, $conference_setting){
     return $DB->get_field('bigbluebuttonbn', $conference_setting, array('id' => $id), 'MUST_EXIST');
 }
 
+function get_meeting_deletion_time_minutes($startime, $duration){
+    return $startime + ($duration + bigbluebuttonbn_get_cfg_conference_extra_time())*60; //duration + extra time + destruction time
+}
+
 //---- Reservations module
 
 // Get meeting total duration in minutes

@@ -43,7 +43,6 @@ class moodle_bbb_openstack_stacks_management_tasks {
     }
 
     public function do_tasks() {
-        // Error with network, Openstack server or openstack configuration in moodle
         try {
             $this->orchestration_service = $this->get_openstack_orchestration_service();
         }
@@ -58,7 +57,7 @@ class moodle_bbb_openstack_stacks_management_tasks {
         }
 
         $this->get_bbb_host_info_for_upcoming_meetings();
-          $this->create_bbb_host_for_upcoming_meetings();
+        $this->create_bbb_host_for_upcoming_meetings();
         $this->delete_bbb_host_for_finished_meetings();
     }
 
@@ -90,6 +89,13 @@ class moodle_bbb_openstack_stacks_management_tasks {
                 $msg_data['meeting_url']= $this->construct_meeting_url($meeting);
                 $msg_data['courseid']= $meeting->courseid;
                 break;
+            case 'creation_error':
+                $msg_data['meetingid']= $meeting->meetingid;
+                $msg_data['openingtime'] = date("Y-m-d h:i", $meeting->openingtime);
+                $msg_data['meeting_url']= $this->construct_meeting_url($meeting);
+                $msg_data['courseid']= $meeting->courseid;
+                $msg_data['stack_name'] = $meeting->stack_name;
+                break;
             case 'deletion_request_error':
             case 'first_deletion_request_error':
                 $msg_data['meetingid']= $meeting->meetingid;
@@ -103,6 +109,7 @@ class moodle_bbb_openstack_stacks_management_tasks {
         return;
     }
 
+    //Creation
     private function create_bbb_host_for_upcoming_meetings() {
         $upcoming_meetings = $this->get_upcoming_meetings(self::UPCOMING_MEETINGS_MINUTES);
         foreach ($upcoming_meetings as $meeting) {
@@ -126,6 +133,8 @@ class moodle_bbb_openstack_stacks_management_tasks {
             $send_message = true;
             if(!$this->resiliency_enabled or $meeting->creation_attempts > $this->max_meeting_creation_retries){
                 $event_record =(object)(['meetingid'=>$meeting->meetingid, 'stack_name'=>$meeting->stack_name, 'log_level'=>'ERROR', 'component'=>'OPENSTACK', 'event'=>'CREATION_REQUEST_FAILED', 'event_details'=>$exception->getMessage()]);
+                //Declared failed server
+                $this->declared_failed_server($meeting, 'Creation request failed');
                 //Handle exception
                 $this->admin_exception_handler->handle_exception($exception);
             }else{
@@ -143,6 +152,7 @@ class moodle_bbb_openstack_stacks_management_tasks {
 
     }
 
+    //Info status
     private function get_bbb_host_info_for_upcoming_meetings() {
         $upcoming_meetings = $this->get_in_progress_meetings();
         foreach ($upcoming_meetings as $meeting) {
@@ -151,6 +161,7 @@ class moodle_bbb_openstack_stacks_management_tasks {
     }
     private function get_bbb_host_info_for_upcoming_meeting($meeting) {
         try {
+            throw new \Exception('Always throw this error');
             $meeting_setup = new meeting_setup($meeting, $this->orchestration_service);
             $meeting_setup->get_meeting_host_info();
             if($meeting->bbb_server_status == 'Ready'){
@@ -161,13 +172,17 @@ class moodle_bbb_openstack_stacks_management_tasks {
         }
         catch(\Exception $exception) {
             $event_record =(object)(['meetingid'=>$meeting->meetingid, 'stack_name'=>$meeting->stack_name, 'log_level'=>'ERROR', 'component'=>'OPENSTACK', 'event'=>'CREATION_FAILED', 'event_details'=>$exception->getMessage()]);
-            helpers::bigbluebuttonbn_add_openstack_event($event_record);
+            $log_id= helpers::bigbluebuttonbn_add_openstack_event($event_record);
+            //Declare failed server
+            $this->declared_failed_server($meeting, 'Creation failed');
+            //Communicate error
+            $this->communicate_error($log_id,$exception->getMessage(), 'creation_error', $meeting);
+            //Handle exception
             $this->admin_exception_handler->handle_exception($exception);
-            # Message API
-            #$this->user_error_communicator->communicate_error($meeting);
         }
     }
 
+    //Deletion
     private function delete_bbb_host_for_finished_meetings() {
         $finished_meetings = $this->get_finished_meetings();
         foreach ($finished_meetings as $meeting) {
@@ -191,6 +206,8 @@ class moodle_bbb_openstack_stacks_management_tasks {
             $send_message = true;
             if (!$this->resiliency_enabled or $meeting->deletion_attempts > $this->max_meeting_deletion_retries) {
                 $event_record = (object)(['meetingid' => $meeting->meetingid, 'stack_name' => $meeting->stack_name, 'log_level' => 'ERROR', 'component' => 'OPENSTACK', 'event' => 'DELETION_START_FAILED', 'event_details' => $exception->getMessage()]);
+                //Declare failed server
+                $this->declared_failed_server($meeting, 'Deletion started failed');
                 //Handle exception
                 $this->admin_exception_handler->handle_exception($exception);
             } else {
@@ -212,18 +229,23 @@ class moodle_bbb_openstack_stacks_management_tasks {
     private function get_upcoming_meetings($minutes) {
         return helpers::get_upcomming_meetings_by_minutes($minutes);
     }
+
     private function get_in_progress_meetings() {
         return helpers::get_meetings_by_state("Create In Progress");
     }
+
     private function get_finished_meetings(){
         return helpers::get_finished_meetings();
     }
+
     private function increase_meeting_creation_attempts($meeting){
         return helpers::increase_meeting_creation_attempts($meeting);
     }
+
     private function increase_meeting_deletion_attempts($meeting){
         return helpers::increase_meeting_deletion_attempts($meeting);
     }
+
     private function get_bbb_openstack_field_by_meetingid($meetingid, $field){
         return helpers::get_bbb_openstack_field_by_meetingid($meetingid, $field);
     }
@@ -245,5 +267,9 @@ class moodle_bbb_openstack_stacks_management_tasks {
 
     private function construct_meeting_url($meeting){
         return helpers::construct_meeting_url($meeting);
+    }
+
+    private function declared_failed_server($meeting, $status){
+        return helpers::set_server_status($meeting, $status);
     }
 }

@@ -121,11 +121,14 @@ $string['openstack_error_conection_subject']='ALERTA-BigBlueButton: Conexión co
 $string['openstack_error_conection_message']='No se puede establacer una conexión con el servicio de Orquestación de OpenStack.Se ha generado un registro en la tabla de  bitácoras de OpenStack con ID={$a->log_id}.{$a->number_upcoming_conferences} videocomunicaciones pueden verse afectadas en las próximas 24 horas. Las conferencias que pronto pueden verse afectadas pronto se listan a continuación (en blanco si no existe alguna). {$a->meetings_urls}<br /><br />A continuación se muestra el mensaje de error asociado:<br /><br />{$a->error_message}.';
 //--OpenStack Task error
 $string['messageprovider:openstack_task_error'] = 'BigBlueButton: Notificación de error en tareas relacionadas a OpenStack';
-//---Creation errors
+//---Creation request errors
 $string['openstack_error_first_creation_request_subject']='ADVERTENCIA-BigBlueButton: Falló solicitud de creación de stack (primer intento)';
-$string['openstack_error_creation_request_subject']='ERROR-BigBlueButton: Falló creación del stack (no hay más intentos)';
+$string['openstack_error_creation_request_subject']='ERROR-BigBlueButton: Falló solicitud de creación del stack (no hay más intentos)';
 $string['openstack_error_creation_request_message']='Falló la solicitud de creación del stack. El ID de la videocomunicación relacionada es {$a->meetingid} con ID de curso {$a->courseid}. Este es el <a href="{$a->meeting_url}">URL</a>  de la videocomunicación. La videocomunicación estaba programada para comenzar a las {$a->openingtime}. Se ha creado un registro en la tabla de Bitácoras de OpenStack con ID={$a->log_id}.<br /><br />A continuación se muestra el mensaje de error asociado:<br /><br />{$a->error_message}';
-//---Deletion errors
+//--Creation errors
+$string['openstack_error_creation_subject']='ERROR-BigBlueButton: Falló creación del stack (no hay más intentos)';
+$string['openstack_error_creation_message']='Falló la solicitud de creación del stack {$a->stack_name}. El ID de la videocomunicación relacionada es {$a->meetingid} con ID de curso {$a->courseid}. Este es el <a href="{$a->meeting_url}">URL</a>  de la videocomunicación. La videocomunicación estaba programada para comenzar a las {$a->openingtime}. Se ha creado un registro en la tabla de Bitácoras de OpenStack con ID={$a->log_id}.<br /><br />A continuación se muestra el mensaje de error asociado:<br /><br />{$a->error_message}';
+//---Deletion request errors
 $string['openstack_error_first_deletion_request_subject']='ADVERTENCIA-BigBlueButton: Falló solicitud de eliminación de stack (primer intento)';
 $string['openstack_error_deletion_request_subject']='ERROR-BigBlueButton: Falló eliminación del stack (no hay más intentos)';
 $string['openstack_error_deletion_request_message']='Falló la solicitud de eliminación del stack. El nombre del stack es <strong>{$a->stack_name}</strong>, el ID del curso relacionado es {$a->courseid} y el ID de la videoconferencia relacionada es {$a->meetingid}. Este es el <a href="{$a->meeting_url}">URL</a>  de la videocomunicación. Se ha creado un registro en la tabla de Bitácoras de OpenStack con ID={$a->log_id}.<br /><br />A continuación se muestra el mensaje de error asociado:<br /><br />{$a->error_message}';
