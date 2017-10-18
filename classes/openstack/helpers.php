@@ -17,7 +17,6 @@ class helpers {
     public static function get_upcomming_meetings_by_minutes($minutes) {
         global $DB;
         $interval = time() + ($minutes*60);
-        echo $interval;
         return $meetings = $DB->get_records_sql('SELECT * FROM {bigbluebuttonbn_openstack} WHERE openingtime < ? AND bbb_server_status = ?', [$interval, 'Wating for creation']);
     }
     public static function get_meetings_by_state($state) {
@@ -27,7 +26,7 @@ class helpers {
 
     public static function get_finished_meetings(){
         global $DB;
-        return $DB->get_records_sql('SELECT * FROM  {bigbluebuttonbn_openstack} WHERE ( openingtime + ( meeting_duration*60 ) ) < ? AND (bbb_server_status <> ?) AND (bbb_server_status <> ?)' , [time(), "Deletion started", "Deletion started failed"]);
+        return $DB->get_records_sql('SELECT * FROM  {bigbluebuttonbn_openstack} WHERE ( openingtime + ( meeting_duration*60 ) ) > ? AND (bbb_server_status <> ?) AND (bbb_server_status <> ?)' , [time(), "Deletion started", "Deletion started failed"]);
     }
 
     public static function get_bbb_openstack_field_by_meetingid($meetingid,$field){
@@ -46,9 +45,8 @@ class helpers {
 
     public static function increase_meeting_creation_retries($meeting){
         global $DB;
-        $meeting_record = $DB->get_record('bigbluebuttonbn_openstack', array('id'=>$meeting->id));
-        $meeting_record->creation_retries += 1;
-        return $DB->update_record('bigbluebuttonbn_openstack', $meeting_record);
+        $meeting->creation_retries += 1;
+        return $DB->update_record('bigbluebuttonbn_openstack', $meeting);
     }
 
     public static function increase_meeting_deletion_retries($meeting){
@@ -56,5 +54,21 @@ class helpers {
         $meeting_record = $DB->get_record('bigbluebuttonbn_openstack', array('id'=>$meeting->id));
         $meeting_record->deletion_retries += 1;
         return $DB->update_record('bigbluebuttonbn_openstack', $meeting_record);
+    }
+
+    public static function set_server_status($meeting, $status){
+        global $DB;
+        $meeting->bbb_server_status = $status;
+        return $DB->update_record('bigbluebuttonbn_openstack', $meeting);
+    }
+
+    public static function construct_meeting_url($meeting){
+        global $DB,$CFG;
+        $module = $DB->get_record('modules', array('name'=>'bigbluebuttonbn'));
+        $instance = $DB->get_record('bigbluebuttonbn', array('meetingid'=>$meeting->meetingid));
+        $course_module = $DB->get_record('course_modules', array('course'=>$meeting->courseid, 'module'=>$module->id, 'instance'=>$instance->id));
+        $meeting_url = isset($CFG->httpswwwroot)? $CFG->httpswwwroot : $CFG->wwwroot;
+        $meeting_url .= "/mod/bigbluebuttonbn/view.php?id=".$course_module->id;
+        return $meeting_url;
     }
 }

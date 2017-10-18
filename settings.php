@@ -124,11 +124,8 @@ if ($ADMIN->fulltree) {
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_authorized_reservation_users_list)||
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_module_enabled)||
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_email_users_list) ||
-            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_deletion_attempts_number)||
-            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_deletion_attempts_number)||
-            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_module_enabled)||
-            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_server_url) ||
-            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_shared_secret)){
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_creation_retries_number)||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_deletion_retries_number)){
 
             $settings->add( new admin_setting_heading('bigbluebuttonbn_config_cloud',
                 '',
@@ -242,50 +239,27 @@ if ($ADMIN->fulltree) {
 
             if (!isset ($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_email_users_list)){
                 //List the users that can receive email notifications about OpenStack errors
-                $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_authorized_resiliency_email_users_list',
+                $settings->add( new admin_setting_configtextarea( 'bigbluebuttonbn_resiliency_email_users_list',
                     get_string('config_authorized_resiliency_email_users_list', 'bigbluebuttonbn'),
                     get_string('config_authorized_resiliency_email_users_list_description','bigbluebuttonbn'),
-                    null, $csv_regex));
+                    $CFG->supportemail, $csv_regex));
             }
 
-            if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_creation_attempts_number)){
+            if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_creation_retries_number)){
                 //Number of creation attempts
-                $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_creation_attempts_number',
-                    get_string('config_creation_attempts_number', 'bigbluebuttonbn'),
-                    get_string('config_creation_attempts_number-description','bigbluebuttonbn'),
+                $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_creation_retries_number',
+                    get_string('config_creation_retries_number', 'bigbluebuttonbn'),
+                    get_string('config_creation_retries_number_description','bigbluebuttonbn'),
                     0, $attempts_number_regex));
             }
 
-            if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_deletion_attempts_number)){
+            if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_deletion_retries_number)){
                 //Extra time for conference
-                $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_deletion_attempts_number',
-                    get_string('config_deletion_attempts_number', 'bigbluebuttonbn'),
-                    get_string('config_deletion_attempts_number-description','bigbluebuttonbn'),
+                $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_deletion_retries_number',
+                    get_string('config_deletion_retries_number', 'bigbluebuttonbn'),
+                    get_string('config_deletion_retries_number_description','bigbluebuttonbn'),
                     0, $attempts_number_regex));
             }
-
-            if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_server_enabled) ){
-                //Enable OpenStack reservations module
-                $settings->add( new admin_setting_configcheckbox( 'bigbluebuttonbn_resiliency_server_enabled',
-                    get_string('config_resiliency_server_enabled', 'bigbluebuttonbn'),
-                    get_string('config_resiliency_server_enabled_description','bigbluebuttonbn'),
-                    0));
-            }
-
-            if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_server_url) ) {
-                $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_resiliency_server_url',
-                    get_string( 'config_resiliency_server_url', 'bigbluebuttonbn' ),
-                    get_string( 'config_resiliency_server_url_description', 'bigbluebuttonbn' ),
-                    null, $bbb_server_regex));
-            }
-            if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_shared_secret) ) {
-                $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_resiliency_shared_secret',
-                    get_string( 'config_resiliency_shared_secret', 'bigbluebuttonbn' ),
-                    get_string( 'config_resiliency_shared_secret_description', 'bigbluebuttonbn' ),
-                    null, $hash_regex));
-            }
-
-
         }
     }
 

@@ -9,6 +9,7 @@
 namespace mod_bigbluebuttonbn\openstack;
 defined('MOODLE_INTERNAL') || die();
 require_once dirname(dirname(__FILE__)) . '/interfaces/error_communicator.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . '/locallib.php';
 
 
 class openstack_error_communicator implements error_communicator
@@ -21,6 +22,8 @@ class openstack_error_communicator implements error_communicator
             case 'connection_error':
                 $msg_data->log_id = $input['log_id'];
                 $msg_data->error_message = $input['error_message'];
+                $msg_data->meetings_urls = $input['meetings_urls'];
+                $msg_data->number_upcoming_conferences = $input['number_upcoming_conferences'];
                 $message = get_string('openstack_error_conection_message', 'bigbluebuttonbn', $msg_data);
                 break;
 
@@ -78,6 +81,8 @@ class openstack_error_communicator implements error_communicator
 
     private function communicate_connection_error($data, $message){
 
+//        $userto = bigbluebuttonbn_get_openstack_notification_error_email();
+
         $data->component         = 'mod_bigbluebuttonbn';
         $data->name              = 'openstack_conection_error'; // This is the message name from messages.php
         $data->userfrom          = \core_user::get_noreply_user();
@@ -93,6 +98,8 @@ class openstack_error_communicator implements error_communicator
     }
 
     private function communicate_creation_error($data, $message, $first_attempt){
+
+//        $userto = bigbluebuttonbn_get_openstack_notification_error_email();
 
         // Choose subject message
         if($first_attempt){
@@ -117,6 +124,8 @@ class openstack_error_communicator implements error_communicator
     }
 
     private function communicate_deletion_error($data, $message, $first_attempt){
+
+//        $userto = bigbluebuttonbn_get_openstack_notification_error_email();
 
         // Choose subject message
         if($first_attempt){

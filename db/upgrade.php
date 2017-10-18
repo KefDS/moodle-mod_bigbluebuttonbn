@@ -403,14 +403,14 @@ function xmldb_bigbluebuttonbn_upgrade($oldversion=0) {
         $table = new xmldb_table('bigbluebuttonbn_openstack');
 
         //Add fields to bigbluebuttonbn_openstack.
-        $field = new xmldb_field('creation_retries', XMLDB_TYPE_INTEGER, '10', null, null, null, '0', 'deletiontime');
+        $field = new xmldb_field('creation_attempts', XMLDB_TYPE_INTEGER, '10', null, null, null, '0', 'deletiontime');
 
         // Conditionally launch add field creation_retries.
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
 
-        $field = new xmldb_field('deletion_retries', XMLDB_TYPE_INTEGER, '10', null, null, null, '0', 'creation_retries');
+        $field = new xmldb_field('deletion_attempts', XMLDB_TYPE_INTEGER, '10', null, null, null, '0', 'creation_retries');
 
         // Conditionally launch add field creation_retries.
         if (!$dbman->field_exists($table, $field)) {
