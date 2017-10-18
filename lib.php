@@ -496,6 +496,7 @@ function bigbluebuttonbn_process_post_save(&$bigbluebuttonbn) {
                 'courseid'=>$bigbluebuttonbn->course,
                 'meeting_duration'=>$bigbluebuttonbn->bbb_meeting_duration,
                 'openingtime'=> $bigbluebuttonbn->openingtime,
+                'bbb_server_status'=> 'Wating for creation'
             ];
             bigbluebuttonbn_create_or_update_os_conference($bbb_os_record);
 
@@ -538,7 +539,8 @@ function bigbluebuttonbn_process_post_save(&$bigbluebuttonbn) {
                 'courseid'=>$bigbluebuttonbn->course,
                 'meeting_duration'=>$bigbluebuttonbn->bbb_meeting_duration,
                 'openingtime'=> $bigbluebuttonbn->openingtime,
-                'meetingid'=> $bbb_openstack_meetingid
+                'meetingid'=> $bbb_openstack_meetingid,
+                'bbb_server_status'=> 'Wating for creation'
             ];
 
             $os_log_update_message = 'User updated a BBB conference managed by OpenStack';
@@ -1048,7 +1050,7 @@ function bigbluebuttonbn_get_cfg_max_simultaneous_instances() {
     return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_simultaneous_instances)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_simultaneous_instances): (isset($CFG->bigbluebuttonbn_max_simultaneous_instances)? trim($CFG->bigbluebuttonbn_max_simultaneous_instances): null));
 }
 
-//----Reservations
+//----Reservations module
 function bigbluebuttonbn_get_cfg_reservation_module_enabled(){
     global $BIGBLUEBUTTONBN_CFG, $CFG;
     return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_reservation_module_enabled)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_reservation_module_enabled): (isset($CFG->bigbluebuttonbn_reservation_module_enabled)? trim($CFG->bigbluebuttonbn_reservation_module_enabled): 0));
@@ -1062,6 +1064,27 @@ function bigbluebuttonbn_get_cfg_reservation_users_list_logic(){
 function bigbluebuttonbn_get_cfg_authorized_reservation_users_list() {
     global $BIGBLUEBUTTONBN_CFG, $CFG;
     return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_authorized_reservation_users_list)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_authorized_reservation_users_list): (isset($CFG->bigbluebuttonbn_authorized_reservation_users_list)? trim($CFG->bigbluebuttonbn_authorized_reservation_users_list): null));
+}
+
+//----Resiliency module
+function bigbluebuttonbn_get_cfg_resiliency_email_users_list(){
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_email_users_list)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_email_users_list): (isset($CFG->bigbluebuttonbn_resiliency_email_users_list)? trim($CFG->bigbluebuttonbn_resiliency_email_users_list): $CFG->supportemail));
+}
+
+function bigbluebuttonbn_get_cfg_resiliency_module_enabled(){
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_module_enabled)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_module_enabled): (isset($CFG->bigbluebuttonbn_resiliency_module_enabled)? trim($CFG->bigbluebuttonbn_resiliency_module_enabled): 0));
+}
+
+function bigbluebuttonbn_get_cfg_creation_retries_number(){
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_creation_retries_number)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_creation_retries_number): (isset($CFG->bigbluebuttonbn_creation_retries_number)? trim($CFG->bigbluebuttonbn_creation_retries_number): 0));
+}
+
+function bigbluebuttonbn_get_cfg_deletion_retries_number(){
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_deletion_retries_number)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_deletion_retries_number): (isset($CFG->bigbluebuttonbn_deletion_retries_number)? trim($CFG->bigbluebuttonbn_deletion_retries_number): 0));
 }
 
 /*---- end of Openstack integration ---- */

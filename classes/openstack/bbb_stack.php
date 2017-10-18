@@ -31,7 +31,6 @@ class bbb_stack extends Stack {
         elseif(preg_match("/CREATE_IN_PROGRESS/", $this->stack->status)) {
             return null;
         }
-        echo($this->stack->status);
         // Other state is an error (for now)
         $error_messaage = "Error in BBB server creation. Stack status: " .$this->stack->status;
         throw new \Exception($error_messaage);

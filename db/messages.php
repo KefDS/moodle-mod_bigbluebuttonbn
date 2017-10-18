@@ -10,8 +10,13 @@
 defined('MOODLE_INTERNAL') || die();
 
 $messageproviders = array (
-    // Notify teacher about a meeting that fail to be created
-    'error' => array (
-        'capability'  => 'mod/bigbluebuttonbn:emailnotifyerror'
-    )
+
+    // Notify about conection errors
+    'openstack_conection_error' => array (
+    ),
+
+    // Notify about creation related errors
+    'openstack_task_error' => array(
+    ),
+
 );

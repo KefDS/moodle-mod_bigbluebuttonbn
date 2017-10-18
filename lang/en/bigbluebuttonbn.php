@@ -15,38 +15,23 @@ defined('MOODLE_INTERNAL') || die();
 //OpenStack integration settings
 $string['openstack_integration']="OpenStack Integration";
 
-//----Openstack Interface
-//OpenStack openstack_integration_forms.php
-$string['os_records_begin_date']='Begin date';
-$string['os_records_choose']='Choose one';
-$string['os_records_delete']='Delete';
-$string['os_records_download']='Download';
-$string['os_records_end_date']='End date';
-$string['os_records_go']='Go';
-$string['os_records_selected']='Action:';
-$string['os_records_select_all']='Select all';
-//----OS logs
-$string['os_logs_management']='Logs management';
-$string['os_logs_explanation']='Select an action to do with Openstack integration logs. You can filter them by date or select "Select all" to select all logs data. ';
-//----Reservations
-$string['reservations_records_management']='Reservations management';
-$string['reservations_records_explanation']='Select an action to do with Openstack integration logs. You can filter them by date or select "Select all" to select all logs data. ';
-//OpenStack openstack_download_records.php
-$string['os_download_records']='Download records';
-//OpenStack openstack_records_delete.php
-$string['os_delete_records']='Delete records';
-$string['os_delete_records_success'] = '{$a} Records were successfully deleted';
-//----OS logs
-$string['os_delete_os_logs_confirmation']='This action will permanently delete {$a} records from the database table mdl_bigbluebuttonbn_os_logs related with the logs of the OpenStack Integration feature.';
-//----Reservations
-$string['os_delete_reservations_records_confirmation']='This action will permanently delete {$a} records from the database table mdl_bigbluebuttonbn_reservations, related with the reservations of the OpenStack Integration feature.';
-
-//---OpenStack admin settings
-//Heading
+//OpenStack admin settings
+//--Heading
+$string['config_openstack_integration']='BBB servers on demand';
+$string['config_openstack_integration_description']='Enables OpenStack integration for managing BBB servers on demand.';
 $string['openstack_integration_help'] = 'BBB servers on demand creates a unique BBB server for each conference created. The lifecycle of a conference is fully automated and managed by OpenStack.';
 $string['openstack_servers_on_demand']= 'Use BBB servers on demand through OpenStack integration. To manage logs a reservations got to ';
-$string['openstack_integration_modules']= 'OpenStack Integration Modules ';
 $string['openstack_settings_note']= '<b>Note:</b> To manage OpenStack related settings, you must the option "BBB servers on demand" checked. If you havent done it, do it, and afterwards, press the save changes button at the end of the page.';
+$string['openstack_integration_modules']= 'OpenStack Integration Modules ';
+//--OpenStack credentials settings
+$string['config_openstack_credentials_description']='<b>OpenStack Credentials</b>. Credentials to access OpenStack services.';
+$string['config_openstack_username']='Username';
+$string['config_openstack_username_description']='OpenStack username to access services.';
+$string['config_openstack_password']='Password';
+$string['config_openstack_password_description']='OpenStack pasword to access services.';
+$string['config_openstack_tenant_id']='Tenant ID';
+$string['config_openstack_tenant_id_description']='OpenStack tenant(project) identifier to access services.';
+//--OpenStack general settings
 $string['config_cloud_description']='<b>General settings for BBB</b> servers on demand. These settings are always used when creating  BBB servers on demand.';
 $string['config_heat_region']='Heat Region';
 $string['config_heat_region_description']='Region setting in Openstack orchestration service.';
@@ -60,31 +45,59 @@ $string['config_min_openingtime']='Minimum opening time';
 $string['config_min_openingtime_description']='Minimum limit of time to schedule a meeting. It should be in a days-hours-minutes format. Eg: "0d-4h-30m" indicates zero days, four hours and thirty minutes.';
 $string['config_max_openingtime']='Maximum opening time';
 $string['config_max_openingtime_description']='Maximum anticipation to schedule a meeting. It should be in a days-hours-minutes format. Eg: "60d-10h-0m" indicates sixty days, ten hours zero minutes.';
-$string['config_openstack_credentials_description']='<b>OpenStack Credentials</b>. Credentials to access OpenStack services.';
 $string['config_max_simultaneous_instances']='Max number of BBB servers';
 $string['config_max_simultaneous_instances_description']='Maximun number of BBB servers that can be running at the same time';
-$string['config_openstack_username']='Username';
-$string['config_openstack_username_description']='OpenStack username to access services.';
-$string['config_openstack_password']='Password';
-$string['config_openstack_password_description']='OpenStack pasword to access services.';
-$string['config_openstack_tenant_id']='Tenant ID';
-$string['config_openstack_tenant_id_description']='OpenStack tenant(project) identifier to access services.';
 $string['config_meeting_durations']='Meeting Durations';
 $string['config_meeting_durations_description']='Array of meeting durations in minutes. They must be in the following format: [30,60,90].';
 $string['config_conference_extra_time']='Conference extra time';
 $string['config_conference_extra_time_description']='Extra time in minutes for conference before destroying the BBB server.';
-$string['config_openstack_integration']='BBB servers on demand';
-$string['config_openstack_integration_description']='Enables OpenStack integration for managing BBB servers on demand.';
+//--Reservation module settings
+$string['openstack_reservation_settings']= '<b>Reservations Module</b>. General settings for Reservations Module.';
+$string['config_reservation_module_enabled']='Enable reservations module';
+$string['config_reservation_module_enabled_description']='Enable or disable reservations module to limit conferences according to resources.';
 $string['config_reservation_user_list_logic']='User whitelist/blacklist for reservations';
 $string['config_reservation_user_list_logic_description']='Mark to use as a blocking list (blacklist), leave it blank to use as an authorization list(whitelist) for users that want to make a conference reservation.';
 $string['config_authorized_reservation_users_list']='Authorized/blocked user list';
 $string['config_authorized_reservation_users_list_description']='Comma separated list of usernames that are authorize/blocked according to the user whitelist/blacklist setting.The format should be "username1,username2,username3"';
-$string['config_reservation_module_enabled']='Enable reservations module';
-$string['config_reservation_module_enabled_description']='Enable or disable reservations module to limit conferences according to resources.';
 $string['openstack_time_description']='<b>Note:</b> the total time of resource reservation is the sum of the "Minimun opening time" + "Conference extra time" + {$a} minutes. To change the last parameter it\'s necessary to change the plugin\'s code.';
-$string['openstack_reservation_settings']= '<b>Reservations Module</b>. General settings for Reservations Module.';
+//--Resiliency module settings
+$string['openstack_resiliency_settings']='<b>Resiliency module</b>. General settings for Resiliency Module.';
+$string['config_resiliency_module_enabled']='Enable resiliency module';
+$string['config_resiliency_module_enabled_description']='Enable or diable resiliency when creating machines with OpenStack.';
+$string['config_authorized_resiliency_email_users_list']='Notifications emails';
+$string['config_authorized_resiliency_email_users_list_description']='Comma separated list of emails that will get notifications of relevant events of the service.';
+$string['config_creation_retries_number']='Creation retries';
+$string['config_creation_retries_number_description']='Number of retries to request OpenStack the creation of a BBB server.';
+$string['config_deletion_retries_number']='Deletion retries';
+$string['config_deletion_retries_number_description']='Number of retries to request OpenStack the deletion of a BBB server.';
 
-//----Meeting form
+//Openstack Interface
+//--OpenStack openstack_integration_forms.php
+$string['os_records_begin_date']='Begin date';
+$string['os_records_choose']='Choose one';
+$string['os_records_delete']='Delete';
+$string['os_records_download']='Download';
+$string['os_records_end_date']='End date';
+$string['os_records_go']='Go';
+$string['os_records_selected']='Action:';
+$string['os_records_select_all']='Select all';
+//---OS logs
+$string['os_logs_management']='Logs management';
+$string['os_logs_explanation']='Select an action to do with Openstack integration logs. You can filter them by date or select "Select all" to select all logs data. ';
+//---Reservations
+$string['reservations_records_management']='Reservations management';
+$string['reservations_records_explanation']='Select an action to do with Openstack integration logs. You can filter them by date or select "Select all" to select all logs data. ';
+//--OpenStack openstack_download_records.php
+$string['os_download_records']='Download records';
+//--OpenStack openstack_records_delete.php
+$string['os_delete_records']='Delete records';
+$string['os_delete_records_success'] = '{$a} Records were successfully deleted';
+//---OS logs
+$string['os_delete_os_logs_confirmation']='This action will permanently delete {$a} records from the database table mdl_bigbluebuttonbn_os_logs related with the logs of the OpenStack Integration feature.';
+//---Reservations
+$string['os_delete_reservations_records_confirmation']='This action will permanently delete {$a} records from the database table mdl_bigbluebuttonbn_reservations, related with the reservations of the OpenStack Integration feature.';
+
+//Meeting form
 $string['mod_form_field_meeting_duration']='Duration (in minutes)';
 $string['mod_form_field_meeting_duration_help']='Meeting duration (in minutes)';
 $string['mod_form_field_custom_closingtime']='Access close (in minutes)';
@@ -100,6 +113,22 @@ $string['unsuficient_availability']='There is not enough room for this conferenc
 
 //Tasks for OpenStack communication
 $string['task_openstack_async_communication']= 'Creating BBB meeting servers with OpenStack';
+
+//Messages related with OpenStack errors
+//--Connection error
+$string['messageprovider:openstack_conection_error'] = 'BigBlueButton: Error notification about OpenStack connection';
+$string['openstack_error_conection_subject']='ALERT-BigBlueButton: OpenStack Connection Down';
+$string['openstack_error_conection_message']='Failed to establish connection with the orchestration service of OpenStack. A record has been inserted in OpenStack Logs Table with ID={$a->log_id}. {$a->number_upcoming_conferences} meetings could be affected in the next 24 hours. Following is the list of meetings that could be affected soon (blank space if there is none). {$a->meetings_urls}<br /><br />This is the related error message:<br /><br /> {$a->error_message}.';
+//--OpenStack Task error
+$string['messageprovider:openstack_task_error'] = 'BigBlueButton: Error notification about OpenStack tasks';
+//---Creation errors
+$string['openstack_error_first_creation_request_subject']='WARNING-BigBlueButton: Stack creation request failed(first attempt)';
+$string['openstack_error_creation_request_subject']='ERROR-BigBlueButton: Stack creation request failed(no more attempts)';
+$string['openstack_error_creation_request_message']='Failed to send creation request for a stack. The meeting ID related is {$a->meetingid} with course ID {$a->courseid}. This is the <a href="{$a->meeting_url}">URL</a> of the meeting. The meeting was scheculed to open at {$a->openingtime}. A record has been inserted in OpenStack Logs Table with ID={$a->log_id}.<br /><br />This is the related error message:<br /><br />{$a->error_message}';
+//---Deletion errors
+$string['openstack_error_first_deletion_request_subject']='WARNING-BigBlueButton: Stack deletion request failed(first attempt)';
+$string['openstack_error_deletion_request_subject']='ERROR-BigBlueButton: Stack deletion request failed(no more attempts)';
+$string['openstack_error_deletion_request_message']='Failed to send deletion request for a stack. The stack name is {$a->stack_name}, the course ID related is {$a->courseid} and the meeting ID related is {$a->meetingid}. This is the <a href="{$a->meeting_url}">URL</a> of the meeting. A record has been inserted in OpenStack Logs Table with ID={$a->log_id}.<br /><br />This is the related error message:<br /><br />{$a->error_message}';
 
 /*---- end of OpenStack integration ----*/
 

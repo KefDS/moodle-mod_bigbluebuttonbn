@@ -397,6 +397,30 @@ function xmldb_bigbluebuttonbn_upgrade($oldversion=0) {
         upgrade_mod_savepoint(true, 2017071701, 'bigbluebuttonbn');
     }
 
+    if($oldversion < 2017100604){
+
+        //Define table bigbluebuttonbn_openstack to be created
+        $table = new xmldb_table('bigbluebuttonbn_openstack');
+
+        //Add fields to bigbluebuttonbn_openstack.
+        $field = new xmldb_field('creation_attempts', XMLDB_TYPE_INTEGER, '10', null, null, null, '0', 'deletiontime');
+
+        // Conditionally launch add field creation_retries.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $field = new xmldb_field('deletion_attempts', XMLDB_TYPE_INTEGER, '10', null, null, null, '0', 'creation_retries');
+
+        // Conditionally launch add field creation_retries.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Bigbluebuttonbn savepoint reached.
+        upgrade_mod_savepoint(true, 2017100604, 'bigbluebuttonbn');
+    }
+
     /*---- end of OpenStack integration ----*/
 
     return $result;

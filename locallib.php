@@ -1723,6 +1723,11 @@ function bigbluebuttonbn_allow_user_reservation($username, $logic_type){
     }
 }
 
+//----Resiliency module
+function bigbluebuttonbn_get_openstack_notification_error_email(){
+    return explode(',', trim(bigbluebuttonbn_get_cfg_resiliency_email_users_list()));
+}
+
 //----Admin interface records management
 function bigbluebuttonbn_delete_os_logs_by_date($delete_all, $begin_datetime=null, $end_datetime=null){
     global $DB;
