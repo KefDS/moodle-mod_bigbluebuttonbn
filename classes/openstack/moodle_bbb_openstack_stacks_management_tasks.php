@@ -145,7 +145,7 @@ class moodle_bbb_openstack_stacks_management_tasks {
             //Log error
             $log_id = helpers::bigbluebuttonbn_add_openstack_event($event_record);
             //Communicate error
-            if($send_message or $type='first_creation_request_error'){
+            if($send_message or $type == 'first_creation_request_error'){
                 $this->communicate_error($log_id,$exception->getMessage(), $type, $meeting);
             }
         }
@@ -218,7 +218,7 @@ class moodle_bbb_openstack_stacks_management_tasks {
             //Log error
             $log_id = helpers::bigbluebuttonbn_add_openstack_event($event_record);
             //Communicate error
-            if($send_message or $type='first_deletion_request_error'){
+            if($send_message or $type == 'first_deletion_request_error'){
                 $this->communicate_error($log_id,$exception->getMessage(), $type, $meeting);
             }
         }

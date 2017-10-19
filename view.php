@@ -298,10 +298,13 @@ function bigbluebuttonbn_view($bbbsession, $activity) {
     }
 }
 
-
+/*---- OpenStack integration ----*/
 function bigbluebuttonbn_openstack_status(){
     echo "aaaaaaaaaaa";
 }
+
+/*---- end of OpenStack integration ----*/
+
 
 function bigbluebuttonbn_view_joining($bbbsession) {
 
