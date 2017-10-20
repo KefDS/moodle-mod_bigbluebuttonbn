@@ -43,6 +43,8 @@ class moodle_bbb_openstack_stacks_management_tasks {
     }
 
     public function do_tasks() {
+
+        // Declare meetings failed due to timeout
         try {
             $this->orchestration_service = $this->get_openstack_orchestration_service();
         }
@@ -125,21 +127,21 @@ class moodle_bbb_openstack_stacks_management_tasks {
             $meeting_setup = new meeting_setup($meeting, $this->orchestration_service);
             $meeting_setup->create_meeting_host();
             //Log event
-            $event_record =(object)(['meetingid'=>$meeting->meetingid, 'stack_name'=>$meeting->stack_name, 'log_level'=>'INFO', 'component'=>'OPENSTACK', 'event'=>'CREATION_STARTED', 'event_details'=>'The BBB server creation has started']);
+            $event_record =(object)(['meetingid'=>$meeting->meetingid, 'stack_name'=>$meeting->stack_name, 'log_level'=>'INFO', 'component'=>'OPENSTACK', 'event'=>'CREATION_STARTED', 'event_details'=>'The BBB server creation has started', 'conference_name'=>$meeting->conference_name, 'user_name'=>$meeting->user_name, 'course_name'=>$meeting->course_name]);
             helpers::bigbluebuttonbn_add_openstack_event($event_record);
         }
         catch (\Exception $exception) {
             $type = 'creation_request_error';
             $send_message = true;
             if(!$this->resiliency_enabled or $meeting->creation_attempts > $this->max_meeting_creation_retries){
-                $event_record =(object)(['meetingid'=>$meeting->meetingid, 'stack_name'=>$meeting->stack_name, 'log_level'=>'ERROR', 'component'=>'OPENSTACK', 'event'=>'CREATION_REQUEST_FAILED', 'event_details'=>$exception->getMessage()]);
+                $event_record =(object)(['meetingid'=>$meeting->meetingid, 'stack_name'=>$meeting->stack_name, 'log_level'=>'ERROR', 'component'=>'OPENSTACK', 'event'=>'CREATION_REQUEST_FAILED', 'event_details'=>$exception->getMessage(), 'conference_name'=>$meeting->conference_name, 'user_name'=>$meeting->user_name, 'course_name'=>$meeting->course_name]);
                 //Declared failed server
                 $this->declared_failed_server($meeting, 'Creation request failed');
                 //Handle exception
                 $this->admin_exception_handler->handle_exception($exception);
             }else{
                 $send_message = false;
-                $event_record =(object)(['meetingid'=>$meeting->meetingid, 'stack_name'=>$meeting->stack_name, 'log_level'=>'WARNING', 'component'=>'OPENSTACK', 'event'=>'CREATION_REQUEST_FAILED', 'event_details'=>$exception->getMessage()]);
+                $event_record =(object)(['meetingid'=>$meeting->meetingid, 'stack_name'=>$meeting->stack_name, 'log_level'=>'WARNING', 'component'=>'OPENSTACK', 'event'=>'CREATION_REQUEST_FAILED', 'event_details'=>$exception->getMessage(), 'conference_name'=>$meeting->conference_name, 'user_name'=>$meeting->user_name, 'course_name'=>$meeting->course_name]);
                 $meeting->creation_attempts == 1 ? $type = 'first_creation_request_error' : $type = 'creation_request_error';
             }
             //Log error
@@ -161,17 +163,20 @@ class moodle_bbb_openstack_stacks_management_tasks {
     }
     private function get_bbb_host_info_for_upcoming_meeting($meeting) {
         try {
-            throw new \Exception('Always throw this error');
+            //throw new \Exception('Always throw this error');
             $meeting_setup = new meeting_setup($meeting, $this->orchestration_service);
             $meeting_setup->get_meeting_host_info();
+            if($meeting->openingtime > time()){
+                throw new \Exception('Meeting was cancelled because the openingtime had already passed.');
+            }
             if($meeting->bbb_server_status == 'Ready'){
                 //Log event
-                $event_record =(object)(['meetingid'=>$meeting->meetingid, 'stack_name'=>$meeting->stack_name, 'log_level'=>'INFO', 'component'=>'OPENSTACK', 'event'=>'BBB_SERVER_READY', 'event_details'=>'The BBB server is ready to host the meeting.']);
+                $event_record =(object)(['meetingid'=>$meeting->meetingid, 'stack_name'=>$meeting->stack_name, 'log_level'=>'INFO', 'component'=>'OPENSTACK', 'event'=>'BBB_SERVER_READY', 'event_details'=>'The BBB server is ready to host the meeting.', 'conference_name'=>$meeting->conference_name, 'user_name'=>$meeting->user_name, 'course_name'=>$meeting->course_name]);
                 helpers::bigbluebuttonbn_add_openstack_event($event_record);
             }
         }
         catch(\Exception $exception) {
-            $event_record =(object)(['meetingid'=>$meeting->meetingid, 'stack_name'=>$meeting->stack_name, 'log_level'=>'ERROR', 'component'=>'OPENSTACK', 'event'=>'CREATION_FAILED', 'event_details'=>$exception->getMessage()]);
+            $event_record =(object)(['meetingid'=>$meeting->meetingid, 'stack_name'=>$meeting->stack_name, 'log_level'=>'ERROR', 'component'=>'OPENSTACK', 'event'=>'CREATION_FAILED', 'event_details'=>$exception->getMessage(), 'conference_name'=>$meeting->conference_name, 'user_name'=>$meeting->user_name, 'course_name'=>$meeting->course_name]);
             $log_id= helpers::bigbluebuttonbn_add_openstack_event($event_record);
             //Declare failed server
             $this->declared_failed_server($meeting, 'Creation failed');
@@ -205,14 +210,14 @@ class moodle_bbb_openstack_stacks_management_tasks {
             $type = 'deletion_request_error';
             $send_message = true;
             if (!$this->resiliency_enabled or $meeting->deletion_attempts > $this->max_meeting_deletion_retries) {
-                $event_record = (object)(['meetingid' => $meeting->meetingid, 'stack_name' => $meeting->stack_name, 'log_level' => 'ERROR', 'component' => 'OPENSTACK', 'event' => 'DELETION_START_FAILED', 'event_details' => $exception->getMessage()]);
+                $event_record = (object)(['meetingid' => $meeting->meetingid, 'stack_name' => $meeting->stack_name, 'log_level' => 'ERROR', 'component' => 'OPENSTACK', 'event' => 'DELETION_START_FAILED', 'event_details' => $exception->getMessage(), 'conference_name'=>$meeting->conference_name, 'user_name'=>$meeting->user_name, 'course_name'=>$meeting->course_name]);
                 //Declare failed server
                 $this->declared_failed_server($meeting, 'Deletion started failed');
                 //Handle exception
                 $this->admin_exception_handler->handle_exception($exception);
             } else {
                 $send_message = false;
-                $event_record = (object)(['meetingid' => $meeting->meetingid, 'stack_name' => $meeting->stack_name, 'log_level' => 'WARNING', 'component' => 'OPENSTACK', 'event' => 'DELETION_START_FAILED', 'event_details' => $exception->getMessage()]);
+                $event_record = (object)(['meetingid' => $meeting->meetingid, 'stack_name' => $meeting->stack_name, 'log_level' => 'WARNING', 'component' => 'OPENSTACK', 'event' => 'DELETION_START_FAILED', 'event_details' => $exception->getMessage(), 'conference_name'=>$meeting->conference_name, 'user_name'=>$meeting->user_name, 'course_name'=>$meeting->course_name]);
                 $meeting->deletion_attempts == 1 ? $type = 'first_deletion_request_error' : $type = 'deletion_request_error';
             }
             //Log error

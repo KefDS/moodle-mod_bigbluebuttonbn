@@ -117,7 +117,7 @@ if ($ADMIN->fulltree) {
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_conference_extra_time) ||
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_min_openingtime) ||
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_openingtime) ||
-            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_yaml_stack_template) ||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_yaml_stack_template_url) ||
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_reservation_module_enabled) ||
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_simultaneous_instances)||
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_reservation_user_list_logic) ||

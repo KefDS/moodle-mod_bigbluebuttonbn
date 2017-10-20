@@ -399,7 +399,7 @@ function xmldb_bigbluebuttonbn_upgrade($oldversion=0) {
 
     if($oldversion < 2017100604){
 
-        //Define table bigbluebuttonbn_openstack to be created
+        //Define table bigbluebuttonbn_openstack to be edited
         $table = new xmldb_table('bigbluebuttonbn_openstack');
 
         //Add fields to bigbluebuttonbn_openstack.
@@ -419,6 +419,79 @@ function xmldb_bigbluebuttonbn_upgrade($oldversion=0) {
 
         // Bigbluebuttonbn savepoint reached.
         upgrade_mod_savepoint(true, 2017100604, 'bigbluebuttonbn');
+    }
+
+    if($oldversion < 2017102000){
+
+        //Define table bigbluebuttonbn_openstack to be edited
+        $table = new xmldb_table('bigbluebuttonbn_openstack');
+
+        //Add fields to bigbluebuttonbn_openstack.
+        $field = new xmldb_field('conference_name', XMLDB_TYPE_CHAR, '256', null, null, null, null, 'deletion_attempts');
+
+        // Conditionally launch add field c
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        //Add fields to bigbluebuttonbn_openstack.
+        $field = new xmldb_field('user_name', XMLDB_TYPE_CHAR, '256', null, null, null, null, 'conference_name');
+
+        // Conditionally launch add field c
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        //Add fields to bigbluebuttonbn_openstack.
+        $field = new xmldb_field('course_name', XMLDB_TYPE_CHAR, '256', null, null, null, null, 'user_name');
+
+        // Conditionally launch add field c
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        //Drop creationtime field
+        $field = new xmldb_field('creationtime');
+
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+
+        // Bigbluebuttonbn savepoint reached.
+        upgrade_mod_savepoint(true, 2017102000, 'bigbluebuttonbn');
+    }
+
+    if($oldversion < 2017102001){
+
+        //Define table bigbluebuttonbn_openstack to be edited
+        $table = new xmldb_table('bigbluebuttonbn_os_logs');
+
+        //Add fields to bigbluebuttonbn_openstack.
+        $field = new xmldb_field('conference_name', XMLDB_TYPE_CHAR, '256', null, null, null, null, 'meetingid');
+
+        // Conditionally launch add field c
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        //Add fields to bigbluebuttonbn_openstack.
+        $field = new xmldb_field('user_name', XMLDB_TYPE_CHAR, '256', null, null, null, null, 'conference_name');
+
+        // Conditionally launch add field c
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        //Add fields to bigbluebuttonbn_openstack.
+        $field = new xmldb_field('course_name', XMLDB_TYPE_CHAR, '256', null, null, null, null, 'user_name');
+
+        // Conditionally launch add field c
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Bigbluebuttonbn savepoint reached.
+        upgrade_mod_savepoint(true, 2017102001, 'bigbluebuttonbn');
     }
 
     /*---- end of OpenStack integration ----*/

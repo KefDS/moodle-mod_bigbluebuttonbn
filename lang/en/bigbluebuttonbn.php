@@ -10,7 +10,7 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
-/*----OpenStack integration---*/
+/*---- OpenStack integration---*/
 
 //OpenStack integration settings
 $string['openstack_integration']="OpenStack Integration";

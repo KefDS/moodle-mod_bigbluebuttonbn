@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Register BigBlueButton mod to send messages
  *
@@ -7,6 +8,7 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v2 or later
  */
 
+/*---- OpenStack integration ----*/
 defined('MOODLE_INTERNAL') || die();
 
 $messageproviders = array (
@@ -20,3 +22,4 @@ $messageproviders = array (
     ),
 
 );
+/*---- end of OpenStack integration ----*/

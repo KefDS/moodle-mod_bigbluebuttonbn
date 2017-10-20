@@ -130,7 +130,7 @@ bigbluebuttonbn_select_add_option = function(id, text, value) {
     select.add(option , 0);
 }
 
-/*----OpenStack integration ----*/
+/*---- OpenStack integration ----*/
 bigbluebuttonbn_update_finish_time = function (opening, duration) {
     var finish_time = document.querySelector('#fitem_id_finishtime > .fstatic');
     var duration = document.getElementById(duration);

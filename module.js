@@ -25,9 +25,9 @@ M.mod_bigbluebuttonbn.datasource_init = function(Y) {
 
 M.mod_bigbluebuttonbn.view_init = function(Y) {
     // Init general datasource
-	M.mod_bigbluebuttonbn.datasource_init(Y);
+    M.mod_bigbluebuttonbn.datasource_init(Y);
     if (bigbluebuttonbn.activity === 'open') {
-	    // Create the main modal form.
+        // Create the main modal form.
         bigbluebuttonbn_panel = new Y.Panel({
             srcNode      : '#panelContent',
             headerContent: bigbluebuttonbn.locales.modal_title,
@@ -79,11 +79,13 @@ M.mod_bigbluebuttonbn.view_init = function(Y) {
     } else {
         if (bigbluebuttonbn.activity === 'ended') {
             Y.DOM.addHTML(Y.one('#status_bar'), M.mod_bigbluebuttonbn.view_init_status_bar(
-              bigbluebuttonbn.locales.conference_ended
+                bigbluebuttonbn.locales.conference_ended
             ));
         } else {
             Y.DOM.addHTML(Y.one('#status_bar'), M.mod_bigbluebuttonbn.view_init_status_bar(
-              [bigbluebuttonbn.locales.conference_not_started, bigbluebuttonbn.opening, bigbluebuttonbn.closing, bigbluebuttonbn.servertime]
+                /*---- OpenStack integration ----*/
+                [bigbluebuttonbn.locales.conference_not_started, bigbluebuttonbn.opening, bigbluebuttonbn.closing, bigbluebuttonbn.servertime]
+                /*---- end of OpenStack integration ----*/
             ));
         }
     }
@@ -135,10 +137,10 @@ M.mod_bigbluebuttonbn.view_clean = function() {
 }
 
 M.mod_bigbluebuttonbn.view_remote_update = function(delay) {
-	setTimeout(function() {
-		M.mod_bigbluebuttonbn.view_clean();
-		M.mod_bigbluebuttonbn.view_update();
-	}, delay);
+    setTimeout(function() {
+        M.mod_bigbluebuttonbn.view_clean();
+        M.mod_bigbluebuttonbn.view_update();
+    }, delay);
 }
 
 M.mod_bigbluebuttonbn.view_init_status_bar = function(status_message) {
@@ -370,7 +372,7 @@ M.mod_bigbluebuttonbn.broker_actionVerification = function(action, recordingid, 
         var associated_links = Y.one('#recording-link-' + action + '-' + recordingid).get('dataset').links;
 
         if( associated_links == 0 ) {
-        	actionVerification = true
+            actionVerification = true
 
         } else {
             if( associated_links == 1 ) {
@@ -397,7 +399,7 @@ M.mod_bigbluebuttonbn.broker_actionVerification = function(action, recordingid, 
         actionVerification = confirm(confirmation_warning + '\n\n' + confirmation);
 
     } else if( action == 'import' ) {
-    	actionVerification = confirm(bigbluebuttonbn.locales.import_confirmation);
+        actionVerification = confirm(bigbluebuttonbn.locales.import_confirmation);
 
     } else {
         actionVerification = true;
