@@ -118,6 +118,7 @@ if ($ADMIN->fulltree) {
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_min_openingtime) ||
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_openingtime) ||
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_yaml_stack_template_url) ||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_error_log_file_enabled)||
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_reservation_module_enabled) ||
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_simultaneous_instances)||
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_reservation_user_list_logic) ||
@@ -189,6 +190,14 @@ if ($ADMIN->fulltree) {
                     get_string('config_max_openingtime', 'bigbluebuttonbn'),
                     get_string('config_max_openingtime_description','bigbluebuttonbn'),
                     null, $days_hours_minutes_regex));
+            }
+
+            if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_error_log_file_enabled)){
+                //Describes how anticipated a meeting can be scheduled
+                $settings->add( new admin_setting_configcheckbox( 'bigbluebuttonbn_error_log_file_enabled',
+                    get_string('config_error_log_file_enabled', 'bigbluebuttonbn'),
+                    get_string('config_error_log_file_enabled_description','bigbluebuttonbn'),
+                    0));
             }
 
             $settings->add( new admin_setting_heading('bigbluebuttonbn_reservation_heading', '', get_string('openstack_reservation_settings', 'bigbluebuttonbn'), null));

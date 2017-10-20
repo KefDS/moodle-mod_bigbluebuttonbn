@@ -51,6 +51,9 @@ $string['config_meeting_durations']='Duraciones de las conferencias';
 $string['config_meeting_durations_description']='Arreglo con las duraciones de conferencia en minutos. Deben estar en el siguiente formato: [30,60,90].';
 $string['config_conference_extra_time']='Tiempo extra para videocomunicaciones';
 $string['config_conference_extra_time_description']='Tiempo extra (en minutos) agregado a videocomunicaciones antes de destruir los servidores BBB.';
+$string['config_error_log_file_enabled']='Bitácora de errores en disco';
+$string['config_error_log_file_enabled_description']='Almaena los errores relacionados a OpenStack en disco. La ubicación actual es dentro del directorio del plugin.';
+
 //--Reservation module settings
 $string['openstack_reservation_settings']= '<b>Módulo de Reservaciones</b>. Configuraciones generales del Módulo de Reservaciones.';
 $string['config_reservation_module_enabled']='Activar modulo de reservaciones';

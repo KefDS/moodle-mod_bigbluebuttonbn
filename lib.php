@@ -1110,4 +1110,10 @@ function bigbluebuttonbn_get_cfg_deletion_retries_number(){
     return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_deletion_retries_number)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_deletion_retries_number): (isset($CFG->bigbluebuttonbn_deletion_retries_number)? trim($CFG->bigbluebuttonbn_deletion_retries_number): 0));
 }
 
+function bigbluebuttonbn_get_cfg_error_log_file_enabled(){
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_error_log_file_enabled)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_error_log_file_enabled): (isset($CFG->bigbluebuttonbn_error_log_file_enabled)? trim($CFG->bigbluebuttonbn_error_log_file_enabled): 0));
+}
+
+
 /*---- end of Openstack integration ---- */

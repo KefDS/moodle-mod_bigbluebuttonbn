@@ -51,6 +51,8 @@ $string['config_meeting_durations']='Meeting Durations';
 $string['config_meeting_durations_description']='Array of meeting durations in minutes. They must be in the following format: [30,60,90].';
 $string['config_conference_extra_time']='Conference extra time';
 $string['config_conference_extra_time_description']='Extra time in minutes for conference before destroying the BBB server.';
+$string['config_error_log_file_enabled']='Log related errors in disk';
+$string['config_error_log_file_enabled_description']='Log OpenStack related errors in disk. The log file is located withtin the plugin directory.';
 //--Reservation module settings
 $string['openstack_reservation_settings']= '<b>Reservations Module</b>. General settings for Reservations Module.';
 $string['config_reservation_module_enabled']='Enable reservations module';
