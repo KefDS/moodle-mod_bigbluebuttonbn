@@ -93,17 +93,18 @@ class openstack_error_communicator implements error_communicator
             case 'deletion_request_error':
                 $data = $this->communicate_deletion_request_error($data,$message,false);
         }
+
         message_send($data);
+        $this->communicate_error_to_external_users($type, $data->subject, $data->fullmessage, $data->fullmessagehtml);
     }
 
     private function communicate_connection_error($data, $message){
-
-//        $userto = bigbluebuttonbn_get_openstack_notification_error_email();
+        global $CFG;
 
         $data->component         = 'mod_bigbluebuttonbn';
         $data->name              = 'openstack_conection_error'; // This is the message name from messages.php
         $data->userfrom          = \core_user::get_noreply_user();
-        $data->userto            = 22;
+        $data->userto            = $CFG->supportemail;
         $data->subject           = get_string('openstack_error_conection_subject', 'bigbluebuttonbn');
         $data->fullmessage       = $message;
         $data->fullmessageformat = FORMAT_HTML;
@@ -116,7 +117,7 @@ class openstack_error_communicator implements error_communicator
 
     private function communicate_creation_request_error($data, $message, $first_attempt){
 
-//        $userto = bigbluebuttonbn_get_openstack_notification_error_email();
+        global $CFG;
 
         // Choose subject message
         if($first_attempt){
@@ -128,7 +129,7 @@ class openstack_error_communicator implements error_communicator
         $data->component         = 'mod_bigbluebuttonbn';
         $data->name              = 'openstack_task_error'; // This is the message name from messages.php
         $data->userfrom          = \core_user::get_noreply_user();
-        $data->userto            = 22;
+        $data->userto            = $CFG->supportemail;
         $data->subject           = $subject;
         $data->fullmessage       = $message;
         $data->fullmessageformat = FORMAT_HTML;
@@ -142,14 +143,14 @@ class openstack_error_communicator implements error_communicator
 
     private function communicate_creation_error($data, $message){
 
-//        $userto = bigbluebuttonbn_get_openstack_notification_error_email();
+        global $CFG;
 
         $subject = get_string('openstack_error_creation_subject', 'bigbluebuttonbn');
 
         $data->component         = 'mod_bigbluebuttonbn';
         $data->name              = 'openstack_task_error'; // This is the message name from messages.php
         $data->userfrom          = \core_user::get_noreply_user();
-        $data->userto            = 22;
+        $data->userto            = $CFG->supportemail;
         $data->subject           = $subject;
         $data->fullmessage       = $message;
         $data->fullmessageformat = FORMAT_HTML;
@@ -163,7 +164,7 @@ class openstack_error_communicator implements error_communicator
 
     private function communicate_deletion_request_error($data, $message, $first_attempt){
 
-//        $userto = bigbluebuttonbn_get_openstack_notification_error_email();
+        global $CFG;
 
         // Choose subject message
         if($first_attempt){
@@ -175,7 +176,7 @@ class openstack_error_communicator implements error_communicator
         $data->component         = 'mod_bigbluebuttonbn';
         $data->name              = 'openstack_task_error'; // This is the message name from messages.php.
         $data->userfrom          = \core_user::get_noreply_user();
-        $data->userto            = 22; //Cambiar este usuario por el o los correctos.
+        $data->userto            = $CFG->supportemail; //Cambiar este usuario por el o los correctos.
         $data->subject           = $subject;
         $data->fullmessage       = $message;
         $data->fullmessageformat = FORMAT_HTML;
@@ -184,6 +185,40 @@ class openstack_error_communicator implements error_communicator
         $data->notification      = 1; // This is only set to 0 for personal messages between users.
 
         return $data;
+    }
+
+    private function communicate_error_to_external_users($type, $messagesubject, $messagetext, $messagehtml){
+
+        global $DB, $USER;
+
+        $emails = null;
+
+        if(bigbluebuttonbn_get_cfg_bigbluebuttonbn_task_error_users_list_enabled() or bigbluebuttonbn_get_cfg_bigbluebuttonbn_connection_error_users_list_enabled()){
+
+            switch ($type){
+                case 'connection_error':
+                    $emails = bigbluebuttonbn_get_openstack_notification_connection_error_email();
+                    break;
+                case 'first_creation_request_error':
+                case 'creation_request_error':
+                case 'creation_error':
+                case 'first_deletion_request_error':
+                case 'deletion_request_error':
+                    $emails = bigbluebuttonbn_get_openstack_notification_task_error_email();
+                    break;
+            }
+
+            if( empty($emails) ){
+                $userfrom = \core_user::get_noreply_user();
+                foreach($emails as $email){
+                    $tempuser = $DB->get_record('user', array('id' => $USER->id), '*', MUST_EXIST);
+                    $tempuser->email = $email;
+                    $algo = email_to_user($tempuser, $userfrom, $messagesubject, $messagetext, $messagehtml);
+                }
+            }
+        }
+
+        return;
     }
 
 }

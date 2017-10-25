@@ -62,6 +62,17 @@ $string['config_reservation_user_list_logic_description']='Mark to use as a bloc
 $string['config_authorized_reservation_users_list']='Authorized/blocked user list';
 $string['config_authorized_reservation_users_list_description']='Comma separated list of usernames that are authorize/blocked according to the user whitelist/blacklist setting.The format should be "username1,username2,username3"';
 $string['openstack_time_description']='<b>Note:</b> the total time of resource reservation is the sum of the "Minimun opening time" + "Conference extra time" + {$a} minutes. To change the last parameter it\'s necessary to change the plugin\'s code.';
+//--Notifications module settings
+$string['openstack_external_notifications_settings']='<b>Notifications module</b>. General settings for Notifications Module.';
+$string['bigbluebuttonbn_connection_error_users_list_enabled']='Connection error notifications';
+$string['bigbluebuttonbn_connection_error_users_list_enabled_description']='Enable or disable notifications to external emails about openstack connection errors.';
+$string['bigbluebuttonbn_openstack_connection_error_email_users_list']='Connection error notification emails';
+$string['bigbluebuttonbn_openstack_connection_error_email_users_list_description']='Comma separated list of emails to notify about openstack errors';
+$string['bigbluebuttonbn_task_error_users_list_enabled']='Task error notifications';
+$string['bigbluebuttonbn_task_error_users_list_enabled_description']='Enable or disable notifications to external emails about openstack task connection errors.';
+$string['bigbluebuttonbn_openstack_task_error_email_users_list']='Tasks error notification emails';
+$string['bigbluebuttonbn_openstack_task_error_email_users_list_description']='Comma separated list of emails to notify about openstack task errors.';
+$string['openstack_admin_notifications_clarification']='<b>Note:</b>  to change notifications regarding the admin of this Moodle site go to <i>Plugins</i> > <i>Message outputs</i> > <i>Default message outputs</i>. The current support email is <i>{$a}</i>.';
 //--Resiliency module settings
 $string['openstack_resiliency_settings']='<b>Resiliency module</b>. General settings for Resiliency Module.';
 $string['config_resiliency_module_enabled']='Enable resiliency module';
