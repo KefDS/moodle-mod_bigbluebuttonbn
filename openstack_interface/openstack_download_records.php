@@ -45,7 +45,10 @@ if ($dataformat){
                 'log_level'=>"LOG_LEVEL",
                 'component'=>"COMPONENT",
                 'event'=>"EVENT",
-                'event_details'=>"EVENT_DETAILS"
+                'event_details'=>"EVENT_DETAILS",
+                'conference_name'=>"CONFERENCE_NAME",
+                'user_name'=>"USERNAME",
+                'course_name'=>"COURSE_NAME"
             );
 
             //Get records to be download

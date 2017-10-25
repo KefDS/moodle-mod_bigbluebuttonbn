@@ -47,6 +47,7 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
+    <!-- OpenStack integration -->
     <TABLE NAME="bigbluebuttonbn_openstack" COMMENT="Table that stores the activity of the stacks hosting the meetings. Used only when OpenStack integration is enabled.">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
@@ -58,8 +59,11 @@
         <FIELD NAME="bbb_server_shared_secret" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Shared secret of the BigBlueButton server hosting the meeting. This field is used when creation of servers on demand is enabled."/>
         <FIELD NAME="meeting_duration" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Duration of the BBB meeting. Needed for destroying the machine when using servers on demand."/>
         <FIELD NAME="openingtime" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Start time of the conference"/>
-        <FIELD NAME="creationtime" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Timestamp when the meeting is scheduled to start."/>
         <FIELD NAME="deletiontime" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Timestamp when is scheduled to end the meeting."/>
+        <FIELD NAME="deletion_attempts" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="conference_name" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Name of conference."/>
+        <FIELD NAME="user_name" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="User that created the conference."/>
+        <FIELD NAME="course_name" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Name of the course."/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
@@ -75,6 +79,9 @@
         <FIELD NAME="component" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Component responsible for the event ocurrence."/>
         <FIELD NAME="event" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Event whithin the lifecycle of the stack."/>
         <FIELD NAME="event_details" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Details of the event."/>
+        <FIELD NAME="conference_name" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Name of conference."/>
+        <FIELD NAME="user_name" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="User that created the conference."/>
+        <FIELD NAME="course_name" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Name of the course."/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
@@ -96,5 +103,6 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
+    <!-- end of OpenStack integration -->
   </TABLES>
 </XMLDB>

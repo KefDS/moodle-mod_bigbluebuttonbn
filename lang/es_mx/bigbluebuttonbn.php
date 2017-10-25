@@ -10,43 +10,28 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
-/*----OpenStack integration---*/
+/*---- OpenStack integration---*/
 
 //OpenStack integration settings
 $string['openstack_integration']="Integración con OpenStack";
 
-//----Openstack Interface
-//OpenStack openstack_integration_forms.php
-$string['os_records_begin_date']='Fecha de inicio';
-$string['os_records_choose']='Escoja una';
-$string['os_records_delete']='Eliminar';
-$string['os_records_download']='Descargar';
-$string['os_records_end_date']='Fecha final';
-$string['os_records_go']='Ir';
-$string['os_records_selected']='Acción:';
-$string['os_records_select_all']='Seleccionar todo';
-//----OS logs
-$string['os_logs_management']='Manejo de bitácoras';
-$string['os_logs_explanation']='Seleccione qué hacer con las bitácoras de integración de OpenStack. Puede filtralas por fecha o seleccionar «Seleccionar todo» para seleccionar toda la información. ';
-//----Reservations
-$string['reservations_records_managememod_form_field_meeting_durationnt']='Manejo de reservaciones';
-$string['reservations_records_explanation']='Seleccione qué hacer con los registros de reservaciones. Puede filtralos por fecha o seleccionar «Seleccionar todo» para seleccionar toda la información. ';
-//OpenStack openstack_download_records.php
-$string['os_download_records']='Descargar registros';
-//OpenStack openstack_records_delete.php
-$string['os_delete_records']='Eliminar registros';
-$string['os_delete_records_success'] = 'Se eliminaron correctamente {$a} registros';
-//----OS logs
-$string['os_delete_os_logs_confirmation']='La acción que desea realizar es irreversible y eliminará por completo {$a} registros de la tabla mdl_bigbluebuttonbn_os_logs correspondientes a las bitácoras de Integración con OpenStack.';
-//----Reservations
-$string['os_delete_reservations_records_confirmation']='La acción que desea realizar es irreversible y eliminará por completo {$a} registros de la tabla mdl_bigbluebuttonbn_reservations correspondientes a las reservaciones de Integración con OpenStack.';
-
-//----OpenStack admin settings
-//Heading
+//OpenStack admin settings
+//--Heading
+$string['config_openstack_integration']='Servidores BBB en demanda.';
+$string['config_openstack_integration_description']='Habilita la integración con OpenStack para manejar los servidores en demanda.';
 $string['openstack_integration_help'] = 'Al usar la opcion de servidores BBB en demanda, se crea un único servidor de BBB para cada actividad de conferencia creada. El ciclo de vida de la confrencia se automatiza por completo y es manejado por OpenStack.';
 $string['openstack_servers_on_demand']= 'Usar servidores BBB en demanda mediante la Integración con OpenStack. Para administrar reservaciones y bitácoras diríjase a';
-$string['openstack_integration_modules']= 'Modulos de Integración de OpenStack.';
 $string['openstack_settings_note']= '<b>Nota:</b>Si desea administrar las opciones relacionadas con la integración de OpenStack, asegúrese de marcar la opción "Servidores BBB en demanda". Posteriormente presione el botón de guardar cambios al final de la página.';
+$string['openstack_integration_modules']= 'Modulos de Integración de OpenStack.';
+//--OpenStack credentials settings
+$string['config_openstack_credentials_description']='<b>Credenciales de OpenStack</b>. Credenciales necesarias para conectarse a los servicios de OpenStack.';
+$string['config_openstack_username']='Nombre de usuario';
+$string['config_openstack_username_description']='Nombre de usuario para conectarse a los servicios de OpenStack.';
+$string['config_openstack_password']='Contraseña';
+$string['config_openstack_password_description']='Contraseña para conectarse a los servicios de OpenStack.';
+$string['config_openstack_tenant_id']='Tenant ID';
+$string['config_openstack_tenant_id_description']='Identificador del projecto (<i>tenant</i>) para conectarse a los servicios de OpenStack. ';
+//--OpenStack general settings
 $string['config_cloud_description']='<b>Configuración General</b> para servidores BBB en demanda. Esta configuración se usa siempre que se crean servidores de BBB en demanda.';
 $string['config_heat_region']='Región de Heat';
 $string['config_heat_region_description']='Región donde opera el sistema de orquestación de OpenStack.';
@@ -62,29 +47,70 @@ $string['config_max_openingtime']='Tiempo máximo para reservar';
 $string['config_max_openingtime_description']='Límite máximo de tiempo para programar una videocomunicación. Debe estar en un formato días-horas-minutos. Por ejemplo: "60d-10h-0m" indica sesenta días, diez horas y cero minutos.';
 $string['config_max_simultaneous_instances']='Número máximo de servidores BBB';
 $string['config_max_simultaneous_instances_description']='Capacidad máxima de servidores de BBB corriendo al mismo tiempo';
-$string['config_openstack_credentials_description']='<b>Credenciales de OpenStack</b>. Credenciales necesarias para conectarse a los servicios de OpenStack.';
-$string['config_openstack_username']='Nombre de usuario';
-$string['config_openstack_username_description']='Nombre de usuario para conectarse a los servicios de OpenStack.';
-$string['config_openstack_password']='Contraseña';
-$string['config_openstack_password_description']='Contraseña para conectarse a los servicios de OpenStack.';
-$string['config_openstack_tenant_id']='Tenant ID';
-$string['config_openstack_tenant_id_description']='Identificador del projecto (<i>tenant</i>) para conectarse a los servicios de OpenStack. ';
 $string['config_meeting_durations']='Duraciones de las conferencias';
 $string['config_meeting_durations_description']='Arreglo con las duraciones de conferencia en minutos. Deben estar en el siguiente formato: [30,60,90].';
 $string['config_conference_extra_time']='Tiempo extra para videocomunicaciones';
 $string['config_conference_extra_time_description']='Tiempo extra (en minutos) agregado a videocomunicaciones antes de destruir los servidores BBB.';
-$string['config_openstack_integration']='Servidores BBB en demanda.';
-$string['config_openstack_integration_description']='Habilita la integración con OpenStack para manejar los servidores en demanda.';
+$string['config_error_log_file_enabled']='Bitácora de errores en disco';
+$string['config_error_log_file_enabled_description']='Almaena los errores relacionados a OpenStack en disco. La ubicación actual es dentro del directorio del plugin.';
+//--Reservation module settings
+$string['openstack_reservation_settings']= '<b>Módulo de Reservaciones</b>. Configuraciones generales del Módulo de Reservaciones.';
+$string['config_reservation_module_enabled']='Activar modulo de reservaciones';
+$string['config_reservation_module_enabled_description']='Activar o desactivar el código de reservaciones para limitar la cantidad de reservaciones de acuerdo a los recursos.';
 $string['config_reservation_user_list_logic']='Lista blanca/negra de usuarios para reservaciones';
 $string['config_reservation_user_list_logic_description']='Marque para usar como una lista de usuarios bloqueados(lista negra), dejela en blanco para usar como lista de usuarios autorizados(lista blanca) a reservar videocomunicaciones.';
 $string['config_authorized_reservation_users_list']="Lista de usuarios autorizados/bloqueados";
 $string['config_authorized_reservation_users_list_description']='Lista separada por comas de los nombres de usuario (username) autorizados o bloqueados según la configuración lista blanca/lista negra. El formato debe ser «username1,username2,username3».';
-$string['config_reservation_module_enabled']='Activar modulo de reservaciones';
-$string['config_reservation_module_enabled_description']='Activar o desactivar el código de reservaciones para limitar la cantidad de reservaciones de acuerdo a los recursos.';
 $string['openstack_time_description']='<b>Nota:</b> el tiempo total de reservación de un recurso es igual a la suma del «Tiempo mínimo para reservar» + «Tiempo extra para videocomunicación» + {$a} minutos. Para cambiar el último parámetro debe hacerlo directamente en el código fuente del plugin.';
-$string['openstack_reservation_settings']= '<b>Módulo de Reservaciones</b>. Configuraciones generales del Módulo de Reservaciones.';
+//--Notifications module settings
+$string['openstack_external_notifications_settings']='<b>Módulo de Notificaciones</b>. Configuraciones generales del Módulo de Notifiaciones.';
+$string['bigbluebuttonbn_connection_error_users_list_enabled']='Notificaciones de conexión';
+$string['bigbluebuttonbn_connection_error_users_list_enabled_description']='Habilita o deshabilita las notificaciones externas de errores de conecxión con openstack.';
+$string['bigbluebuttonbn_openstack_connection_error_email_users_list']='Correos para errores de conexión';
+$string['bigbluebuttonbn_openstack_connection_error_email_users_list_description']='Lista separada por comas de los emails externos a los que se debe notificar en caso de un error de conexión con openstack.';
+$string['bigbluebuttonbn_task_error_users_list_enabled']='Notificaciones de tareas';
+$string['bigbluebuttonbn_task_error_users_list_enabled_description']='Habilita o deshabilita las notificaciones externas de errores de de tareas de openstack.';
+$string['bigbluebuttonbn_openstack_task_error_email_users_list']='Correos para errores de tareas';
+$string['bigbluebuttonbn_openstack_task_error_email_users_list_description']='Lista separada por comas de los emails externos a los que se debe notificar en caso de un error de tareas de openstack.';
+$string['openstack_admin_notifications_clarification']='<b>Nota:</b> para cambiar las configuraciones de notificaciones del administrador de Moodle diríjase a <i>Plugins</i> > <i>Salidas de mensajes</i> > <i>Mensajes de salida por defecto</i>. El email de soporte configurado actualmente es<b>{$a}</b>';
+//--Resiliency module settings
+$string['openstack_resiliency_settings']='<b>Módulo de Resiliencia</b>. Configuraciones generales del Módulo de Resiliencia.';
+$string['config_resiliency_module_enabled']='Activar modulo de resiliencia';
+$string['config_resiliency_module_enabled_description']='Activar o desactivar la resiliencia al momento de crear máquinas con OpenStack.';
+$string['config_authorized_resiliency_email_users_list']='Correos para notificaciones';
+$string['config_authorized_resiliency_email_users_list_description']='Lista separada por comas con los correos electrónicos a los que se debe notificar hechos relacionados a la resiliencia del servicio.';
+$string['config_creation_retries_number']='Reintentos de creación';
+$string['config_creation_retries_number_description']='Número de intentos para solicitar la creación de un servidor de BBB en OpenStack.';
+$string['config_deletion_retries_number']='Reintentos de eliminación';
+$string['config_deletion_retries_number_description']='Número de intentos para solicitar la eliminación de un servidor de BBB en OpenStack.';
 
-//----Meeting form
+//Openstack Interface
+//--OpenStack openstack_integration_forms.php
+$string['os_records_begin_date']='Fecha de inicio';
+$string['os_records_choose']='Escoja una';
+$string['os_records_delete']='Eliminar';
+$string['os_records_download']='Descargar';
+$string['os_records_end_date']='Fecha final';
+$string['os_records_go']='Ir';
+$string['os_records_selected']='Acción:';
+$string['os_records_select_all']='Seleccionar todo';
+//---OS logs
+$string['os_logs_management']='Manejo de bitácoras';
+$string['os_logs_explanation']='Seleccione qué hacer con las bitácoras de integración de OpenStack. Puede filtralas por fecha o seleccionar «Seleccionar todo» para seleccionar toda la información. ';
+//---Reservations
+$string['reservations_records_managememod_form_field_meeting_durationnt']='Manejo de reservaciones';
+$string['reservations_records_explanation']='Seleccione qué hacer con los registros de reservaciones. Puede filtralos por fecha o seleccionar «Seleccionar todo» para seleccionar toda la información. ';
+//--OpenStack openstack_download_records.php
+$string['os_download_records']='Descargar registros';
+//--OpenStack openstack_records_delete.php
+$string['os_delete_records']='Eliminar registros';
+$string['os_delete_records_success'] = 'Se eliminaron correctamente {$a} registros';
+//---OS logs
+$string['os_delete_os_logs_confirmation']='La acción que desea realizar es irreversible y eliminará por completo {$a} registros de la tabla mdl_bigbluebuttonbn_os_logs correspondientes a las bitácoras de Integración con OpenStack.';
+//---Reservations
+$string['os_delete_reservations_records_confirmation']='La acción que desea realizar es irreversible y eliminará por completo {$a} registros de la tabla mdl_bigbluebuttonbn_reservations correspondientes a las reservaciones de Integración con OpenStack.';
+
+//Meeting form
 $string['mod_form_field_meeting_duration']='Duración(en minutos)';
 $string['mod_form_field_meeting_duration_help']='Duración de la conferencia (en minutos).';
 $string['mod_form_field_custom_closingtime']='Cierre de ingreso(en minutos)';
@@ -100,6 +126,25 @@ $string['unsuficient_availability']='No hay cupo suficiente para el horario soli
 
 //Tasks for OpenStack communication
 $string['task_openstack_async_communication']= 'Creación de servidores de conferencias BBB con OpenStack';
+
+//Messages related with OpenStack
+//--Connection error
+$string['messageprovider:openstack_conection_error'] = 'BigBlueButton: Notificación de error de conexión con OpenStack' ;
+$string['openstack_error_conection_subject']='ALERTA-BigBlueButton: Conexión con OpenStack caída';
+$string['openstack_error_conection_message']='No se puede establacer una conexión con el servicio de Orquestación de OpenStack.Se ha generado un registro en la tabla de  bitácoras de OpenStack con ID={$a->log_id}.{$a->number_upcoming_conferences} videocomunicaciones pueden verse afectadas en las próximas 24 horas. Las conferencias que pronto pueden verse afectadas pronto se listan a continuación (en blanco si no existe alguna). {$a->meetings_urls}<br /><br />A continuación se muestra el mensaje de error asociado:<br /><br />{$a->error_message}.';
+//--OpenStack Task error
+$string['messageprovider:openstack_task_error'] = 'BigBlueButton: Notificación de error en tareas relacionadas a OpenStack';
+//---Creation request errors
+$string['openstack_error_first_creation_request_subject']='ADVERTENCIA-BigBlueButton: Falló solicitud de creación de stack (primer intento)';
+$string['openstack_error_creation_request_subject']='ERROR-BigBlueButton: Falló solicitud de creación del stack (no hay más intentos)';
+$string['openstack_error_creation_request_message']='Falló la solicitud de creación del stack. El ID de la videocomunicación relacionada es {$a->meetingid} con ID de curso {$a->courseid}. Este es el <a href="{$a->meeting_url}">URL</a>  de la videocomunicación. La videocomunicación estaba programada para comenzar a las {$a->openingtime}. Se ha creado un registro en la tabla de Bitácoras de OpenStack con ID={$a->log_id}.<br /><br />A continuación se muestra el mensaje de error asociado:<br /><br />{$a->error_message}';
+//--Creation errors
+$string['openstack_error_creation_subject']='ERROR-BigBlueButton: Falló creación del stack (no hay más intentos)';
+$string['openstack_error_creation_message']='Falló la solicitud de creación del stack {$a->stack_name}. El ID de la videocomunicación relacionada es {$a->meetingid} con ID de curso {$a->courseid}. Este es el <a href="{$a->meeting_url}">URL</a>  de la videocomunicación. La videocomunicación estaba programada para comenzar a las {$a->openingtime}. Se ha creado un registro en la tabla de Bitácoras de OpenStack con ID={$a->log_id}.<br /><br />A continuación se muestra el mensaje de error asociado:<br /><br />{$a->error_message}';
+//---Deletion request errors
+$string['openstack_error_first_deletion_request_subject']='ADVERTENCIA-BigBlueButton: Falló solicitud de eliminación de stack (primer intento)';
+$string['openstack_error_deletion_request_subject']='ERROR-BigBlueButton: Falló eliminación del stack (no hay más intentos)';
+$string['openstack_error_deletion_request_message']='Falló la solicitud de eliminación del stack. El nombre del stack es <strong>{$a->stack_name}</strong>, el ID del curso relacionado es {$a->courseid} y el ID de la videoconferencia relacionada es {$a->meetingid}. Este es el <a href="{$a->meeting_url}">URL</a>  de la videocomunicación. Se ha creado un registro en la tabla de Bitácoras de OpenStack con ID={$a->log_id}.<br /><br />A continuación se muestra el mensaje de error asociado:<br /><br />{$a->error_message}';
 
 /*---- end of OpenStack integration ----*/
 

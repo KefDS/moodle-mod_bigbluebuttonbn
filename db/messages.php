@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Register BigBlueButton mod to send messages
  *
@@ -7,11 +8,18 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v2 or later
  */
 
+/*---- OpenStack integration ----*/
 defined('MOODLE_INTERNAL') || die();
 
 $messageproviders = array (
-    // Notify teacher about a meeting that fail to be created
-    'error' => array (
-        'capability'  => 'mod/bigbluebuttonbn:emailnotifyerror'
-    )
+
+    // Notify about conection errors
+    'openstack_conection_error' => array (
+    ),
+
+    // Notify about creation related errors
+    'openstack_task_error' => array(
+    ),
+
 );
+/*---- end of OpenStack integration ----*/

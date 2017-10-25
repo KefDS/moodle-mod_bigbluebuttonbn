@@ -15,10 +15,9 @@ global $BIGBLUEBUTTONBN_CFG;
 
 require_once(dirname(__FILE__).'/locallib.php');
 
-
 /*---- OpenStack integration ----*/
 //Regex values used for validation
-$bbb_server_regex= '/^https?\:\/\/([a-zA-Z0-9\-\.]+\.[a-zA-Z0-9]{2,3})(\/[a-zA-Z0-9\-\.]+)*(\/bigbluebutton\/)$/'; //Validates BBB server instance
+$bbb_server_regex= '/^(https?\:\/\/([a-zA-Z0-9\-\.]+\.[a-zA-Z0-9]{2,3})(\/[a-zA-Z0-9\-\.]+)*(\/bigbluebutton\/))$|(^$)/'; //Validates BBB server instance
 $heat_url_regex='/^https?\:\/\/([a-zA-Z0-9\-\.]+\.[a-zA-Z0-9]{2,3})(\/[a-zA-Z0-9\-\.]+)*(:[0-9]{1,6}\/v2.0)$/'; //Validates API version
 $hash_regex='/^[[:xdigit:]]{0,40}$/';
 $default_text_regex= '/^[a-zA-Z0-9-_.[:space:]]{0,40}$/';
@@ -27,6 +26,7 @@ $durations_array_regex='/^\[\d{1,3}(,\d{1,3}){0,10}\]$/';
 $days_hours_minutes_regex = '/^\d{1,3}[Dd]-\d{1,2}[Hh]-\d{1,2}[mM]$/';
 $max_simultaneous_instances_regex = '/^\d{0,5}$/';
 $minutes_regex = '/^\d{0,4}$/';
+$attempts_number_regex = '/^\d{0,3}$/';
 $csv_regex = '/^$|[0-9a-z\.\-\@\_]+(,[0-9a-z\.\-\@\_]+)*/';
 
 //Create OpenStackIntegration link
@@ -116,11 +116,20 @@ if ($ADMIN->fulltree) {
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_conference_extra_time) ||
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_min_openingtime) ||
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_openingtime) ||
-            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_yaml_stack_template) ||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_yaml_stack_template_url) ||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_error_log_file_enabled)||
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_reservation_module_enabled) ||
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_simultaneous_instances)||
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_reservation_user_list_logic) ||
-            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_authorized_reservation_users_list)) {
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_authorized_reservation_users_list)||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_connection_error_users_list_enabled)||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_connection_error_email_users_list)||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_task_error_users_list_enabled)||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_task_error_email_users_list)||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_module_enabled)||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_creation_retries_number)||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_deletion_retries_number)){
+
             $settings->add( new admin_setting_heading('bigbluebuttonbn_config_cloud',
                 '',
                 get_string('config_cloud_description', 'bigbluebuttonbn'),
@@ -185,8 +194,15 @@ if ($ADMIN->fulltree) {
                     null, $days_hours_minutes_regex));
             }
 
-            $settings->add( new admin_setting_heading('bigbluebuttonbn_reservation_heading', '', get_string('openstack_reservation_settings', 'bigbluebuttonbn'), null));
+            if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_error_log_file_enabled)){
+                //Describes how anticipated a meeting can be scheduled
+                $settings->add( new admin_setting_configcheckbox( 'bigbluebuttonbn_error_log_file_enabled',
+                    get_string('config_error_log_file_enabled', 'bigbluebuttonbn'),
+                    get_string('config_error_log_file_enabled_description','bigbluebuttonbn'),
+                    0));
+            }
 
+            $settings->add( new admin_setting_heading('bigbluebuttonbn_reservation_heading', '', get_string('openstack_reservation_settings', 'bigbluebuttonbn'), null));
 
             if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_reservation_module_enabled) ){
                 //Enable OpenStack reservations module
@@ -221,6 +237,68 @@ if ($ADMIN->fulltree) {
             }
 
             $settings->add( new admin_setting_heading('bigbluebuttonbn_time_clarification', '', get_string('openstack_time_description', 'bigbluebuttonbn', bigbluebuttonbn_get_cfg_openstack_destruction_time()), null));
+
+            $settings->add( new admin_setting_heading('bigbluebuttonbn_external_notifications_heading', '', get_string('openstack_external_notifications_settings', 'bigbluebuttonbn'), null));
+
+            if(!isset ($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_connection_error_users_list_enabled)){
+                //Enables external user notificationes
+                $settings->add ( new admin_setting_configcheckbox('bigbluebuttonbn_connection_error_users_list_enabled',
+                    get_string('bigbluebuttonbn_connection_error_users_list_enabled','bigbluebuttonbn'),
+                    get_string('bigbluebuttonbn_connection_error_users_list_enabled_description', 'bigbluebuttonbn'),
+                    0));
+            }
+
+            if(!isset ($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_connection_error_email_users_list)){
+                //List with external emails for notifications on openstack connection errors
+                $settings->add ( new admin_setting_configtextarea('bigbluebuttonbn_openstack_connection_error_email_users_list',
+                    get_string('bigbluebuttonbn_openstack_connection_error_email_users_list','bigbluebuttonbn'),
+                    get_string('bigbluebuttonbn_openstack_connection_error_email_users_list_description', 'bigbluebuttonbn'),
+                    null, $csv_regex));
+            }
+
+            if(!isset ($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_task_error_users_list_enabled)){
+                //Enables external user notificationes
+                $settings->add ( new admin_setting_configcheckbox('bigbluebuttonbn_task_error_users_list_enabled',
+                    get_string('bigbluebuttonbn_task_error_users_list_enabled','bigbluebuttonbn'),
+                    get_string('bigbluebuttonbn_task_error_users_list_enabled_description', 'bigbluebuttonbn'),
+                    0));
+            }
+
+            if(!isset ($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_task_error_email_users_list)){
+                //List with external emails for notifications on openstack task errors
+                $settings->add ( new admin_setting_configtextarea('bigbluebuttonbn_openstack_task_error_email_users_list',
+                    get_string('bigbluebuttonbn_openstack_task_error_email_users_list','bigbluebuttonbn'),
+                    get_string('bigbluebuttonbn_openstack_task_error_email_users_list_description', 'bigbluebuttonbn'),
+                    null, $csv_regex));
+            }
+
+            $settings->add( new admin_setting_heading('bigbluebuttonbn_admin_notification_clarification_heading', '', get_string('openstack_admin_notifications_clarification', 'bigbluebuttonbn', $CFG->supportemail), null));
+
+            $settings->add( new admin_setting_heading('bigbluebuttonbn_resiliency_heading', '', get_string('openstack_resiliency_settings', 'bigbluebuttonbn'), null));
+
+            if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_module_enabled)){
+                //Enable OpenStack reservations module
+                $settings->add( new admin_setting_configcheckbox( 'bigbluebuttonbn_resiliency_module_enabled',
+                    get_string('config_resiliency_module_enabled', 'bigbluebuttonbn'),
+                    get_string('config_resiliency_module_enabled_description','bigbluebuttonbn'),
+                    0));
+            }
+
+            if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_creation_retries_number)){
+                //Number of creation attempts
+                $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_creation_retries_number',
+                    get_string('config_creation_retries_number', 'bigbluebuttonbn'),
+                    get_string('config_creation_retries_number_description','bigbluebuttonbn'),
+                    0, $attempts_number_regex));
+            }
+
+            if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_deletion_retries_number)){
+                //Extra time for conference
+                $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_deletion_retries_number',
+                    get_string('config_deletion_retries_number', 'bigbluebuttonbn'),
+                    get_string('config_deletion_retries_number_description','bigbluebuttonbn'),
+                    0, $attempts_number_regex));
+            }
         }
     }
 

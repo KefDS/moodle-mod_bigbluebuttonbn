@@ -428,3 +428,19 @@ Client error response
 [reason phrase] Unauthorized
 [url] https://172.16.128.10:13000/v2.0/tokens
 
+[2017-10-19 15:05:33] The bbb host cannot be created. Stack parameters: NULL.
+Client error response
+[status code] 400
+[reason phrase] Bad Request
+[url] http://172.16.0.210:8004/v1/242cafb76f4c45419427ea6d25945b46/stacks
+
+[2017-10-19 15:05:33] The bbb host cannot be destroy. Try delete it manually. Meeting id: d96ec0e824f5c6df04046f580338205140aca80e
+Client error response
+[status code] 404
+[reason phrase] Not Found
+[url] http://172.16.0.210:8004/v1/242cafb76f4c45419427ea6d25945b46/stacks/bbb_meeting_223
+
+[2017-10-19 15:08:50] [curl] 7: Failed to connect to 172.16.0.210 port 5000: Network is unreachable [url] http://172.16.0.210:5000/v2.0/tokens
+
+[2017-10-19 15:09:32] [curl] 7: Failed to connect to 172.16.0.210 port 5000: No route to host [url] http://172.16.0.210:5000/v2.0/tokens
+

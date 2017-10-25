@@ -2,5 +2,6 @@
 namespace mod_bigbluebuttonbn\openstack;
 
 interface error_communicator {
-    public function communicate_error($meeting);
+    public function build_message($data, $type);
+    public function communicate_error($message, $type);
 }

@@ -286,6 +286,7 @@ function bigbluebuttonbn_view($bbbsession, $activity) {
 
     if ($activity == 'not_started') {
         // Do nothing
+        bigbluebuttonbn_openstack_status();
     } else {
         if ($activity == 'ended') {
             bigbluebuttonbn_view_ended($bbbsession);

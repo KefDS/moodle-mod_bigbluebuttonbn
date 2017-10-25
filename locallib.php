@@ -1691,6 +1691,10 @@ function bigbluebuttonbn_get_previous_setting($id, $conference_setting){
     return $DB->get_field('bigbluebuttonbn', $conference_setting, array('id' => $id), 'MUST_EXIST');
 }
 
+function get_meeting_deletion_time_minutes($startime, $duration){
+    return $startime + ($duration + bigbluebuttonbn_get_cfg_conference_extra_time())*60; //duration + extra time + destruction time
+}
+
 //---- Reservations module
 
 // Get meeting total duration in minutes
@@ -1712,7 +1716,7 @@ function bigbluebuttonbn_bbb_servers_availability($opening_time, $finish_time, $
 //Check for username in authorized reservation users list
 function bigbluebuttonbn_allow_user_reservation($username, $logic_type){
     //Get user list
-    $authorized_users = explode(',', trim(bigbluebuttonbn_get_cfg_authorized_reservation_users_list()) );
+    $authorized_users = explode(',', preg_replace('/\s+/', '', trim(bigbluebuttonbn_get_cfg_authorized_reservation_users_list())));
 
     if (empty($authorized_users)){//List is empty
         return true;
@@ -1721,6 +1725,15 @@ function bigbluebuttonbn_allow_user_reservation($username, $logic_type){
     }else{ //Blacklist logic
         return ( !(array_search($username, $authorized_users)!== false) ) ;
     }
+}
+
+//----Notifications module
+function bigbluebuttonbn_get_openstack_notification_connection_error_email(){
+    return explode(',', preg_replace('/\s+/', '', trim(bigbluebuttonbn_get_cfg_openstack_connection_error_email_users_list())));
+}
+
+function bigbluebuttonbn_get_openstack_notification_task_error_email(){
+    return explode(',', preg_replace('/\s+/', '', trim(bigbluebuttonbn_get_cfg_openstack_task_error_email_users_list())));
 }
 
 //----Admin interface records management
