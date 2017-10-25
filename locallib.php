@@ -1716,7 +1716,7 @@ function bigbluebuttonbn_bbb_servers_availability($opening_time, $finish_time, $
 //Check for username in authorized reservation users list
 function bigbluebuttonbn_allow_user_reservation($username, $logic_type){
     //Get user list
-    $authorized_users = explode(',', trim(bigbluebuttonbn_get_cfg_authorized_reservation_users_list()) );
+    $authorized_users = explode(',', preg_replace('/\s+/', '', trim(bigbluebuttonbn_get_cfg_authorized_reservation_users_list())));
 
     if (empty($authorized_users)){//List is empty
         return true;
@@ -1727,9 +1727,13 @@ function bigbluebuttonbn_allow_user_reservation($username, $logic_type){
     }
 }
 
-//----Resiliency module
-function bigbluebuttonbn_get_openstack_notification_error_email(){
-    return explode(',', trim(bigbluebuttonbn_get_cfg_resiliency_email_users_list()));
+//----Notifications module
+function bigbluebuttonbn_get_openstack_notification_connection_error_email(){
+    return explode(',', preg_replace('/\s+/', '', trim(bigbluebuttonbn_get_cfg_openstack_connection_error_email_users_list())));
+}
+
+function bigbluebuttonbn_get_openstack_notification_task_error_email(){
+    return explode(',', preg_replace('/\s+/', '', trim(bigbluebuttonbn_get_cfg_openstack_task_error_email_users_list())));
 }
 
 //----Admin interface records management

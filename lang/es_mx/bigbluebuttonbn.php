@@ -53,7 +53,6 @@ $string['config_conference_extra_time']='Tiempo extra para videocomunicaciones';
 $string['config_conference_extra_time_description']='Tiempo extra (en minutos) agregado a videocomunicaciones antes de destruir los servidores BBB.';
 $string['config_error_log_file_enabled']='Bitácora de errores en disco';
 $string['config_error_log_file_enabled_description']='Almaena los errores relacionados a OpenStack en disco. La ubicación actual es dentro del directorio del plugin.';
-
 //--Reservation module settings
 $string['openstack_reservation_settings']= '<b>Módulo de Reservaciones</b>. Configuraciones generales del Módulo de Reservaciones.';
 $string['config_reservation_module_enabled']='Activar modulo de reservaciones';
@@ -63,6 +62,17 @@ $string['config_reservation_user_list_logic_description']='Marque para usar como
 $string['config_authorized_reservation_users_list']="Lista de usuarios autorizados/bloqueados";
 $string['config_authorized_reservation_users_list_description']='Lista separada por comas de los nombres de usuario (username) autorizados o bloqueados según la configuración lista blanca/lista negra. El formato debe ser «username1,username2,username3».';
 $string['openstack_time_description']='<b>Nota:</b> el tiempo total de reservación de un recurso es igual a la suma del «Tiempo mínimo para reservar» + «Tiempo extra para videocomunicación» + {$a} minutos. Para cambiar el último parámetro debe hacerlo directamente en el código fuente del plugin.';
+//--Notifications module settings
+$string['openstack_external_notifications_settings']='<b>Módulo de Notificaciones</b>. Configuraciones generales del Módulo de Notifiaciones.';
+$string['bigbluebuttonbn_connection_error_users_list_enabled']='Notificaciones de conexión';
+$string['bigbluebuttonbn_connection_error_users_list_enabled_description']='Habilita o deshabilita las notificaciones externas de errores de conecxión con openstack.';
+$string['bigbluebuttonbn_openstack_connection_error_email_users_list']='Correos para errores de conexión';
+$string['bigbluebuttonbn_openstack_connection_error_email_users_list_description']='Lista separada por comas de los emails externos a los que se debe notificar en caso de un error de conexión con openstack.';
+$string['bigbluebuttonbn_task_error_users_list_enabled']='Notificaciones de tareas';
+$string['bigbluebuttonbn_task_error_users_list_enabled_description']='Habilita o deshabilita las notificaciones externas de errores de de tareas de openstack.';
+$string['bigbluebuttonbn_openstack_task_error_email_users_list']='Correos para errores de tareas';
+$string['bigbluebuttonbn_openstack_task_error_email_users_list_description']='Lista separada por comas de los emails externos a los que se debe notificar en caso de un error de tareas de openstack.';
+$string['openstack_admin_notifications_clarification']='<b>Nota:</b> para cambiar las configuraciones de notificaciones del administrador de Moodle diríjase a <i>Plugins</i> > <i>Salidas de mensajes</i> > <i>Mensajes de salida por defecto</i>. El email de soporte configurado actualmente es<b>{$a}</b>';
 //--Resiliency module settings
 $string['openstack_resiliency_settings']='<b>Módulo de Resiliencia</b>. Configuraciones generales del Módulo de Resiliencia.';
 $string['config_resiliency_module_enabled']='Activar modulo de resiliencia';

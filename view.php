@@ -298,14 +298,6 @@ function bigbluebuttonbn_view($bbbsession, $activity) {
     }
 }
 
-/*---- OpenStack integration ----*/
-function bigbluebuttonbn_openstack_status(){
-
-}
-
-/*---- end of OpenStack integration ----*/
-
-
 function bigbluebuttonbn_view_joining($bbbsession) {
 
     if ($bbbsession['tagging'] && ($bbbsession['administrator'] || $bbbsession['moderator'])) {

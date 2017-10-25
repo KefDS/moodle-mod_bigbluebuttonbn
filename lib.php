@@ -1089,12 +1089,26 @@ function bigbluebuttonbn_get_cfg_authorized_reservation_users_list() {
     return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_authorized_reservation_users_list)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_authorized_reservation_users_list): (isset($CFG->bigbluebuttonbn_authorized_reservation_users_list)? trim($CFG->bigbluebuttonbn_authorized_reservation_users_list): null));
 }
 
-//----Resiliency module
-function bigbluebuttonbn_get_cfg_resiliency_email_users_list(){
+//----Notifications module
+
+function bigbluebuttonbn_get_cfg_bigbluebuttonbn_connection_error_users_list_enabled(){
     global $BIGBLUEBUTTONBN_CFG, $CFG;
-    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_email_users_list)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_email_users_list): (isset($CFG->bigbluebuttonbn_resiliency_email_users_list)? trim($CFG->bigbluebuttonbn_resiliency_email_users_list): $CFG->supportemail));
+    return(isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_connection_error_users_list_enabled)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_connection_error_users_list_enabled): (isset($CFG->bigbluebuttonbn_connection_error_users_list_enabled)? trim($CFG->bigbluebuttonbn_connection_error_users_list_enabled): 0));
+}
+function bigbluebuttonbn_get_cfg_openstack_connection_error_email_users_list(){
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return(isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_connection_error_email_users_list)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_connection_error_email_users_list): (isset($CFG->bigbluebuttonbn_openstack_connection_error_email_users_list)? trim($CFG->bigbluebuttonbn_openstack_connection_error_email_users_list): null));
+}
+function bigbluebuttonbn_get_cfg_bigbluebuttonbn_task_error_users_list_enabled(){
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return(isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_task_error_users_list_enabled)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_task_error_users_list_enabled): (isset($CFG->bigbluebuttonbn_task_error_users_list_enabled)? trim($CFG->bigbluebuttonbn_task_error_users_list_enabled): 0));
+}
+function bigbluebuttonbn_get_cfg_openstack_task_error_email_users_list(){
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return(isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_task_error_email_users_list)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_task_error_email_users_list): (isset($CFG->bigbluebuttonbn_openstack_task_error_email_users_list)? trim($CFG->bigbluebuttonbn_openstack_task_error_email_users_list): null));
 }
 
+//----Resiliency module
 function bigbluebuttonbn_get_cfg_resiliency_module_enabled(){
     global $BIGBLUEBUTTONBN_CFG, $CFG;
     return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_module_enabled)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_module_enabled): (isset($CFG->bigbluebuttonbn_resiliency_module_enabled)? trim($CFG->bigbluebuttonbn_resiliency_module_enabled): 0));
@@ -1114,6 +1128,5 @@ function bigbluebuttonbn_get_cfg_error_log_file_enabled(){
     global $BIGBLUEBUTTONBN_CFG, $CFG;
     return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_error_log_file_enabled)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_error_log_file_enabled): (isset($CFG->bigbluebuttonbn_error_log_file_enabled)? trim($CFG->bigbluebuttonbn_error_log_file_enabled): 0));
 }
-
 
 /*---- end of Openstack integration ---- */

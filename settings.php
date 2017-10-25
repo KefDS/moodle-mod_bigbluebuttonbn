@@ -15,7 +15,6 @@ global $BIGBLUEBUTTONBN_CFG;
 
 require_once(dirname(__FILE__).'/locallib.php');
 
-
 /*---- OpenStack integration ----*/
 //Regex values used for validation
 $bbb_server_regex= '/^(https?\:\/\/([a-zA-Z0-9\-\.]+\.[a-zA-Z0-9]{2,3})(\/[a-zA-Z0-9\-\.]+)*(\/bigbluebutton\/))$|(^$)/'; //Validates BBB server instance
@@ -123,8 +122,11 @@ if ($ADMIN->fulltree) {
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_max_simultaneous_instances)||
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_reservation_user_list_logic) ||
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_authorized_reservation_users_list)||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_connection_error_users_list_enabled)||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_connection_error_email_users_list)||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_task_error_users_list_enabled)||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_task_error_email_users_list)||
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_module_enabled)||
-            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_email_users_list) ||
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_creation_retries_number)||
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_deletion_retries_number)){
 
@@ -236,22 +238,50 @@ if ($ADMIN->fulltree) {
 
             $settings->add( new admin_setting_heading('bigbluebuttonbn_time_clarification', '', get_string('openstack_time_description', 'bigbluebuttonbn', bigbluebuttonbn_get_cfg_openstack_destruction_time()), null));
 
+            $settings->add( new admin_setting_heading('bigbluebuttonbn_external_notifications_heading', '', get_string('openstack_external_notifications_settings', 'bigbluebuttonbn'), null));
+
+            if(!isset ($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_connection_error_users_list_enabled)){
+                //Enables external user notificationes
+                $settings->add ( new admin_setting_configcheckbox('bigbluebuttonbn_connection_error_users_list_enabled',
+                    get_string('bigbluebuttonbn_connection_error_users_list_enabled','bigbluebuttonbn'),
+                    get_string('bigbluebuttonbn_connection_error_users_list_enabled_description', 'bigbluebuttonbn'),
+                    0));
+            }
+
+            if(!isset ($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_connection_error_email_users_list)){
+                //List with external emails for notifications on openstack connection errors
+                $settings->add ( new admin_setting_configtextarea('bigbluebuttonbn_openstack_connection_error_email_users_list',
+                    get_string('bigbluebuttonbn_openstack_connection_error_email_users_list','bigbluebuttonbn'),
+                    get_string('bigbluebuttonbn_openstack_connection_error_email_users_list_description', 'bigbluebuttonbn'),
+                    null, $csv_regex));
+            }
+
+            if(!isset ($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_task_error_users_list_enabled)){
+                //Enables external user notificationes
+                $settings->add ( new admin_setting_configcheckbox('bigbluebuttonbn_task_error_users_list_enabled',
+                    get_string('bigbluebuttonbn_task_error_users_list_enabled','bigbluebuttonbn'),
+                    get_string('bigbluebuttonbn_task_error_users_list_enabled_description', 'bigbluebuttonbn'),
+                    0));
+            }
+
+            if(!isset ($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_task_error_email_users_list)){
+                //List with external emails for notifications on openstack task errors
+                $settings->add ( new admin_setting_configtextarea('bigbluebuttonbn_openstack_task_error_email_users_list',
+                    get_string('bigbluebuttonbn_openstack_task_error_email_users_list','bigbluebuttonbn'),
+                    get_string('bigbluebuttonbn_openstack_task_error_email_users_list_description', 'bigbluebuttonbn'),
+                    null, $csv_regex));
+            }
+
+            $settings->add( new admin_setting_heading('bigbluebuttonbn_admin_notification_clarification_heading', '', get_string('openstack_admin_notifications_clarification', 'bigbluebuttonbn', $CFG->supportemail), null));
+
             $settings->add( new admin_setting_heading('bigbluebuttonbn_resiliency_heading', '', get_string('openstack_resiliency_settings', 'bigbluebuttonbn'), null));
 
-            if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_module_enabled) ){
+            if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_module_enabled)){
                 //Enable OpenStack reservations module
                 $settings->add( new admin_setting_configcheckbox( 'bigbluebuttonbn_resiliency_module_enabled',
                     get_string('config_resiliency_module_enabled', 'bigbluebuttonbn'),
                     get_string('config_resiliency_module_enabled_description','bigbluebuttonbn'),
                     0));
-            }
-
-            if (!isset ($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_resiliency_email_users_list)){
-                //List the users that can receive email notifications about OpenStack errors
-                $settings->add( new admin_setting_configtextarea( 'bigbluebuttonbn_resiliency_email_users_list',
-                    get_string('config_authorized_resiliency_email_users_list', 'bigbluebuttonbn'),
-                    get_string('config_authorized_resiliency_email_users_list_description','bigbluebuttonbn'),
-                    $CFG->supportemail, $csv_regex));
             }
 
             if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_creation_retries_number)){
