@@ -166,7 +166,7 @@ class moodle_bbb_openstack_stacks_management_tasks {
             //throw new \Exception('Always throw this error');
             $meeting_setup = new meeting_setup($meeting, $this->orchestration_service);
             $meeting_setup->get_meeting_host_info();
-            if($meeting->openingtime > time()){
+            if($meeting->openingtime < time()){
                 throw new \Exception('Meeting was cancelled because the openingtime had already passed.');
             }
             if($meeting->bbb_server_status == 'Ready'){
