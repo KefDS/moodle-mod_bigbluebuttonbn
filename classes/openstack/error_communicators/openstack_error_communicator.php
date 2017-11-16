@@ -104,7 +104,7 @@ class openstack_error_communicator implements error_communicator
         $data->component         = 'mod_bigbluebuttonbn';
         $data->name              = 'openstack_conection_error'; // This is the message name from messages.php
         $data->userfrom          = \core_user::get_noreply_user();
-        $data->userto            = $CFG->supportemail;
+        $data->userto            = \core_user::get_support_user();
         $data->subject           = get_string('openstack_error_conection_subject', 'bigbluebuttonbn');
         $data->fullmessage       = $message;
         $data->fullmessageformat = FORMAT_HTML;
