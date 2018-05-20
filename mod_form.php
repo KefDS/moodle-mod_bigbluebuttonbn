@@ -52,7 +52,7 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
         /*---- OpenStack integration ----*/
         if (bigbluebuttonbn_get_cfg_openstack_integration()){
             //Validates if the BigBlueButton server is running
-            $serverVersion = 1.0;
+            $serverVersion = 1.1;
         }else{
             $serverVersion = bigbluebuttonbn_getServerVersion($endpoint);
             if ( !isset($serverVersion) ) {

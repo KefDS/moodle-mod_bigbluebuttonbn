@@ -798,8 +798,11 @@ function bigbluebuttonbn_bbb_broker_get_recordings($meetingid, $password, $force
     global $CFG;
 
     $recordings = array();
-    $endpoint = bigbluebuttonbn_get_cfg_server_url();
-    $shared_secret = bigbluebuttonbn_get_cfg_shared_secret();
+    /*---- OpenStack integration ----*/
+    $meetingid_bbb = substr($meetingid, 0, strpos($meetingid, '-'));
+    $endpoint = bigbluebuttonbn_get_cfg_server_url($meetingid_bbb);
+    $shared_secret = bigbluebuttonbn_get_cfg_shared_secret($meetingid_bbb);
+    /*---- end of OpenStack integration ---*/
     $cache_ttl = bigbluebuttonbn_get_cfg_waitformoderator_cache_ttl();
 
     $cache = cache::make_from_params(cache_store::MODE_APPLICATION, 'mod_bigbluebuttonbn', 'meetings_cache');
@@ -828,16 +831,9 @@ function bigbluebuttonbn_bbb_broker_get_meeting_info($meetingid, $password, $for
     $meeting_info = array();
 
     /*---- OpenStack integration ----*/
-
-    if(bigbluebuttonbn_get_cfg_openstack_integration()){
-        $meetingid_bbb = substr($meetingid, 0, strpos($meetingid, '-'));
-        $endpoint = bigbluebuttonbn_get_meeting_server_url($meetingid_bbb);
-        $shared_secret = bigbluebuttonbn_get_meeting_shared_secret($meetingid_bbb);
-
-    }else{
-        $endpoint = bigbluebuttonbn_get_cfg_server_url();
-        $shared_secret = bigbluebuttonbn_get_cfg_shared_secret();
-    }
+    $meetingid_bbb = substr($meetingid, 0, strpos($meetingid, '-'));
+    $endpoint = bigbluebuttonbn_get_cfg_server_url($meetingid_bbb);
+    $shared_secret = bigbluebuttonbn_get_cfg_shared_secret($meetingid_bbb);
     /*---- end of OpenStack integration ---*/
 
     $cache_ttl = bigbluebuttonbn_get_cfg_waitformoderator_cache_ttl();
@@ -861,16 +857,9 @@ function bigbluebuttonbn_bbb_broker_do_end_meeting($meetingid, $password){
     global $CFG;
 
     /*---- OpenStack integration ----*/
-
-    if(bigbluebuttonbn_get_cfg_openstack_integration()){
-        $meetingid_bbb = substr($meetingid, 0, strpos($meetingid, '-'));
-        $endpoint = bigbluebuttonbn_get_meeting_server_url($meetingid_bbb);
-        $shared_secret = bigbluebuttonbn_get_meeting_shared_secret($meetingid_bbb);
-
-    }else{
-        $endpoint = bigbluebuttonbn_get_cfg_server_url();
-        $shared_secret = bigbluebuttonbn_get_cfg_shared_secret();
-    }
+    $meetingid_bbb = substr($meetingid, 0, strpos($meetingid, '-'));
+    $endpoint = bigbluebuttonbn_get_cfg_server_url($meetingid_bbb);
+    $shared_secret = bigbluebuttonbn_get_cfg_shared_secret($meetingid_bbb);
     /*---- end of OpenStack integration ---*/
 
     bigbluebuttonbn_doEndMeeting($meetingid, $password, $endpoint, $shared_secret);
@@ -879,8 +868,11 @@ function bigbluebuttonbn_bbb_broker_do_end_meeting($meetingid, $password){
 function bigbluebuttonbn_bbb_broker_do_publish_recording($recordingid, $publish=true){
     global $CFG;
 
-    $endpoint = bigbluebuttonbn_get_cfg_server_url();
-    $shared_secret = bigbluebuttonbn_get_cfg_shared_secret();
+    /*---- OpenStack integration ----*/
+    $meetingid_bbb = substr($recordingid, 0, strpos($recordingid, '-'));
+    $endpoint = bigbluebuttonbn_get_cfg_server_url($meetingid_bbb);
+    $shared_secret = bigbluebuttonbn_get_cfg_shared_secret($meetingid_bbb);
+    /*---- end of OpenStack integration ---*/
 
     bigbluebuttonbn_doPublishRecordings($recordingid, ($publish)? 'true': 'false', $endpoint, $shared_secret);
 }
@@ -908,8 +900,11 @@ function bigbluebuttonbn_bbb_broker_do_publish_recording_imported($recordingid, 
 function bigbluebuttonbn_bbb_broker_do_delete_recording($recordingid){
     global $CFG;
 
-    $endpoint = bigbluebuttonbn_get_cfg_server_url();
-    $shared_secret = bigbluebuttonbn_get_cfg_shared_secret();
+    /*---- OpenStack integration ----*/
+    $meetingid_bbb = substr($recordingid, 0, strpos($recordingid, '-'));
+    $endpoint = bigbluebuttonbn_get_cfg_server_url($meetingid_bbb);
+    $shared_secret = bigbluebuttonbn_get_cfg_shared_secret($meetingid_bbb);
+    /*---- end of OpenStack integration ---*/
 
     bigbluebuttonbn_doDeleteRecordings($recordingid, $endpoint, $shared_secret);
 }
@@ -1675,14 +1670,22 @@ function bigbluebuttonbn_html2text($html, $len) {
 function bigbluebuttonbn_get_meeting_server_url($meetingid){
     global $DB;
     $url = $DB->get_field('bigbluebuttonbn_openstack','bbb_server_url',array('meetingid'=>$meetingid), 'MUST_EXIST');
-    return trim($url);
+    if($url){
+        return trim($url);
+    }else if (bigbluebuttonbn_get_cfg_backup_recording){
+        return bigbluebuttonbn_get_cfg_recording_server_url();
+    }
 }
 
 //Get BBB server shared secret. Used when creation on demand is enabled.
 function bigbluebuttonbn_get_meeting_shared_secret($meetingid){
     global $DB;
     $shared_secret = $DB->get_field('bigbluebuttonbn_openstack','bbb_server_shared_secret',array('meetingid'=>$meetingid), 'MUST_EXIST');
-    return trim($shared_secret);
+    if($shared_secret){
+        return trim($shared_secret);
+    }else if (bigbluebuttonbn_get_cfg_backup_recording){
+        return bigbluebuttonbn_get_cfg_recording_shared_secret();
+    }
 }
 
 //Get previous setting

@@ -109,7 +109,8 @@ if ($ADMIN->fulltree) {
         }
 
         //Configurations for stacks and OpenStack API
-        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_url) ||
+        if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_name_prefix) ||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_url) ||
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_region) ||
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_json_stack_parameters_url) ||
             !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_meeting_durations) ||
@@ -134,7 +135,6 @@ if ($ADMIN->fulltree) {
                 '',
                 get_string('config_cloud_description', 'bigbluebuttonbn'),
                 null));
-
             if( !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_heat_url) ){
                 //URL of server with Heat endpoint
                 $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_heat_url',
@@ -200,6 +200,13 @@ if ($ADMIN->fulltree) {
                     get_string('config_error_log_file_enabled', 'bigbluebuttonbn'),
                     get_string('config_error_log_file_enabled_description','bigbluebuttonbn'),
                     0));
+            }
+            if(!isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_name_prefix)){
+                //BBB server prefix
+                $settings->add( new admin_setting_configtext( 'bigbluebuttonbn_openstack_name_prefix',
+                    get_string( 'config_openstack_name_prefix', 'bigbluebuttonbn' ),
+                    get_string( 'config_openstack_name_prefix_description', 'bigbluebuttonbn' ),
+                    null, $default_text_regex));
             }
 
             $settings->add( new admin_setting_heading('bigbluebuttonbn_reservation_heading', '', get_string('openstack_reservation_settings', 'bigbluebuttonbn'), null));
@@ -298,6 +305,25 @@ if ($ADMIN->fulltree) {
                     get_string('config_deletion_retries_number', 'bigbluebuttonbn'),
                     get_string('config_deletion_retries_number_description','bigbluebuttonbn'),
                     0, $attempts_number_regex));
+            }
+        }
+
+        if (!isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_use_backup_server) ||
+            !isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_backup_recording)){
+            $settings->add(new admin_setting_heading('bigbluebuttonbn_openstack_backup_heading', '', get_string('config_openstack_backup_settings', 'bigbluebuttonbn'), null));
+            if (!isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_use_backup_server)) {
+                // Use a backup server
+                $settings->add(new admin_setting_configcheckbox('bigbluebuttonbn_openstack_use_backup_server',
+                    get_string('config_openstack_use_backup_server', 'bigbluebuttonbn'),
+                    get_string('config_openstack_use_backup_server_description', 'bigbluebuttonbn'),
+                    0));
+            }
+            if (!isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_backup_recording)) {
+                // Use a backup server
+                $settings->add(new admin_setting_configcheckbox('bigbluebuttonbn_openstack_backup_recording',
+                    get_string('config_openstack_backup_recording', 'bigbluebuttonbn'),
+                    get_string('config_openstack_backup_recording_description', 'bigbluebuttonbn'),
+                    0));
             }
         }
     }

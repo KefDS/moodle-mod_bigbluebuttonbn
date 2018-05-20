@@ -32,9 +32,13 @@ class meeting_setup {
             $DB->update_record('bigbluebuttonbn_openstack', $this->meeting);
         }
         catch (\Exception $exception) {
+            $response = json_decode($exception->getResponse()->getBody(), true);
             $exception_message = "The bbb host cannot be created. Stack parameters: " .
-                var_export($stack_params, true) . ".\n" .
-                $exception->getMessage();
+                var_export($stack_params, true) .
+                "\ntitle: " . $response['title'] .
+                "\ncode: " . $response['code'] .
+                "\nexplanation: " . $response['explanation'] .
+                "\nmessage: " . $response['error']['message'];
             throw new \Exception($exception_message);
         }
     }
@@ -65,6 +69,12 @@ class meeting_setup {
         catch (\Exception $exception) {
             $exception_message = "The bbb host cannot be destroy. Try delete it manually. Meeting id: " . $this->meeting->meetingid . "\n" .
                 $exception->getMessage();
+            $response = json_decode($exception->getResponse()->getBody(), true);
+            $exception_message = "The bbb host cannot be destroy. Try delete it manually. Meeting id: " . $this->meeting->meetingid . "\n" .
+                "\ntitle: " . $response['title'] .
+                "\ncode: " . $response['code'] .
+                "\nexplanation: " . $response['explanation'] .
+                "\nmessage: " . $response['error']['message'];
             throw new \Exception($exception_message);
         }
     }

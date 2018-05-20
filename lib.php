@@ -880,18 +880,51 @@ function bigbluebuttonbn_get_context_course($id) {
     return $context;
 }
 
-function bigbluebuttonbn_get_cfg_server_url() {
+function bigbluebuttonbn_get_cfg_server_url($meeting_id = null) {
     global $BIGBLUEBUTTONBN_CFG, $CFG;
-    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_server_url)? trim(trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_server_url),'/').'/': (isset($CFG->bigbluebuttonbn_server_url)? trim(trim($CFG->bigbluebuttonbn_server_url),'/').'/': 'http://test-install.blindsidenetworks.com/bigbluebutton/'));
+    /*---- OpenStack integration ----*/
+    if(bigbluebuttonbn_get_cfg_openstack_integration() && $meeting_id){
+        return bigbluebuttonbn_get_meeting_server_url($meeting_id);
+    /*---- end of OpenStack integration ---*/
+    }else{
+        return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_server_url)? trim(trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_server_url),'/').'/': (isset($CFG->bigbluebuttonbn_server_url)? trim(trim($CFG->bigbluebuttonbn_server_url),'/').'/': 'http://test-install.blindsidenetworks.com/bigbluebutton/'));
+    }
 }
 
-function bigbluebuttonbn_get_cfg_shared_secret() {
+function bigbluebuttonbn_get_cfg_shared_secret($meeting_id = null) {
     global $BIGBLUEBUTTONBN_CFG, $CFG;
-    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_shared_secret)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_shared_secret): (isset($CFG->bigbluebuttonbn_shared_secret)? trim($CFG->bigbluebuttonbn_shared_secret): '8cd8ef52e8e101574e400365b55e11a6'));
+    /*---- OpenStack integration ----*/
+    if(bigbluebuttonbn_get_cfg_openstack_integration() && $meeting_id){
+        return bigbluebuttonbn_get_meeting_shared_secret($meeting_id);
+    /*---- end of OpenStack integration ---*/
+    }else{
+        return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_shared_secret)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_shared_secret): (isset($CFG->bigbluebuttonbn_shared_secret)? trim($CFG->bigbluebuttonbn_shared_secret): '8cd8ef52e8e101574e400365b55e11a6'));
+    }
 }
-
 
 /*---- OpenStack integration ----*/
+
+function bigbluebuttonbn_get_cfg_recording_server_url($meeting_id = null) {
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    /*---- OpenStack integration ----*/
+    if(bigbluebuttonbn_get_cfg_openstack_integration() && $meeting_id && !bigbluebuttonbn_get_cfg_backup_recording()){
+        return bigbluebuttonbn_get_meeting_server_url($meeting_id);
+    /*---- end of OpenStack integration ---*/
+    }else{
+        return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_server_url)? trim(trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_server_url),'/').'/': (isset($CFG->bigbluebuttonbn_server_url)? trim(trim($CFG->bigbluebuttonbn_server_url),'/').'/': 'http://test-install.blindsidenetworks.com/bigbluebutton/'));
+    }
+}
+
+function bigbluebuttonbn_get_cfg_recording_shared_secret($meeting_id = null) {
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    /*---- OpenStack integration ----*/
+    if(bigbluebuttonbn_get_cfg_openstack_integration() && $meeting_id && !bigbluebuttonbn_get_cfg_backup_recording()){
+        return bigbluebuttonbn_get_meeting_shared_secret($meeting_id);
+    /*---- end of OpenStack integration ---*/
+    }else{
+        return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_shared_secret)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_shared_secret): (isset($CFG->bigbluebuttonbn_shared_secret)? trim($CFG->bigbluebuttonbn_shared_secret): '8cd8ef52e8e101574e400365b55e11a6'));
+    }
+}
 
 function bigbluebuttonbn_get_meeting_course_name($course_id){
     global  $DB;
@@ -1006,6 +1039,16 @@ function bigbluebuttonbn_add_openstack_event($event_record){
 function bigbluebuttonbn_get_cfg_openstack_integration() {
     global $BIGBLUEBUTTONBN_CFG, $CFG;
     return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_integration)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_integration): (isset($CFG->bigbluebuttonbn_openstack_integration)? trim($CFG->bigbluebuttonbn_openstack_integration): 0));
+}
+
+function bigbluebuttonbn_get_cfg_use_backup_server() {
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_use_backup_server)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_use_backup_server): (isset($CFG->bigbluebuttonbn_openstack_use_backup_server)? trim($CFG->bigbluebuttonbn_openstack_use_backup_server): 0));
+}
+
+function bigbluebuttonbn_get_cfg_backup_recording() {
+    global $BIGBLUEBUTTONBN_CFG, $CFG;
+    return (isset($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_backup_recording)? trim($BIGBLUEBUTTONBN_CFG->bigbluebuttonbn_openstack_backup_recording): (isset($CFG->bigbluebuttonbn_openstack_backup_recording)? trim($CFG->bigbluebuttonbn_openstack_backup_recording): 0));
 }
 
 function bigbluebuttonbn_get_cfg_heat_url() {
