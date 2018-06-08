@@ -870,8 +870,8 @@ function bigbluebuttonbn_bbb_broker_do_publish_recording($recordingid, $publish=
 
     /*---- OpenStack integration ----*/
     $meetingid_bbb = substr($recordingid, 0, strpos($recordingid, '-'));
-    $endpoint = bigbluebuttonbn_get_cfg_server_url($meetingid_bbb);
-    $shared_secret = bigbluebuttonbn_get_cfg_shared_secret($meetingid_bbb);
+    $endpoint = bigbluebuttonbn_get_cfg_recording_server_url($meetingid_bbb);
+    $shared_secret = bigbluebuttonbn_get_cfg_recording_shared_secret($meetingid_bbb);
     /*---- end of OpenStack integration ---*/
 
     bigbluebuttonbn_doPublishRecordings($recordingid, ($publish)? 'true': 'false', $endpoint, $shared_secret);
@@ -902,8 +902,8 @@ function bigbluebuttonbn_bbb_broker_do_delete_recording($recordingid){
 
     /*---- OpenStack integration ----*/
     $meetingid_bbb = substr($recordingid, 0, strpos($recordingid, '-'));
-    $endpoint = bigbluebuttonbn_get_cfg_server_url($meetingid_bbb);
-    $shared_secret = bigbluebuttonbn_get_cfg_shared_secret($meetingid_bbb);
+    $endpoint = bigbluebuttonbn_get_cfg_recording_server_url($meetingid_bbb);
+    $shared_secret = bigbluebuttonbn_get_cfg_recording_shared_secret($meetingid_bbb);
     /*---- end of OpenStack integration ---*/
 
     bigbluebuttonbn_doDeleteRecordings($recordingid, $endpoint, $shared_secret);
