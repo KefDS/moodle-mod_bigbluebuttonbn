@@ -1672,8 +1672,8 @@ function bigbluebuttonbn_get_meeting_server_url($meetingid){
     $url = $DB->get_field('bigbluebuttonbn_openstack','bbb_server_url',array('meetingid'=>$meetingid), 'MUST_EXIST');
     if($url){
         return trim($url);
-    }else if (bigbluebuttonbn_get_cfg_backup_recording){
-        return bigbluebuttonbn_get_cfg_recording_server_url();
+    }else if (bigbluebuttonbn_get_cfg_use_backup_server()){
+        return bigbluebuttonbn_get_cfg_server_url();
     }
 }
 
@@ -1683,8 +1683,8 @@ function bigbluebuttonbn_get_meeting_shared_secret($meetingid){
     $shared_secret = $DB->get_field('bigbluebuttonbn_openstack','bbb_server_shared_secret',array('meetingid'=>$meetingid), 'MUST_EXIST');
     if($shared_secret){
         return trim($shared_secret);
-    }else if (bigbluebuttonbn_get_cfg_backup_recording){
-        return bigbluebuttonbn_get_cfg_recording_shared_secret();
+    }else if (bigbluebuttonbn_get_cfg_use_backup_server()){
+        return bigbluebuttonbn_get_cfg_shared_secret();
     }
 }
 
