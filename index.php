@@ -1,7 +1,7 @@
 <?php
 /**
  * View all BigBlueButton instances in this course.
- * 
+ *
  * @package   mod_bigbluebuttonbn
  * @author    Fred Dixon  (ffdixon [at] blindsidenetworks [dt] com)
  * @author    Jesus Federico  (jesus [at] blindsidenetworks [dt] com)
@@ -91,10 +91,8 @@ if ($submit === 'end') {
         echo get_string('index_ending', 'bigbluebuttonbn');
 
         /*---- OpenStack integration ----*/
-        if($openStack_integration_enabled){
-            $endpoint = bigbluebuttonbn_get_meeting_server_url($bigbluebuttonbn->meetingid);
-            $shared_secret =  bigbluebuttonbn_get_meeting_shared_secret($bigbluebuttonbn->meetingid);
-        }
+        $endpoint = bigbluebuttonbn_get_cfg_server_url($bigbluebuttonbn->meetingid);
+        $shared_secret =  bigbluebuttonbn_get_cfg_server_url($bigbluebuttonbn->meetingid);
         /*---- end of OpenStack integration ----*/
 
         $meetingID = $bigbluebuttonbn->meetingid.'-'.$course->id.'-'.$bigbluebuttonbn->id;
@@ -121,11 +119,9 @@ foreach ($bigbluebuttonbns as $bigbluebuttonbn) {
     $administrator = has_capability('moodle/category:manage', $context);
 
     /*---- OpenStack integration ----*/
-    if($openStack_integration_enabled){
-        $endpoint = bigbluebuttonbn_get_meeting_server_url($bigbluebuttonbn->meetingid);
-        $shared_secret =  bigbluebuttonbn_get_meeting_shared_secret($bigbluebuttonbn->meetingid);
-    }
-    /*---- end of OpenStack integration  ---- */
+    $endpoint = bigbluebuttonbn_get_cfg_server_url($bigbluebuttonbn->meetingid);
+    $shared_secret =  bigbluebuttonbn_get_cfg_server_url($bigbluebuttonbn->meetingid);
+    /*---- end of OpenStack integration ----*/
 
     if ( groups_get_activity_groupmode($cm) > 0 ){
         $table->data[] = displayBigBlueButtonRooms($endpoint, $shared_secret, ($administrator || $moderator), $course, $bigbluebuttonbn, (object) array('id'=>0, 'name'=>get_string('allparticipants')));
@@ -165,11 +161,9 @@ function displayBigBlueButtonRooms($endpoint, $shared_secret, $moderator, $cours
         $attPW = $bigbluebuttonbn->viewerpass;
 
         /*---- OpenStack integration ----*/
-        if(bigbluebuttonbn_get_cfg_openstack_integration()){
-            $endpoint = bigbluebuttonbn_get_meeting_server_url($bigbluebuttonbn->meetingid);
-            $shared_secret =  bigbluebuttonbn_get_meeting_shared_secret($bigbluebuttonbn->meetingid);
-        }
-        /*---- end of OpenStack integration  ---- */
+        $endpoint = bigbluebuttonbn_get_cfg_server_url($bigbluebuttonbn->meetingid);
+        $shared_secret =  bigbluebuttonbn_get_cfg_server_url($bigbluebuttonbn->meetingid);
+        /*---- end of OpenStack integration ----*/
 
         $meetingID = $bigbluebuttonbn->meetingid.'-'.$course->id.'-'.$bigbluebuttonbn->id;
         //
@@ -183,7 +177,7 @@ function displayBigBlueButtonRooms($endpoint, $shared_secret, $moderator, $cours
             $joinURL = '<a href="view.php?id=' . $bigbluebuttonbn->coursemodule . '&group=' . $groupObj->id . '">' . format_string($bigbluebuttonbn->name) . '</a>';
             $group = $groupObj->name;
         }
-        
+
         if (!$meetingInfo) {
             //
             // The server was unreachable
@@ -226,7 +220,7 @@ function displayBigBlueButtonRooms($endpoint, $shared_secret, $moderator, $cours
                 if (isset($meetingInfo['recording']) && $meetingInfo['recording'] == 'true') { // if it has been set when meeting created, set the variable on/off
                     $recording = get_string('index_enabled', 'bigbluebuttonbn');
                 }
-                 
+
                 $xml = $meetingInfo['attendees'];
                 if (count($xml) && count($xml->attendee)) {
                     $users = count($xml->attendee);

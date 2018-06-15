@@ -20,14 +20,12 @@ $params['idx'] = optional_param('idx', '', PARAM_TEXT); //meetingID, the BBB mee
 $params['bigbluebuttonbn'] = optional_param('bigbluebuttonbn', 0, PARAM_INT);
 $params['signed_parameters'] = optional_param('signed_parameters', '', PARAM_TEXT);
 
-
-$openStack_integration_enabled = bigbluebuttonbn_get_cfg_openstack_integration();
-//Get the meetingID
+/*---- OpenStack integration ----*/
 $meetingid_bbb = substr($params['id'], 0, strpos($params['id'], '-'));
+/*---- end of OpenStack integration ---*/
 
-$endpoint = ($openStack_integration_enabled)? bigbluebuttonbn_get_meeting_server_url($meetingid_bbb): bigbluebuttonbn_get_cfg_server_url();
-$shared_secret = ($openStack_integration_enabled)? bigbluebuttonbn_get_meeting_shared_secret($meetingid_bbb): bigbluebuttonbn_get_cfg_shared_secret();
-
+$endpoint = bigbluebuttonbn_get_cfg_server_url($meetingid_bbb);
+$shared_secret = bigbluebuttonbn_get_cfg_shared_secret($meetingid_bbb);
 
 $error = '';
 
@@ -153,7 +151,7 @@ if (empty($error)) {
 
                         // As the recordingid was not identified as imported recording link, look up for a real recording
                         } else {
-                            $recording = bigbluebuttonbn_getRecordingArray($params['id'], $params['idx'], $endpoint, $shared_secret);
+                            $recording = bigbluebuttonbn_getRecordingArray($params['id'], $params['idx'], bigbluebuttonbn_get_cfg_recording_server_url($meetingid_bbb), bigbluebuttonbn_get_cfg_recording_shared_secret($meetingid_bbb));
                             if (isset($recording) && !empty($recording) && !array_key_exists('messageKey', $recording)) {  // The recording was found
                                 echo $params['callback'] . '({ "status": "true", "published": "' . $recording['published'] . '"});';
                             } else {
@@ -173,7 +171,7 @@ if (empty($error)) {
                         $recordings_imported = bigbluebuttonbn_getRecordingsImportedArray($bbbsession['course']->id, isset($bbbsession['bigbluebuttonbn']) ? $bbbsession['bigbluebuttonbn']->id : NULL);
                         $recordings_imported_indexed = bigbluebuttonbn_index_recordings($recordings_imported);
                         if (isset($recordings_imported_indexed[$params['id']])) {
-                            $recordings = bigbluebuttonbn_getRecordingsArray($recordings_imported_indexed[$params['id']]['meetingID'], $bbbsession['endpoint'], $bbbsession['shared_secret']);
+                            $recordings = bigbluebuttonbn_getRecordingsArray($recordings_imported_indexed[$params['id']]['meetingID'], bigbluebuttonbn_get_cfg_recording_server_url($meetingid_bbb), bigbluebuttonbn_get_cfg_recording_shared_secret($meetingid_bbb));
                             $recordings_indexed = bigbluebuttonbn_index_recordings($recordings);
                             $recording = $recordings_indexed[$params['id']];
                             if ($recording['published'] === 'true') {
