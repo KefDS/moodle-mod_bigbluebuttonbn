@@ -71,17 +71,8 @@ $bbbsession['managerecordings'] = ($bbbsession['administrator'] || has_capabilit
 
 // BigBlueButton server data
 /*---- OpenStack integration ----*/
-
-if(bigbluebuttonbn_get_cfg_openstack_integration()){
-    $meetingid = $bbbsession['bigbluebuttonbn']->meetingid;
-    $bbbsession['endpoint'] = bigbluebuttonbn_get_meeting_server_url($meetingid);
-    $bbbsession['shared_secret']  = bigbluebuttonbn_get_meeting_shared_secret($meetingid);
-
-}else{
-    $bbbsession['endpoint'] = bigbluebuttonbn_get_cfg_server_url();
-    $bbbsession['shared_secret']  = bigbluebuttonbn_get_cfg_shared_secret();
-}
-
+$bbbsession['endpoint'] = bigbluebuttonbn_get_cfg_server_url($bbbsession['bigbluebuttonbn']->meetingid);
+$bbbsession['shared_secret']  = bigbluebuttonbn_get_cfg_shared_secret($bbbsession['bigbluebuttonbn']->meetingid);
 /*---- end of OpenStack integration ---*/
 
 // Server data
@@ -128,7 +119,7 @@ $bbbsession['originTag'] = 'moodle-mod_bigbluebuttonbn (' . $module_version . ')
 /*---- OpenStack integration ----*/
 
 if( !bigbluebuttonbn_get_cfg_openstack_integration() ){
-    
+
     // Validates if the BigBlueButton server is running
     $serverVersion = bigbluebuttonbn_getServerVersion($bbbsession['endpoint']);
     if (!isset($serverVersion)) { //Server is not working
@@ -148,7 +139,7 @@ if( !bigbluebuttonbn_get_cfg_openstack_integration() ){
             else
                 print_error('view_error_unable_join_student', 'bigbluebuttonbn', $CFG->wwwroot . '/course/view.php?id=' . $bigbluebuttonbn->course);
         }
-    }    
+    }
 }
 
 /*---- end of OpenStack integration ----*/
@@ -366,7 +357,7 @@ function bigbluebuttonbn_view_recordings($bbbsession)
 
         // Get actual recordings
         if ($meetingID != '') {
-            $recordings = bigbluebuttonbn_getRecordingsArray($meetingID, $bbbsession['endpoint'], $bbbsession['shared_secret']);
+            $recordings = bigbluebuttonbn_getRecordingsArray($meetingID, bigbluebuttonbn_get_cfg_recording_server_url($bbbsession['bigbluebuttonbn']->meetingid), bigbluebuttonbn_get_cfg_recording_shared_secret($bbbsession['bigbluebuttonbn']->meetingid));
         } else {
             $recordings = Array();
         }

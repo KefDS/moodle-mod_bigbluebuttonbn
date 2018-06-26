@@ -21,7 +21,7 @@ class bbb_host_management {
     }
 
     function create_bbb_host($meeting_id, $stack_parameters, $templateURL) {
-        $stack_name = $this->get_bbb_host_name($meeting_id);
+        $stack_name = $this->set_bbb_host_name($meeting_id);
         $stack_parameters['name'] = $stack_name;
         $stack_parameters ['templateUrl']= $templateURL;
         $stack_parameters['timeoutMins'] = self::DEFAULT_TIMEOUT_MINUTES;
@@ -43,6 +43,17 @@ class bbb_host_management {
     }
 
     private function get_bbb_host_name($meeting_id) {
-        return "bbb_meeting_" . $meeting_id;
+        global $DB;
+        return $DB->get_record('bigbluebuttonbn_openstack', array('id'=>$meeting_id),'stack_name')->stack_name;
+    }
+
+    private function set_bbb_host_name($meeting_id) {
+        global $CFG;
+        $prefix = $CFG->bigbluebuttonbn_openstack_name_prefix;
+        if($prefix){
+            return $prefix."_"."bbb_meeting_" . $meeting_id;
+        }else{
+            return "bbb_meeting_" . $meeting_id;
+        }
     }
 }

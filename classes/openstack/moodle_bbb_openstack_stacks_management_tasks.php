@@ -115,7 +115,9 @@ class moodle_bbb_openstack_stacks_management_tasks {
     private function create_bbb_host_for_upcoming_meetings() {
         $upcoming_meetings = $this->get_upcoming_meetings(self::UPCOMING_MEETINGS_MINUTES);
         foreach ($upcoming_meetings as $meeting) {
-            $this->create_bbb_host_for_upcoming_meeting($meeting);
+            if($meeting->deletiontime > time()) {
+                $this->create_bbb_host_for_upcoming_meeting($meeting);
+            }
         }
     }
     private function create_bbb_host_for_upcoming_meeting($meeting) {
@@ -191,7 +193,9 @@ class moodle_bbb_openstack_stacks_management_tasks {
     private function delete_bbb_host_for_finished_meetings() {
         $finished_meetings = $this->get_finished_meetings();
         foreach ($finished_meetings as $meeting) {
-            $this->delete_bbb_host_for_finished_meeting($meeting);
+            if($meeting->openingtime < time()) {
+                $this->delete_bbb_host_for_finished_meeting($meeting);
+            }
         }
     }
     private function delete_bbb_host_for_finished_meeting($meeting) {

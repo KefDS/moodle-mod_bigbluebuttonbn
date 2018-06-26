@@ -129,7 +129,7 @@ class openstack_error_communicator implements error_communicator
         $data->component         = 'mod_bigbluebuttonbn';
         $data->name              = 'openstack_task_error'; // This is the message name from messages.php
         $data->userfrom          = \core_user::get_noreply_user();
-        $data->userto            = $CFG->supportemail;
+        $data->userto            = \core_user::get_support_user();
         $data->subject           = $subject;
         $data->fullmessage       = $message;
         $data->fullmessageformat = FORMAT_HTML;
@@ -150,7 +150,7 @@ class openstack_error_communicator implements error_communicator
         $data->component         = 'mod_bigbluebuttonbn';
         $data->name              = 'openstack_task_error'; // This is the message name from messages.php
         $data->userfrom          = \core_user::get_noreply_user();
-        $data->userto            = $CFG->supportemail;
+        $data->userto            = \core_user::get_support_user();
         $data->subject           = $subject;
         $data->fullmessage       = $message;
         $data->fullmessageformat = FORMAT_HTML;
@@ -176,7 +176,7 @@ class openstack_error_communicator implements error_communicator
         $data->component         = 'mod_bigbluebuttonbn';
         $data->name              = 'openstack_task_error'; // This is the message name from messages.php.
         $data->userfrom          = \core_user::get_noreply_user();
-        $data->userto            = $CFG->supportemail; //Cambiar este usuario por el o los correctos.
+        $data->userto            = \core_user::get_support_user();
         $data->subject           = $subject;
         $data->fullmessage       = $message;
         $data->fullmessageformat = FORMAT_HTML;
