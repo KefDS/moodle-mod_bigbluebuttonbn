@@ -61,7 +61,7 @@
         <FIELD NAME="openingtime" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Start time of the conference"/>
         <FIELD NAME="creation_attempts" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="deletiontime" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Timestamp when is scheduled to end the meeting."/>
-        <FIELD NAME="deletion_attempts" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="deletion_attempts" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="conference_name" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Name of conference."/>
         <FIELD NAME="user_name" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="User that created the conference."/>
         <FIELD NAME="course_name" TYPE="char" LENGTH="256" NOTNULL="false" SEQUENCE="false" COMMENT="Name of the course."/>

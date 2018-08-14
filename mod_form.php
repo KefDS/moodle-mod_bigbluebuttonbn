@@ -297,7 +297,7 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
             $mform->addHelpButton('openingtime', 'mod_form_field_openingtime', 'bigbluebuttonbn');
 
             //Access closed
-            if($current_activity->closingtime != null){
+            if(!empty($current_activity->closingtime)){
                 $current_activity->closingtime = ($current_activity->closingtime - $current_activity->openingtime)/60;
             }
             $mform->addElement('text', 'closingtime', get_string('mod_form_field_custom_closingtime', 'bigbluebuttonbn'), $closingtime_default );
@@ -321,6 +321,7 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
 
             //Value for reservations
             $mform->addElement('hidden','reservation_id',null);
+            $mform->setType('reservation_id', PARAM_TEXT);
 
         }else{// Without OpenStack integration
             $mform->addElement('date_time_selector', 'openingtime', get_string('mod_form_field_openingtime', 'bigbluebuttonbn'));
@@ -387,8 +388,12 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
             global $USER;
 
             $course_module_id = optional_param('update', 0, PARAM_INT); //Checks if course is being updated
-            $conference_duplicated = bigbluebuttonbn_meeting_is_duplicated($this->current->meetingid);
-
+            $conference_duplicated = false;
+            $current_meetingid = null;
+            if(!empty($this->current->meetingid)){
+                $conference_duplicated = bigbluebuttonbn_meeting_is_duplicated($this->current->meetingid);
+                $current_meetingid = $this->current->meetingid;
+            }
             //Prevents creation of meetings to soon or to anticipated
             if ($course_module_id == 0 or $conference_duplicated){
                 if ( $data['openingtime'] < bigbluebuttonbn_get_min_openingtime()) {
@@ -458,7 +463,7 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
                             'finish_time'=> $finish_time,
                             'user_info'=> 'UserID: '.$USER->id.' UserEmail:'.$USER->email,
                             'course_info'=> 'CourseID:'.$this->_course->id.' CourseName:'.$this->_course->fullname,
-                            'meetingid'=> $this->current->meetingid
+                            'meetingid'=> $current_meetingid
                         ];
                         $this->_form->_submitValues['reservation_id'] = bigbluebuttonbn_create_or_update_bbb_servers_reservation($reservation_data);
                     }else{ // Show error
