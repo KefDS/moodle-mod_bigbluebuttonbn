@@ -1,4 +1,4 @@
-/log
+/log/openstack_errors
 composer.lock
 composer.phar
 .buildpath
