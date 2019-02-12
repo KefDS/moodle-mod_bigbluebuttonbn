@@ -310,7 +310,7 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
             $mform->addHelpButton('bbb_meeting_duration', 'mod_form_field_meeting_duration', 'bigbluebuttonbn');
 
             //Finish time
-            $finish_time = date('d/m/Y, H:i:s',($openingtime_default + ($closingtime_default*60)));
+            $finish_time = date('d M Y H:i',($openingtime_default + ($closingtime_default*60)));
             $mform->addElement('static', 'finishtime', get_string('mod_form_field_finish_time', 'bigbluebuttonbn'), $finish_time );
 
 
@@ -397,7 +397,7 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
             //Prevents creation of meetings to soon or to anticipated
             if ($course_module_id == 0 or $conference_duplicated){
                 if ( $data['openingtime'] < bigbluebuttonbn_get_min_openingtime()) {
-                    $errors['openingtime'] = get_string('bbbconferencetoosoon', 'bigbluebuttonbn', (date('m/d/Y H:i:s', bigbluebuttonbn_get_min_openingtime())));
+                    $errors['openingtime'] = get_string('bbbconferencetoosoon', 'bigbluebuttonbn', (date('d M Y H:i', bigbluebuttonbn_get_min_openingtime())));
                 }
             }
 
@@ -421,7 +421,7 @@ class mod_bigbluebuttonbn_mod_form extends moodleform_mod {
                     }
                 }else{
                     if ( $data['openingtime'] < bigbluebuttonbn_get_min_openingtime()) {
-                        $errors['openingtime'] = get_string('bbbconferencetoosoon', 'bigbluebuttonbn');
+                        $errors['openingtime'] = get_string('bbbconferencetoosoon', 'bigbluebuttonbn', (date('d M Y H:i', bigbluebuttonbn_get_min_openingtime())));
                     }
                 }
             }
